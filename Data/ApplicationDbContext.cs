@@ -11,5 +11,7 @@ namespace CollectionsPortal.Data
         {
             Database.Migrate();
         }
+
+        public DbSet<Tag> Tags { get; set; }
     }
 }
