@@ -2,25 +2,26 @@
 @model LoginModel
 
   <div class="container py-5 h-100">
-    <h1>Sign in</h1>
+    <h1 class="my-5 display-5 fw-bold ls-tight">Sign in</h1>
     <div class="row d-flex align-items-center justify-content-center h-100">
       <div class="col-md-8 col-lg-7 col-xl-6">
         <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.svg"
           class="img-fluid" alt="Phone image">
       </div>
+
       <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
         <form id="account" method="post">
-           <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+           <div asp-validation-summary="ModelOnly" class="font-weight-bold-danger"></div>
           <!-- Email input -->
           <div class="form-outline mb-4">
-            <input asp-for="Input.Email" type="email" placeholder="Email" id="form1Example13" autocomplete="username" aria-required="true" class="form-control form-control-lg" />
-            <span asp-validation-for="Input.Email" class="text-danger"></span>
+            <input asp-for="Input.Email" type="email" placeholder="Email" id="emailInput" autocomplete="username" aria-required="true" class="form-control form-control-lg" />
+            <span asp-validation-for="Input.Email" class="font-weight-bold-danger"></span>
           </div>
 
           <!-- Password input -->
           <div id"rememberMe" class="form-outline mb-4">
-            <input asp-for="Input.Password" type="password" placeholder="Password" id="form1Example23" autocomplete="current-password" aria-required="true" class="form-control form-control-lg" />
-            <span asp-validation-for="Input.Password" class="text-danger"></span>
+            <input asp-for="Input.Password" type="password" placeholder="Password" id="passwordInput" autocomplete="current-password" aria-required="true" class="form-control form-control-lg" />
+            <span asp-validation-for="Input.Password" class="font-weight-bold-danger"></span>
           </div>
  
           <div class="d-flex justify-content-start align-items-start mb-4">
@@ -34,10 +35,10 @@
           </div>
 
           <!-- Submit button -->
-          <button id="login-submit" type="submit" class="btn btn-secondary btn-lg">Sign in</button>
+          <button id="login-submit" type="submit" class="btn btn-secondary btn-lg btn-block">Sign in</button>
 
           <!-- Register button -->
-          <input class="btn btn-secondary btn-lg" type="button" asp-router-returnUrl="@Model.ReturnUrl" onclick="location.href='./Register';" value="Register" />
+          <input class="btn btn-secondary btn-lg btn-block" type="button" asp-router-returnUrl="@Model.ReturnUrl" onclick="location.href='./Register';" value="Register" />
 
           
           <div class="divider d-flex align-items-center my-4">
