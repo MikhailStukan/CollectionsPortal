@@ -4,7 +4,7 @@
 
 namespace CollectionsPortal.Migrations
 {
-    public partial class SeedRoles : Migration
+    public partial class SeedDB : Migration
     {
         private string UserRoleId = Guid.NewGuid().ToString();
         private string AdminRoleId = Guid.NewGuid().ToString();
