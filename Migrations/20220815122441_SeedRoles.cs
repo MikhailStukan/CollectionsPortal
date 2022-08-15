@@ -27,6 +27,13 @@ namespace CollectionsPortal.Migrations
                 ,[RoleId])
             VALUES
                 ('{userId}', '{AdminRoleId}');");
+
+            migrationBuilder.Sql($@"
+            INSERT INTO [dbo].[AspNetUserRoles]
+                ([UserId]
+                ,[RoleId])
+            VALUES
+                ('{userId}', '{UserRoleId}');");
         }
 
         private void SeedUser(MigrationBuilder migrationBuilder)
