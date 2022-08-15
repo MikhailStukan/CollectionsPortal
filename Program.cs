@@ -1,5 +1,6 @@
 using CollectionsPortal.Data;
 using CollectionsPortal.Models;
+using DotNetEd.CoreAdmin;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,10 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("RequireAdmin", policy => policy.RequireRole("Administrator"));
     options.AddPolicy("RequireUser", policy => policy.RequireRole("User"));
 });
+
+builder.Services.AddCoreAdmin();
+builder.Services.AddCoreAdmin("Administrator");
+
 
 var app = builder.Build();
 
@@ -47,5 +52,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+
 
 app.Run();

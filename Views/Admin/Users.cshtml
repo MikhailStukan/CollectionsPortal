@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Admin Panel";
+}
+@model CollectionsPortal.ViewModels.UserViewModel
+
+<div class="text-center">
+    <h2>Manage users: </h2>
+    <input id="searchUser" class="form-control" placeholder="Search user" name="searchUser" />
+    <div>
+         @foreach (var user in Model.Paginated())  
+        {  
+        <div id="userBlock" class="alert alert-secondary rounded-0">  
+            <p><b>Email: </b>@user.Email <button class="btn btn-primary">Block</button><button class="btn btn-success">Make admin</button><button class="btn btn-danger">Delete</button></p>
+        </div>  
+        }  
+  
+    <ul class="pagination">  
+        @for (int i = 1; i <= Model.PageCount(); i++)  
+            {  
+            <li class="@(i == Model.CurrentPage ? "page-item active" : "page-item")">  
+                <a class="page-link" href="@Url.Action("Users", new { page = i })">@i</a>  
+            </li>  
+            }  
+    </ul>  
+    </div>
+</div>

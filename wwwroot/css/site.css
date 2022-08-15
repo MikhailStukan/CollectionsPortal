@@ -16,3 +16,13 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+#userBlock{
+    text-align:left;
+}
+
+#searchUser{
+    max-width: 300px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
