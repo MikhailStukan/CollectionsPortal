@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CollectionsPortal.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Policy = "RequireAdmin")]
     public class Admin : Controller
     {
         public IActionResult Index()

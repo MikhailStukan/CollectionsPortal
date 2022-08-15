@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace CollectionsPortal.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "RequireUser")]
     public class Collection : Controller
     {
         public IActionResult Profile()

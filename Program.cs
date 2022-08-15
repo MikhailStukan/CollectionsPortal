@@ -15,6 +15,11 @@ builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfi
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireAdmin", policy => policy.RequireRole("Administrator"));
+    options.AddPolicy("RequireUser", policy => policy.RequireRole("User"));
+});
 
 var app = builder.Build();
 
