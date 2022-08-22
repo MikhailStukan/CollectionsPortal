@@ -2,7 +2,19 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+<div class="content">
     <p>Main page toDo</p>   
+    <p>last items here:</p>
+    <p>top 5 biggest collections:</p>
+    <div class="container mt-5 col-6">
+        <h2>Tags:</h2>
+        <ul class="cloud" role="navigation" aria-label="Tag Cloud">
+        @{
+            foreach(var tagName in (List<String>)ViewData["tags"])
+            {
+                <li><a href="search/?tag=@tagName">@tagName</a></li>
+            }
+         }
+        </ul>
+    </div>
 </div>
