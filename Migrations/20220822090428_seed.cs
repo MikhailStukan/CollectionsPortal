@@ -4,7 +4,7 @@
 
 namespace CollectionsPortal.Migrations
 {
-    public partial class SeedDB : Migration
+    public partial class seed : Migration
     {
         private string UserRoleId = Guid.NewGuid().ToString();
         private string AdminRoleId = Guid.NewGuid().ToString();
@@ -16,6 +16,10 @@ namespace CollectionsPortal.Migrations
             SeedUser(migrationBuilder);
 
             SeedUserRoles(migrationBuilder);
+
+            seedTags(migrationBuilder);
+
+            seedTopics(migrationBuilder);
 
         }
 
@@ -52,6 +56,20 @@ namespace CollectionsPortal.Migrations
             VALUES ('{AdminRoleId}', 'Administrator', 'ADMINISTRATOR', null);");
             migrationBuilder.Sql($@"INSERT INTO [dbo].[AspNetRoles] ([Id],[Name],[NormalizedName],[ConcurrencyStamp])
             VALUES ('{UserRoleId}', 'User', 'USER', null);");
+        }
+
+        private void seedTags(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.Sql($@"INSERT INTO [dbo].[Tags] ([Name]) VALUES ('Whiskey');");
+            migrationBuilder.Sql($@"INSERT INTO [dbo].[Tags] ([Name]) VALUES ('Ferrari');");
+            migrationBuilder.Sql($@"INSERT INTO [dbo].[Tags] ([Name]) VALUES ('Fantasy');");
+        }
+
+        private void seedTopics(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.Sql($@"INSERT INTO [dbo].[Topics] ([Name]) VALUES ('Books');");
+            migrationBuilder.Sql($@"INSERT INTO [dbo].[Topics] ([Name]) VALUES ('Cars');");
+            migrationBuilder.Sql($@"INSERT INTO [dbo].[Topics] ([Name]) VALUES ('Alcohol');");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

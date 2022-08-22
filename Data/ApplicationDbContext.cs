@@ -13,5 +13,10 @@ namespace CollectionsPortal.Data
         }
 
         public DbSet<Tag> Tags { get; set; }
+        public DbSet<Topic> Topics { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Like> Likes { get; set; }
+        public DbSet<Item> Items { get; set; }
+        public DbSet<Collection> Collections { get; set; }
     }
 }
