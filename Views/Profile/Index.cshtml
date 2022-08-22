@@ -3,7 +3,10 @@
 }
 <h1 class="display-4">Hello, @ViewBag.User</h1>
 <div class="text-center">
-    <button class="btn btn-success">Create new collection</button>
+    <a href="/profile/create/">
+        <button class="btn btn-success">Create new collection</button>
+        </a>
+    
     <h2>Your collections: </h2>
     @{
         foreach(var item in ViewBag.Collections)

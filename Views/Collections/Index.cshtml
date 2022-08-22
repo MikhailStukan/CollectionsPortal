@@ -1,1 +1,18 @@
-﻿<p>Collection name: </p><p>@ViewBag.Collection.Name</p>
+﻿<div class="container-fluid">
+    <h2>Collection name: @ViewBag.Collection.Name Owner: @ViewBag.Owner</h2>
+    <h2>Collection items: </h2>
+    @{
+        if(User.Identity.Name != null)
+        {
+           if(User.IsInRole("Administrator") || User.Identity.Name == ViewBag.Owner)
+            {
+            <button class="btn btn-success">Add item to this collection</button>
+            <button class="btn btn-danger">Delete collection</button>
+            }
+        }
+        foreach(var item in ViewBag.Items)
+        {
+            <p>@item.Name</p>
+        }         
+    }
+</div>

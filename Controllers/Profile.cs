@@ -21,6 +21,7 @@ namespace CollectionsPortal.Controllers
         public async Task<IActionResult> Index()
         {
             User user =  await _userManager.FindByNameAsync(User.Identity.Name);
+            
 
             ViewBag.User = user;
 
@@ -49,7 +50,7 @@ namespace CollectionsPortal.Controllers
             _context.Collections.Add(collection);
             _context.SaveChanges();
 
-            return RedirectToAction("Index", "Profile");
+            return RedirectToAction("Index", "Collections", new {collectionId = collection.Id});
         }
     }
 }
