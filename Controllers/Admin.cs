@@ -9,12 +9,11 @@ namespace CollectionsPortal.Controllers
     [Authorize(Policy = "RequireAdmin")]
     public class Admin : Controller
     {
-        private readonly ApplicationDbContext db;
+        private readonly ApplicationDbContext _context;
         
-
-        public Admin(ApplicationDbContext context)
+        public Admin(ApplicationDbContext db)
         {
-            db = context;
+            _context = db;
         }
         public IActionResult Index()
         {
@@ -26,7 +25,7 @@ namespace CollectionsPortal.Controllers
             var usersView = new UserViewModel
             {
                 UsersPerPage = 10,
-                Users = db.Users.OrderBy(u => u.Id),
+                Users = _context.Users.OrderBy(u => u.Id),
                 CurrentPage = currentPageIndex
             };
 

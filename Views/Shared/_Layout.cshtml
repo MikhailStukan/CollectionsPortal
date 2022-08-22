@@ -28,7 +28,7 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                            <li class="nav-item">
-                                <a class="nav-link active" asp-area="" asp-controller="Collection" asp-action="Profile">Profile</a>
+                                <a class="nav-link active" asp-area="" asp-controller="Profile" asp-action="Index">Profile</a>
                            </li> 
                         }
                         @if (User.IsInRole("Administrator"))
