@@ -1,17 +1,20 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+
+@inject IViewLocalizer Localizer
+@{
     ViewData["Title"] = "Profile";
 }
-<h1 class="display-4">Hello, @ViewBag.User</h1>
+<h1 class="display-4">@Localizer["Hello"], @ViewBag.User</h1>
 <div class="text-center">
     <a href="/profile/create/">
-        <button class="btn btn-success">Create new collection</button>
+        <button class="btn btn-success">@Localizer["CreateNewCollection"]</button>
         </a>
     
-    <h2>Your collections: </h2>
+    <h2>@Localizer["YourCollections"] </h2>
     @{
         foreach(var item in ViewBag.Collections)
         {
-            <div><a href="/collections/?collectionId=@item.Id">@item.Name</a><button class="btn btn-primary" id="buttonEdit"><i class="bi bi-x-square-fill"></i></button></div>
+            <div><a href="/collections/?collectionId=@item.Id">@item.Name</a></div>
         }
     }
 </div>

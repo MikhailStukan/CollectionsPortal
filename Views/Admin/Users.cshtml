@@ -1,16 +1,19 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+
+@inject IViewLocalizer Localizer
+@{
     ViewData["Title"] = "Admin Panel";
 }
 @model CollectionsPortal.ViewModels.UserViewModel
 
 <div class="text-center">
-    <h2>Manage users: </h2>
-    <input id="searchUser" class="form-control" placeholder="Search user" name="searchUser" />
+    <h2>@Localizer["ManageUsers"]</h2>
+    <input id="searchUser" class="form-control" placeholder="@Localizer["SearchUser"]" name="searchUser" />
     <div>
          @foreach (var user in Model.Paginated())  
         {  
         <div id="userBlock" class="alert alert-secondary rounded-0">  
-            <p><b>Email: </b>@user.Email <button class="btn btn-primary">Block</button><button class="btn btn-success">Make admin</button><button class="btn btn-danger">Delete</button></p>
+            <p><b>@Localizer["Email"]: </b>@user.Email <button class="btn btn-primary">@Localizer["Block"]</button><button class="btn btn-success">@Localizer["MakeAdmin"]</button><button class="btn btn-danger">@Localizer["Delete"]</button></p>
         </div>  
         }  
   

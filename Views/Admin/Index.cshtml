@@ -1,12 +1,15 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+
+@inject IViewLocalizer Localizer
+@{
     ViewData["Title"] = "Admin Panel";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Admin panel</h1>
+    <h1 class="display-4">@Localizer["AdminPanel"]</h1>
     <div>
     <h2>Controls: </h2>
-    <a href="/coreadmin" class="btn btn-danger" role="button">Manage database</a>
-    <a href="admin/users" class="btn btn-success" role="button">Manage users</a>
+    <a href="/coreadmin" class="btn btn-danger" role="button">@Localizer["ManageDatabase"]</a>
+    <a href="admin/users" class="btn btn-success" role="button">@Localizer["ManageUsers"]</a>
     </div>
 </div>

@@ -1,4 +1,7 @@
-﻿@model CollectionsPortal.Models.Collection;
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+
+@inject IViewLocalizer Localizer
+@model CollectionsPortal.Models.Collection;
 @{
     ViewData["Title"] = "Create collection";
 }
@@ -7,12 +10,12 @@
     <div asp-validation-summary="ModelOnly"></div>
     <div class="col-md-4">
         <div class="form-group">
-            <label asp-for="Name">Name</label><br />
+            <label asp-for="Name">@Localizer["Name"]</label><br />
             <input asp-for="Name" class="form-control"/>
             <span asp-validation-for="Name"></span>
         </div>
         <div class="form-group">
-            <label asp-for="TopicId">Topic</label><br />
+            <label asp-for="TopicId">@Localizer["Topic"]</label><br />
             <select asp-for="TopicId" class="form-control">
                 @{
                     foreach (var topic in ViewBag.Topics)
@@ -23,12 +26,12 @@
             </select>
         </div>
         <div class="form-group">
-            <label asp-for="Description">Description</label><br />
+            <label asp-for="Description">@Localizer["Description"]</label><br />
             <textarea class="form-control" rows="3" asp-for="Description"></textarea>
             <span asp-validation-for="Description"></span>
         </div>
         <div>
-            <button type="submit" class="btn btn-primary mt-1">Create</button>
+            <button type="submit" class="btn btn-primary mt-1">@Localizer["Create"]</button>
         </div>
     </div>
 </form>

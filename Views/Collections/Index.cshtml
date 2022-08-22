@@ -1,13 +1,16 @@
-﻿<div class="container-fluid">
-    <h2>Collection name: @ViewBag.Collection.Name Owner: @ViewBag.Owner</h2>
-    <h2>Collection items: </h2>
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+
+@inject IViewLocalizer Localizer
+<div class="container-fluid">
+    <h2>@Localizer["CollectionName"] @ViewBag.Collection.Name Owner: @ViewBag.Owner</h2>
+    <h2>@Localizer["CollectionItems"] </h2>
     @{
         if(User.Identity.Name != null)
         {
            if(User.IsInRole("Administrator") || User.Identity.Name == ViewBag.Owner)
             {
-            <button class="btn btn-success">Add item to this collection</button>
-            <button class="btn btn-danger">Delete collection</button>
+            <button class="btn btn-success">@Localizer["AddItem"]</button>
+            <button class="btn btn-danger">@Localizer["DeleteCollection"]</button>
             }
         }
         foreach(var item in ViewBag.Items)

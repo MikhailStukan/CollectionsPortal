@@ -1,8 +1,11 @@
+using System.Globalization;
 using CollectionsPortal.Data;
 using CollectionsPortal.Models;
 using DotNetEd.CoreAdmin;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +28,27 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddCoreAdmin();
 builder.Services.AddCoreAdmin("Administrator");
 
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
+builder.Services.AddMvc()
+    .AddDataAnnotationsLocalization()
+    .AddViewLocalization();
+
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new List<CultureInfo>
+    {
+        new CultureInfo("en"),
+        new CultureInfo("fr"),
+        new CultureInfo("pl")
+    };
+
+    options.DefaultRequestCulture = new RequestCulture("en");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

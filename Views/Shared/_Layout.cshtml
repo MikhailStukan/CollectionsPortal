@@ -1,4 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using System.Globalization
+@using Microsoft.AspNetCore.Http.Features
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,19 +28,19 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <form class="d-flex">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <input class="form-control me-2" type="search" placeholder="@Localizer["Search"]" aria-label="Search">
                             <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
                         </form>
                         @if (User.Identity.IsAuthenticated)
                         {
                            <li class="nav-item">
-                                <a class="nav-link active" asp-area="" asp-controller="Profile" asp-action="Index">Profile</a>
+                                <a class="nav-link active" asp-area="" asp-controller="Profile" asp-action="Index">@Localizer["Profile"]</a>
                            </li> 
                         }
                         @if (User.IsInRole("Administrator"))
                         {
                            <li class="nav-item">
-                                <a class="nav-link active" asp-area="" asp-controller="Admin" asp-action="Index">Admin panel</a>
+                                <a class="nav-link active" asp-area="" asp-controller="Admin" asp-action="Index">@Localizer["Admin"]</a>
                            </li>
                         }
                     </ul>
@@ -63,6 +69,7 @@
         <div class="container">
            <p>2022 - Mikhail Stukan - Collections</p>
         </div>
+        @await Html.PartialAsync("_SelectLanguage")
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

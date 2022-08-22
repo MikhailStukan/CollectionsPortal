@@ -1,5 +1,8 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["Home Page"];
 }
 
 <div class="content">
@@ -7,12 +10,12 @@
     <p>last items here:</p>
     <p>top 5 biggest collections:</p>
     <div class="container mt-5 col-6">
-        <h2>Tags:</h2>
+        <h2>@Localizer["Tags"]</h2>
         <ul class="cloud" role="navigation" aria-label="Tag Cloud">
         @{
             foreach(var tagName in (List<String>)ViewData["tags"])
             {
-                <li><a href="search/?tag=@tagName">@tagName</a></li>
+                    <li><a href="search/?tag=@tagName">@tagName</a></li>
             }
          }
         </ul>
