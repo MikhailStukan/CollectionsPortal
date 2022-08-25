@@ -22,6 +22,8 @@ namespace CollectionsPortal.Controllers
         public IActionResult Index()
         {
             ViewData["tags"] = GetTags();
+            ViewData["collections"] = BiggestCollections();
+            ViewData["items"] = LastItems();
             return View();
         }
 
@@ -55,6 +57,20 @@ namespace CollectionsPortal.Controllers
                 }
             }
             return tagNames;
+        }
+
+        private List<Collection> BiggestCollections()
+        {
+            List<Collection> collections = new List<Collection>();
+
+            return collections;
+        }
+
+        private List<Item> LastItems()
+        {
+            List<Item> items = new List<Item>();
+
+            return items;
         }
     }
 }

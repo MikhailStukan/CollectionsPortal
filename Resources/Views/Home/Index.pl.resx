@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="BiggestCollections" xml:space="preserve">
+    <value>Największe kolekcje</value>
+  </data>
   <data name="HomePage" xml:space="preserve">
     <value>Strona główna</value>
+  </data>
+  <data name="NewAdditions" xml:space="preserve">
+    <value>Nowe elementy</value>
   </data>
   <data name="Tags" xml:space="preserve">
     <value>Tagi:</value>
