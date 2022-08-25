@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using CollectionsPortal.Data;
+﻿using CollectionsPortal.Data;
 using CollectionsPortal.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CollectionsPortal.Controllers
 {
@@ -21,14 +21,14 @@ namespace CollectionsPortal.Controllers
         {
             Collection collection = _context.Collections.Find(collectionId);
 
-            if(collection == null)
+            if (collection == null)
                 return NotFound();
 
             ViewBag.Collection = collection;
 
             var collOwner = _context.Users.Where(p => p.Id == collection.UserId).ToList();
 
-            foreach(var user in collOwner)
+            foreach (var user in collOwner)
             {
                 ViewBag.Owner = user.UserName;
             }

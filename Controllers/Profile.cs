@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CollectionsPortal.Data;
+using CollectionsPortal.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using CollectionsPortal.Data;
-using CollectionsPortal.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CollectionsPortal.Controllers
 {
@@ -20,8 +20,8 @@ namespace CollectionsPortal.Controllers
 
         public async Task<IActionResult> Index()
         {
-            User user =  await _userManager.FindByNameAsync(User.Identity.Name);
-            
+            User user = await _userManager.FindByNameAsync(User.Identity.Name);
+
 
             ViewBag.User = user;
 
@@ -50,7 +50,7 @@ namespace CollectionsPortal.Controllers
             _context.Collections.Add(collection);
             _context.SaveChanges();
 
-            return RedirectToAction("Index", "Collections", new {collectionId = collection.Id});
+            return RedirectToAction("Index", "Collections", new { collectionId = collection.Id });
         }
     }
 }

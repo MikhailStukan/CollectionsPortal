@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
+﻿using CollectionsPortal.Data;
 using CollectionsPortal.ViewModels;
-using CollectionsPortal.Models;
-using CollectionsPortal.Data;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CollectionsPortal.Controllers
 {
@@ -10,7 +9,7 @@ namespace CollectionsPortal.Controllers
     public class Admin : Controller
     {
         private readonly ApplicationDbContext _context;
-        
+
         public Admin(ApplicationDbContext db)
         {
             _context = db;

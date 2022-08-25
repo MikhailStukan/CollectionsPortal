@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace CollectionsPortal.Models
+﻿namespace CollectionsPortal.Models
 
 {
     public class Tag
