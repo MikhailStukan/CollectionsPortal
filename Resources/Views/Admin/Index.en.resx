@@ -117,13 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="&quot;AdminPanel&quot;" xml:space="preserve">
+  <data name="AdminPanel" xml:space="preserve">
     <value>Admin panel</value>
   </data>
-  <data name="&quot;ManageDatabase&quot;" xml:space="preserve">
+  <data name="ManageDatabase" xml:space="preserve">
     <value>Manage database</value>
   </data>
-  <data name="&quot;ManageUsers&quot;" xml:space="preserve">
+  <data name="ManageUsers" xml:space="preserve">
     <value>Manage users</value>
   </data>
 </root>

@@ -117,13 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="&quot;AdminPanel&quot;" xml:space="preserve">
+  <data name="AdminPanel" xml:space="preserve">
     <value>Panel d'administration</value>
   </data>
-  <data name="&quot;Profile&quot;" xml:space="preserve">
+  <data name="Profile" xml:space="preserve">
     <value>Profil</value>
   </data>
-  <data name="&quot;Search&quot;" xml:space="preserve">
+  <data name="Search" xml:space="preserve">
     <value>Recherche</value>
   </data>
 </root>

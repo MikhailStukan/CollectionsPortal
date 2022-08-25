@@ -117,13 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="&quot;CreateNewCollection&quot;" xml:space="preserve">
+  <data name="CreateNewCollection" xml:space="preserve">
     <value>Create new collection</value>
   </data>
-  <data name="&quot;Hello&quot;" xml:space="preserve">
+  <data name="Hello" xml:space="preserve">
     <value>Hello</value>
   </data>
-  <data name="&quot;YourCollections&quot;" xml:space="preserve">
+  <data name="YourCollections" xml:space="preserve">
     <value>Your collections:</value>
   </data>
 </root>
