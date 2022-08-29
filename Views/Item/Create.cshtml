@@ -1,0 +1,22 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+
+@inject IViewLocalizer Localizer
+@model CollectionsPortal.Models.Item;
+
+@{
+    ViewData["Title"] = "Create item";
+}
+
+<form method="post" enctype="multipart/form-data"  asp-controller="Item" asp-action="CreateItem">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="Name">@Localizer["Name"]</label><br />
+            <input asp-for="Name" class="form-control"/>
+            <span asp-validation-for="Name"></span>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary mt-1">@Localizer["Create"]</button>
+        </div>
+    </div>
+</form>

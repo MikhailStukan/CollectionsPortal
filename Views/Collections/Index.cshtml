@@ -9,7 +9,7 @@
         {
            if(User.IsInRole("Administrator") || User.Identity.Name == ViewBag.Owner)
             {
-            <button class="btn btn-success">@Localizer["AddItem"]</button>
+            <button onclick="location.href='@Url.Action("Create","Item", new {collection = ViewBag.Collection.Id})'" class="btn btn-success">@Localizer["AddItem"]</button>
             <button onclick="location.href='@Url.Action("Delete", "Collections", new {collection = ViewBag.Collection.Id})'" class="btn btn-danger">@Localizer["DeleteCollection"]</button>
             }
         }
