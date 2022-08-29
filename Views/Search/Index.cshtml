@@ -1,8 +1,16 @@
 ﻿@using CollectionsPortal.Models;
 
 @{
-    foreach(var item in (List<Item>)ViewBag.items)
+    if (ViewBag.items != null)
     {
-    <p>@item.Id</p>
-}
+        foreach (var item in (List<Item>)ViewBag.items)
+        {
+            <p>@item.Id</p>
+        }
+    }
+    else
+    {
+        <h2>Nothing found</h2>
+    }
+
 }

@@ -33,5 +33,12 @@ namespace CollectionsPortal.Controllers
 
             return View();
         }
+
+        public IActionResult textSearch(string text)
+        {
+            //full text search of db implementation here
+
+            return View();
+        }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using CollectionsPortal.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CollectionsPortal.Controllers
 {
@@ -108,7 +109,15 @@ namespace CollectionsPortal.Controllers
 
                 if (user != null)
                 {
+                    var items = _context.Collections.OrderBy(p => p.Id).Include(p => p.Items).ToList();
+                    foreach (var item in items)
+                    {
+                        _context.Remove(item);
+                    }
+
                     await _userManager.DeleteAsync(user);
+
+
                     if(user.UserName == User.Identity.Name)
                     {
                         await _signInManager.SignOutAsync();

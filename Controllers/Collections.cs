@@ -2,6 +2,7 @@
 using CollectionsPortal.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CollectionsPortal.Controllers
 {
@@ -37,6 +38,28 @@ namespace CollectionsPortal.Controllers
             ViewBag.Items = items;
 
             return View();
+        }
+
+        
+        public async Task<IActionResult> Delete(int collection)
+        {
+            var coll = _context.Collections.OrderBy(p => p.Id).Include(p => p.Items).First();
+
+            if (coll == null)
+                return NotFound();
+
+            var collOwner = _context.Users.Where(p => p.Id == coll.UserId).ToList();
+
+            foreach(var user in collOwner)
+            {
+                if(User.Identity.Name != null && (User.Identity.Name == user.UserName || User.IsInRole("Administrator")))
+                {
+                    _context.Collections.Remove(coll);
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            return RedirectToAction("Index", "Profile");
         }
     }
 }

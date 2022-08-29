@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CollectionsPortal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220829132646_Initial")]
+    [Migration("20220829143408_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,10 +53,11 @@ namespace CollectionsPortal.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Collections");
                 });
@@ -76,14 +77,17 @@ namespace CollectionsPortal.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ItemId")
+                    b.Property<int?>("ItemId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -96,7 +100,7 @@ namespace CollectionsPortal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CollectionId")
+                    b.Property<int?>("CollectionId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -112,6 +116,8 @@ namespace CollectionsPortal.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CollectionId");
+
                     b.ToTable("Items");
                 });
 
@@ -123,15 +129,17 @@ namespace CollectionsPortal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ItemId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("ItemId")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Likes");
                 });
@@ -403,6 +411,48 @@ namespace CollectionsPortal.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CollectionsPortal.Models.Collection", b =>
+                {
+                    b.HasOne("CollectionsPortal.Models.User", "User")
+                        .WithMany("collections")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CollectionsPortal.Models.Comment", b =>
+                {
+                    b.HasOne("CollectionsPortal.Models.Item", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("ItemId");
+
+                    b.HasOne("CollectionsPortal.Models.User", null)
+                        .WithMany("comments")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("CollectionsPortal.Models.Item", b =>
+                {
+                    b.HasOne("CollectionsPortal.Models.Collection", null)
+                        .WithMany("Items")
+                        .HasForeignKey("CollectionId");
+                });
+
+            modelBuilder.Entity("CollectionsPortal.Models.Like", b =>
+                {
+                    b.HasOne("CollectionsPortal.Models.Item", "Item")
+                        .WithMany("Likes")
+                        .HasForeignKey("ItemId");
+
+                    b.HasOne("CollectionsPortal.Models.User", "User")
+                        .WithMany("likes")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Item");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -452,6 +502,27 @@ namespace CollectionsPortal.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("CollectionsPortal.Models.Collection", b =>
+                {
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("CollectionsPortal.Models.Item", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Likes");
+                });
+
+            modelBuilder.Entity("CollectionsPortal.Models.User", b =>
+                {
+                    b.Navigation("collections");
+
+                    b.Navigation("comments");
+
+                    b.Navigation("likes");
                 });
 #pragma warning restore 612, 618
         }
