@@ -129,6 +129,7 @@ namespace CollectionsPortal.Areas.Identity.Pages.Account
                     LastName = Input.LastName,
                     UserName = Input.Email,
                     Email = Input.Email,
+                    isAdmin = false
                 };
 
                 var result = await _userManager.CreateAsync(user, Input.Password);

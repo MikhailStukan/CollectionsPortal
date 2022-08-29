@@ -42,10 +42,10 @@ namespace CollectionsPortal.Migrations
 
         private void SeedUser(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql($@"INSERT [dbo].[AspNetUsers] ([Id], [FirstName], [LastName], [UserName], [NormalizedUserName], [Email], [NormalizedEmail], [EmailConfirmed],
+            migrationBuilder.Sql($@"INSERT [dbo].[AspNetUsers] ([Id], [FirstName], [LastName], [isAdmin], [UserName], [NormalizedUserName], [Email], [NormalizedEmail], [EmailConfirmed],
             [PasswordHash], [SecurityStamp], [ConcurrencyStamp], [PhoneNumber], [PhoneNumberConfirmed], [TwoFactorEnabled], [LockoutEnd], [LockoutEnabled], [AccessFailedCount])
             VALUES
-            (N'{userId}', N'Admin', N'Admin', N'admin@gmail.com', N'ADMIN@GMAIL.COM', N'admin@gmail.com', N'ADMIN@GMAIL.COM', 1, 
+            (N'{userId}', N'Admin', N'Admin', 1,  N'admin@gmail.com', N'ADMIN@GMAIL.COM', N'admin@gmail.com', N'ADMIN@GMAIL.COM', 1, 
             N'AQAAAAEAACcQAAAAEM9bd2+tdwpkGD4E9QEIYvo/uI5ThjzRnRvTo0kjNES3lKF722gdXyRIHyjelgnAhg==',
             N'3ZMWQLTNBURJMN6KK3CRCMJ3KTGOHML2', N'd511593e-d565-4135-a19c-ac2eda0058f7', NULL, 0, 0, NULL, 1, 0)");
         }

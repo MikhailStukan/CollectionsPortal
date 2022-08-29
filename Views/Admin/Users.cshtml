@@ -13,7 +13,10 @@
          @foreach (var user in Model.Paginated())  
         {  
         <div id="userBlock" class="alert alert-secondary rounded-0">  
-            <p><b>@Localizer["Email"]: </b>@user.Email <button class="btn btn-primary">@Localizer["Block"]</button><button class="btn btn-success">@Localizer["MakeAdmin"]</button><button class="btn btn-danger">@Localizer["Delete"]</button></p>
+            <p><b>@Localizer["Email"]</b>@user.Email 
+            <button id="block" onclick="location.href='@Url.Action("Block","admin", new {email = @user.Email})'"class="btn btn-primary">@if(user.LockoutEnd == null){@Localizer["Block"]}else{@Localizer["Unblock"]}</button>
+            <button id="admin" onclick="location.href='@Url.Action("MakeAdmin", "admin", new {email = @user.Email})'" class="btn btn-success">@if(user.isAdmin){@Localizer["RemoveAdmin"]}else{@Localizer["AddAdmin"]}</button>
+            <button id="delete" onclick="location.href='@Url.Action("Delete", "admin", new {email = @user.Email})'"  class="btn btn-danger">@Localizer["Delete"]</button></p>
         </div>  
         }  
   

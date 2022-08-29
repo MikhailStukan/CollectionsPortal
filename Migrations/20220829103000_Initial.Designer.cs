@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CollectionsPortal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220822101936_Initial")]
+    [Migration("20220829103000_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -227,6 +227,9 @@ namespace CollectionsPortal.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("isAdmin")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
