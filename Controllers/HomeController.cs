@@ -43,19 +43,13 @@ namespace CollectionsPortal.Controllers
 
             return LocalRedirect(returnUrl);
         }
-        private List<string> GetTags()
+        private List<Tag> GetTags()
         {
-            List<string> tagNames = new List<string>();
+            List<Tag> tags = new List<Tag>();
 
-            var tags = _context.Tags.ToList();
-            if (tags != null)
-            {
-                foreach (var tag in tags)
-                {
-                    tagNames.Add(tag.Name);
-                }
-            }
-            return tagNames;
+            tags = _context.Tags.ToList();
+
+            return tags;
         }
 
         private List<Collection> BiggestCollections()
@@ -71,5 +65,6 @@ namespace CollectionsPortal.Controllers
 
             return items;
         }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization;
+@using CollectionsPortal.Models;
 
 @inject IViewLocalizer Localizer
 @{
@@ -18,9 +19,9 @@
         <h2>@Localizer["Tags"]</h2>
         <ul class="cloud" role="navigation" aria-label="Tag Cloud">
         @{
-            foreach(var tagName in (List<String>)ViewData["tags"])
+            foreach(var tag in (List<Tag>)ViewData["tags"])
             {
-                    <li><a href="search/?tag=@tagName">@tagName</a></li>
+                    <li><a href="@Url.Action("Index", "Search", new {tag = @tag.Id})">@tag.Name</a></li>
             }
          }
         </ul>

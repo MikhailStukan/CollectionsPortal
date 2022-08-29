@@ -46,11 +46,14 @@ namespace CollectionsPortal.Controllers
             collection.UserId = await _userManager.GetUserIdAsync(user);
             collection.CreatedAt = DateTime.Now;
             collection.UpdatedAt = DateTime.Now;
+            collection.CountItems = 0;
 
             _context.Collections.Add(collection);
             _context.SaveChanges();
 
             return RedirectToAction("Index", "Collections", new { collectionId = collection.Id });
         }
+
+
     }
 }

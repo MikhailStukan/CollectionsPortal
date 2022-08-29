@@ -63,7 +63,8 @@ namespace CollectionsPortal.Migrations
                     TopicId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CountItems = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -127,6 +128,20 @@ namespace CollectionsPortal.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tags", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TagsToItems",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ItemId = table.Column<int>(type: "int", nullable: false),
+                    TagId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TagsToItems", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -319,6 +334,9 @@ namespace CollectionsPortal.Migrations
 
             migrationBuilder.DropTable(
                 name: "Tags");
+
+            migrationBuilder.DropTable(
+                name: "TagsToItems");
 
             migrationBuilder.DropTable(
                 name: "Topics");
