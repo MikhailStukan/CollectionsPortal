@@ -1,9 +1,9 @@
 ﻿namespace CollectionsPortal.Models
 {
-    public class Topic
+    public class FieldTemplate
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<Collection> Collection { get; set; }
+        public Collection Collection { get; set; }
     }
 }

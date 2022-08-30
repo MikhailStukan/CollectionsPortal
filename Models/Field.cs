@@ -1,9 +1,12 @@
 ﻿namespace CollectionsPortal.Models
 {
-    public class Like
+    public class Field
     {
         public int Id { get; set; }
-        public User User { get; set; }
+        public string Value { get; set; }
+
         public Item Item { get; set; }
+        
+        public Collection Collection { get; set; }
     }
 }

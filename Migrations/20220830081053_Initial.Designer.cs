@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CollectionsPortal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220829143453_seed")]
-    partial class seed
+    [Migration("20220830081053_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,9 +31,6 @@ namespace CollectionsPortal.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("CountItems")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -57,6 +54,8 @@ namespace CollectionsPortal.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("TopicId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Collections");
@@ -77,7 +76,7 @@ namespace CollectionsPortal.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ItemId")
+                    b.Property<int>("ItemId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -90,6 +89,55 @@ namespace CollectionsPortal.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("CollectionsPortal.Models.Field", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CollectionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CollectionId");
+
+                    b.HasIndex("ItemId");
+
+                    b.ToTable("Fields");
+                });
+
+            modelBuilder.Entity("CollectionsPortal.Models.FieldTemplate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CollectionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CollectionId");
+
+                    b.ToTable("FieldTemplates");
                 });
 
             modelBuilder.Entity("CollectionsPortal.Models.Item", b =>
@@ -129,7 +177,7 @@ namespace CollectionsPortal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("ItemId")
+                    b.Property<int>("ItemId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -413,22 +461,66 @@ namespace CollectionsPortal.Migrations
 
             modelBuilder.Entity("CollectionsPortal.Models.Collection", b =>
                 {
+                    b.HasOne("CollectionsPortal.Models.Topic", "Topic")
+                        .WithMany("Collection")
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("CollectionsPortal.Models.User", "User")
                         .WithMany("collections")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Topic");
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("CollectionsPortal.Models.Comment", b =>
                 {
-                    b.HasOne("CollectionsPortal.Models.Item", null)
+                    b.HasOne("CollectionsPortal.Models.Item", "Item")
                         .WithMany("Comments")
-                        .HasForeignKey("ItemId");
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("CollectionsPortal.Models.User", null)
+                    b.HasOne("CollectionsPortal.Models.User", "User")
                         .WithMany("comments")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Item");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CollectionsPortal.Models.Field", b =>
+                {
+                    b.HasOne("CollectionsPortal.Models.Collection", "Collection")
+                        .WithMany()
+                        .HasForeignKey("CollectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CollectionsPortal.Models.Item", "Item")
+                        .WithMany("Fields")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Collection");
+
+                    b.Navigation("Item");
+                });
+
+            modelBuilder.Entity("CollectionsPortal.Models.FieldTemplate", b =>
+                {
+                    b.HasOne("CollectionsPortal.Models.Collection", "Collection")
+                        .WithMany("FieldTemplates")
+                        .HasForeignKey("CollectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Collection");
                 });
 
             modelBuilder.Entity("CollectionsPortal.Models.Item", b =>
@@ -442,7 +534,9 @@ namespace CollectionsPortal.Migrations
                 {
                     b.HasOne("CollectionsPortal.Models.Item", "Item")
                         .WithMany("Likes")
-                        .HasForeignKey("ItemId");
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("CollectionsPortal.Models.User", "User")
                         .WithMany("likes")
@@ -506,6 +600,8 @@ namespace CollectionsPortal.Migrations
 
             modelBuilder.Entity("CollectionsPortal.Models.Collection", b =>
                 {
+                    b.Navigation("FieldTemplates");
+
                     b.Navigation("Items");
                 });
 
@@ -513,7 +609,14 @@ namespace CollectionsPortal.Migrations
                 {
                     b.Navigation("Comments");
 
+                    b.Navigation("Fields");
+
                     b.Navigation("Likes");
+                });
+
+            modelBuilder.Entity("CollectionsPortal.Models.Topic", b =>
+                {
+                    b.Navigation("Collection");
                 });
 
             modelBuilder.Entity("CollectionsPortal.Models.User", b =>

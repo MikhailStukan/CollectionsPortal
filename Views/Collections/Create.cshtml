@@ -1,12 +1,12 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization;
 
 @inject IViewLocalizer Localizer
-@model CollectionsPortal.Models.Collection;
+@model CollectionsPortal.ViewModels.CreateCollectionViewModel;
 @{
-    ViewData["Title"] = "Create collection";
+    ViewData["Title"] = @Localizer["CreateCollection"];
 }
 
-<form method="post" enctype="multipart/form-data"  asp-controller="Profile" asp-action="CreateCollection">
+<form method="post" enctype="multipart/form-data"  asp-controller="Collections" asp-action="CreateCollection">
     <div asp-validation-summary="ModelOnly"></div>
     <div class="col-md-4">
         <div class="form-group">
@@ -15,12 +15,12 @@
             <span asp-validation-for="Name"></span>
         </div>
         <div class="form-group">
-            <label asp-for="TopicId">@Localizer["Topic"]</label><br />
-            <select asp-for="TopicId" class="form-control">
+            <label asp-for="Topic">@Localizer["Topic"]</label><br />
+            <select asp-for="Topic.Id" class="form-control">
                 @{
                     foreach (var topic in ViewBag.Topics)
                     {
-                       <option value="@topic.Id">@topic.Name</option> 
+                           <option value="@topic.Id">@topic.Name</option> 
                     }
                 }
             </select>
@@ -30,8 +30,15 @@
             <textarea class="form-control" rows="3" asp-for="Description"></textarea>
             <span asp-validation-for="Description"></span>
         </div>
+        <div class="form-group">
+            <label asp-for="Fields">@Localizer["Fields"]</label>
+            <div id="fields">
+            </div>
+            <span asp-validation-for="Fields" class="text-danger"></span>
+            <a class="btn btn-primary" onclick="addInput()">@Localizer["AddFields"]</a>
+        </div>
         <div>
-            <button type="submit" class="btn btn-primary mt-1">@Localizer["Create"]</button>
+            <button type="submit" class="btn btn-success">@Localizer["Create"]</button>
         </div>
     </div>
 </form>

@@ -209,8 +209,7 @@ namespace CollectionsPortal.Migrations
                     TopicId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CountItems = table.Column<int>(type: "int", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -220,6 +219,32 @@ namespace CollectionsPortal.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Collections_Topics_TopicId",
+                        column: x => x.TopicId,
+                        principalTable: "Topics",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FieldTemplates",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CollectionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FieldTemplates", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FieldTemplates_Collections_CollectionId",
+                        column: x => x.CollectionId,
+                        principalTable: "Collections",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -230,8 +255,8 @@ namespace CollectionsPortal.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CollectionId = table.Column<int>(type: "int", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CollectionId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -250,7 +275,7 @@ namespace CollectionsPortal.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    ItemId = table.Column<int>(type: "int", nullable: true),
+                    ItemId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -266,7 +291,35 @@ namespace CollectionsPortal.Migrations
                         name: "FK_Comments_Items_ItemId",
                         column: x => x.ItemId,
                         principalTable: "Items",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Fields",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ItemId = table.Column<int>(type: "int", nullable: false),
+                    CollectionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Fields", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Fields_Collections_CollectionId",
+                        column: x => x.CollectionId,
+                        principalTable: "Collections",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Fields_Items_ItemId",
+                        column: x => x.ItemId,
+                        principalTable: "Items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -276,7 +329,7 @@ namespace CollectionsPortal.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    ItemId = table.Column<int>(type: "int", nullable: true)
+                    ItemId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -290,7 +343,8 @@ namespace CollectionsPortal.Migrations
                         name: "FK_Likes_Items_ItemId",
                         column: x => x.ItemId,
                         principalTable: "Items",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -333,6 +387,11 @@ namespace CollectionsPortal.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Collections_TopicId",
+                table: "Collections",
+                column: "TopicId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Collections_UserId",
                 table: "Collections",
                 column: "UserId");
@@ -346,6 +405,21 @@ namespace CollectionsPortal.Migrations
                 name: "IX_Comments_UserId",
                 table: "Comments",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Fields_CollectionId",
+                table: "Fields",
+                column: "CollectionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Fields_ItemId",
+                table: "Fields",
+                column: "ItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FieldTemplates_CollectionId",
+                table: "FieldTemplates",
+                column: "CollectionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Items_CollectionId",
@@ -384,6 +458,12 @@ namespace CollectionsPortal.Migrations
                 name: "Comments");
 
             migrationBuilder.DropTable(
+                name: "Fields");
+
+            migrationBuilder.DropTable(
+                name: "FieldTemplates");
+
+            migrationBuilder.DropTable(
                 name: "Likes");
 
             migrationBuilder.DropTable(
@@ -391,9 +471,6 @@ namespace CollectionsPortal.Migrations
 
             migrationBuilder.DropTable(
                 name: "TagsToItems");
-
-            migrationBuilder.DropTable(
-                name: "Topics");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -406,6 +483,9 @@ namespace CollectionsPortal.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Topics");
         }
     }
 }

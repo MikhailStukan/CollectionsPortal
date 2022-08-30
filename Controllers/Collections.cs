@@ -2,7 +2,10 @@
 using CollectionsPortal.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using CollectionsPortal.ViewModels;
+using CollectionsPortal.Models;
 
 namespace CollectionsPortal.Controllers
 {
@@ -20,46 +23,69 @@ namespace CollectionsPortal.Controllers
         [HttpGet]
         public async Task<ActionResult> Index(int collectionId)
         {
-            Collection collection = _context.Collections.Find(collectionId);
+            var collection = _context.Collections.Where(p => p.Id == collectionId).Include(p => p.User).Include(p => p.Items).First();
 
             if (collection == null)
                 return NotFound();
 
             ViewBag.Collection = collection;
 
-            var collOwner = _context.Users.Where(p => p.Id == collection.UserId).ToList();
+            ViewBag.Owner = collection.User;
 
-            foreach (var user in collOwner)
-            {
-                ViewBag.Owner = user.UserName;
-            }
-
-            var items = _context.Items.Where(p => p.CollectionId == collectionId);
-            ViewBag.Items = items;
+            ViewBag.Items = collection.Items;
 
             return View();
         }
 
-        
+        [Authorize(Policy = "RequireUser")]
+        public async Task<IActionResult> Create()
+        {
+            ViewBag.Topics = await _context.Topics.ToListAsync();
+
+            return View();
+        }
+
+        [Authorize(Policy = "RequireUser")]
+        [HttpPost]
+        public async Task<IActionResult> CreateCollection(CreateCollectionViewModel model)
+        {
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var topic = await _context.Topics.FirstOrDefaultAsync(p => p.Id == model.Topic.Id);
+
+            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            Collection collection = new Collection()
+            {
+                User = user,
+                Name = model.Name,
+                Description = model.Description,
+                FieldTemplates = model.Fields,
+                Topic = topic
+            };
+
+            await _context.AddAsync(collection);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Collections", new { collectionId = collection.Id });
+
+        }
+
+        [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Delete(int collection)
         {
-            var coll = _context.Collections.OrderBy(p => p.Id).Include(p => p.Items).First();
+            var coll = _context.Collections.OrderBy(p => p.Id).Include(p => p.Items).Include(p => p.User).First();
 
             if (coll == null)
                 return NotFound();
 
-            var collOwner = _context.Users.Where(p => p.Id == coll.UserId).ToList();
-
-            foreach(var user in collOwner)
-            {
-                if(User.Identity.Name != null && (User.Identity.Name == user.UserName || User.IsInRole("Administrator")))
+                if(User.Identity.Name != null && (User.Identity.Name == coll.User.UserName || User.IsInRole("Administrator")))
                 {
                     _context.Collections.Remove(coll);
                     await _context.SaveChangesAsync();
                 }
-            }
 
             return RedirectToAction("Index", "Profile");
         }
+
+        }
     }
-}
+
