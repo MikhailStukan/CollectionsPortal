@@ -22,7 +22,7 @@ namespace CollectionsPortal.Controllers
         [HttpGet]
         public async Task<ActionResult> Index(int collectionId)
         {
-            var collection = _context.Collections.Where(p => p.Id == collectionId).Include(p => p.User).Include(p => p.Items).Include(p => p.Topic).Include(p => p.FieldTemplates).First();
+            var collection = _context.Collections.Where(p => p.Id == collectionId).Include(p => p.User).Include(p => p.Items).Include(p => p.Topic).Include(p => p.FieldTemplates).FirstOrDefault();
 
             if (collection == null)
                 return NotFound();
@@ -55,14 +55,16 @@ namespace CollectionsPortal.Controllers
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             var topic = await _context.Topics.FirstOrDefaultAsync(p => p.Id == model.Topic.Id);
 
-            var errors = ModelState.Values.SelectMany(v => v.Errors);
+            
             Collection collection = new Collection()
             {
                 User = user,
                 Name = model.Name,
                 Description = model.Description,
                 FieldTemplates = model.Fields,
-                Topic = topic
+                Topic = topic,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now
             };
 
             await _context.AddAsync(collection);
@@ -73,7 +75,7 @@ namespace CollectionsPortal.Controllers
         }
 
         [Authorize(Policy = "RequireUser")]
-        public async Task<IActionResult> Delete(int collection)
+        public async Task<IActionResult> Delete(int collectionId)
         {
             var coll = _context.Collections.OrderBy(p => p.Id).Include(p => p.Items).Include(p => p.User).First();
 

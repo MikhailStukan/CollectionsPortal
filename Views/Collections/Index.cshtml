@@ -8,9 +8,9 @@
            if(User.IsInRole("Administrator") || User.Identity.Name == ViewBag.Owner.UserName)
             {
                     <h2>@Localizer["ControlCollection"]</h2>
-                    <button onclick="location.href='@Url.Action("Create","Item", new {collection = ViewBag.Collection.Id})'" class="btn btn-success">@Localizer["AddItem"]</button>
-                    <button onclick="location.href='@Url.Action("Edit","Collection", new {collection = ViewBag.Collection.Id})'" class="btn btn-primary">@Localizer["EditCollection"]</button>
-                    <button onclick="location.href='@Url.Action("Delete", "Collections", new {collection = ViewBag.Collection.Id})'" class="btn btn-danger">@Localizer["DeleteCollection"]</button>
+                    <button onclick="location.href='@Url.Action("Create","Item", new {collectionId = ViewBag.Collection.Id})'" class="btn btn-success">@Localizer["AddItem"]</button>
+                    <button onclick="location.href='@Url.Action("Edit","Collection", new {collectionId = ViewBag.Collection.Id})'" class="btn btn-primary">@Localizer["EditCollection"]</button>
+                    <button onclick="location.href='@Url.Action("Delete", "Collections", new {collectionId = ViewBag.Collection.Id})'" class="btn btn-danger">@Localizer["DeleteCollection"]</button>
             }
         }
     }

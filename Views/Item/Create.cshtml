@@ -1,19 +1,34 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization;
 
 @inject IViewLocalizer Localizer
-@model CollectionsPortal.Models.Item;
+@model CollectionsPortal.ViewModels.CreateItemViewModel;
 
-@{
-    ViewData["Title"] = "Create item";
-}
-
-<form method="post" enctype="multipart/form-data"  asp-controller="Item" asp-action="CreateItem">
+<form method="post" enctype="multipart/form-data"  asp-controller="Item" asp-action="Create">
     <div asp-validation-summary="ModelOnly"></div>
+    <input type="hidden" asp-for="collectionId" value="@ViewBag.Collection.Id">
     <div class="col-md-4">
         <div class="form-group">
             <label asp-for="Name">@Localizer["Name"]</label><br />
             <input asp-for="Name" class="form-control"/>
             <span asp-validation-for="Name"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description">@Localizer["Description"]</label><br />
+            <input asp-for="Description" class="form-control"/>
+            <span asp-validation-for="Description"></span>
+        </div>
+        <div class="form-group">
+            @for(var fields = 0; fields < ViewBag.Collection.FieldTemplates.Count; fields++)
+            {
+                <input type="hidden" asp-for="Fields[fields].FieldTemplates.Id" value="@ViewBag.Collection.FieldTemplates[fields].Id">
+                <label>@ViewBag.Collection.FieldTemplates[fields].Name</label>
+                <input class="form-control" name="Fields[@fields].Value" placeholder="@ViewBag.Collection.FieldTemplates[fields].Name">
+            }
+        </div>
+        <div class="form-group">
+            <label asp-for="Tags"></label>
+            <input type="hidden" id="tags" asp-for="Tags"/>
+            <span asp-validation-for="Tags" class="text-danger"></span>
         </div>
         <div>
             <button type="submit" class="btn btn-primary mt-1">@Localizer["Create"]</button>

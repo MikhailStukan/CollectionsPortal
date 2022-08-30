@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -254,8 +255,8 @@ namespace CollectionsPortal.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CollectionId = table.Column<int>(type: "int", nullable: true)
+                    CollectionId = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -264,7 +265,8 @@ namespace CollectionsPortal.Migrations
                         name: "FK_Items_Collections_CollectionId",
                         column: x => x.CollectionId,
                         principalTable: "Collections",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -302,15 +304,15 @@ namespace CollectionsPortal.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ItemId = table.Column<int>(type: "int", nullable: false),
-                    CollectionId = table.Column<int>(type: "int", nullable: false)
+                    FieldTemplatesId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Fields", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Fields_Collections_CollectionId",
-                        column: x => x.CollectionId,
-                        principalTable: "Collections",
+                        name: "FK_Fields_FieldTemplates_FieldTemplatesId",
+                        column: x => x.FieldTemplatesId,
+                        principalTable: "FieldTemplates",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -318,7 +320,7 @@ namespace CollectionsPortal.Migrations
                         column: x => x.ItemId,
                         principalTable: "Items",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -406,9 +408,9 @@ namespace CollectionsPortal.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Fields_CollectionId",
+                name: "IX_Fields_FieldTemplatesId",
                 table: "Fields",
-                column: "CollectionId");
+                column: "FieldTemplatesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Fields_ItemId",
@@ -460,9 +462,6 @@ namespace CollectionsPortal.Migrations
                 name: "Fields");
 
             migrationBuilder.DropTable(
-                name: "FieldTemplates");
-
-            migrationBuilder.DropTable(
                 name: "Likes");
 
             migrationBuilder.DropTable(
@@ -473,6 +472,9 @@ namespace CollectionsPortal.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "FieldTemplates");
 
             migrationBuilder.DropTable(
                 name: "Items");

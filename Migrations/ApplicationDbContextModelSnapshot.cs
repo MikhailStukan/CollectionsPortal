@@ -97,7 +97,7 @@ namespace CollectionsPortal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CollectionId")
+                    b.Property<int>("FieldTemplatesId")
                         .HasColumnType("int");
 
                     b.Property<int>("ItemId")
@@ -109,7 +109,7 @@ namespace CollectionsPortal.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CollectionId");
+                    b.HasIndex("FieldTemplatesId");
 
                     b.HasIndex("ItemId");
 
@@ -146,7 +146,7 @@ namespace CollectionsPortal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("CollectionId")
+                    b.Property<int>("CollectionId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -493,9 +493,9 @@ namespace CollectionsPortal.Migrations
 
             modelBuilder.Entity("CollectionsPortal.Models.Field", b =>
                 {
-                    b.HasOne("CollectionsPortal.Models.Collection", "Collection")
+                    b.HasOne("CollectionsPortal.Models.FieldTemplate", "FieldTemplates")
                         .WithMany()
-                        .HasForeignKey("CollectionId")
+                        .HasForeignKey("FieldTemplatesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -505,7 +505,7 @@ namespace CollectionsPortal.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Collection");
+                    b.Navigation("FieldTemplates");
 
                     b.Navigation("Item");
                 });
@@ -523,9 +523,13 @@ namespace CollectionsPortal.Migrations
 
             modelBuilder.Entity("CollectionsPortal.Models.Item", b =>
                 {
-                    b.HasOne("CollectionsPortal.Models.Collection", null)
+                    b.HasOne("CollectionsPortal.Models.Collection", "Collection")
                         .WithMany("Items")
-                        .HasForeignKey("CollectionId");
+                        .HasForeignKey("CollectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Collection");
                 });
 
             modelBuilder.Entity("CollectionsPortal.Models.Like", b =>
