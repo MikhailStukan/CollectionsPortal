@@ -22,7 +22,7 @@ namespace CollectionsPortal.Controllers
         [HttpGet]
         public async Task<ActionResult> Index(int collectionId)
         {
-            var collection = _context.Collections.Where(p => p.Id == collectionId).Include(p => p.User).Include(p => p.Items).First();
+            var collection = _context.Collections.Where(p => p.Id == collectionId).Include(p => p.User).Include(p => p.Items).Include(p => p.Topic).Include(p => p.FieldTemplates).First();
 
             if (collection == null)
                 return NotFound();
@@ -32,6 +32,10 @@ namespace CollectionsPortal.Controllers
             ViewBag.Owner = collection.User;
 
             ViewBag.Items = collection.Items;
+
+            ViewBag.Fields = collection.FieldTemplates;
+
+            ViewBag.Topic = collection.Topic;
 
             return View();
         }

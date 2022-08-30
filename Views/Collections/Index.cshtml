@@ -2,20 +2,40 @@
 
 @inject IViewLocalizer Localizer
 <div class="container-fluid">
-    <h2>@Localizer["CollectionName"] @ViewBag.Collection.Name Owner: @ViewBag.Owner</h2>
-    <h2>@Localizer["CollectionItems"] </h2>
     @{
         if(User.Identity.Name != null)
         {
            if(User.IsInRole("Administrator") || User.Identity.Name == ViewBag.Owner.UserName)
             {
-            <button onclick="location.href='@Url.Action("Create","Item", new {collection = ViewBag.Collection.Id})'" class="btn btn-success">@Localizer["AddItem"]</button>
-            <button onclick="location.href='@Url.Action("Delete", "Collections", new {collection = ViewBag.Collection.Id})'" class="btn btn-danger">@Localizer["DeleteCollection"]</button>
+                    <h2>@Localizer["ControlCollection"]</h2>
+                    <button onclick="location.href='@Url.Action("Create","Item", new {collection = ViewBag.Collection.Id})'" class="btn btn-success">@Localizer["AddItem"]</button>
+                    <button onclick="location.href='@Url.Action("Edit","Collection", new {collection = ViewBag.Collection.Id})'" class="btn btn-primary">@Localizer["EditCollection"]</button>
+                    <button onclick="location.href='@Url.Action("Delete", "Collections", new {collection = ViewBag.Collection.Id})'" class="btn btn-danger">@Localizer["DeleteCollection"]</button>
             }
         }
-        foreach(var item in ViewBag.Items)
-        {
-            <p>@item.Name</p>
-        }         
     }
+</div>
+<div>
+    <h1>@Localizer["Collname"] @ViewBag.Collection.Name @Localizer["CollectionTopic"] @ViewBag.Collection.Topic.Name</h1>
+    <div class="h2">@Localizer["Description"] @ViewBag.Collection.Description</div>
+    <div>
+        @{
+            if(ViewBag.Items.Count == 0)
+            {
+                <h3>@Localizer["NoItems"]</h3>
+            }
+            else
+            {
+                foreach(var item in ViewBag.Items)
+                {
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text cropped-text">@item.Description</p>
+                        <a href="@Url.Action("Index", "Item", new {itemId = @item.Id})" class="btn btn-primary">@Localizer["OpenItem"]</a>
+                    </div>
+                } 
+            }
+        }
+        
+    </div>
 </div>

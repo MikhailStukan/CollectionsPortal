@@ -26,10 +26,7 @@
                         <p>@collection.Topic.Name</p>
                     </th>
                     <th>
-                        @foreach(var item in @collection.Items)
-                            {
-                               <p>@item</p>
-                            }
+                       @collection.Items.Count
                     </th>
                 </tr>
             }
