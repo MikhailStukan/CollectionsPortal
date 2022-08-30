@@ -3,6 +3,7 @@ using CollectionsPortal.Models;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace CollectionsPortal.Controllers
@@ -20,9 +21,10 @@ namespace CollectionsPortal.Controllers
 
         public IActionResult Index()
         {
-            ViewData["tags"] = GetTags();
-            ViewData["collections"] = BiggestCollections();
-            ViewData["items"] = LastItems();
+            ViewBag.Tags = GetTags();
+            ViewBag.Collections = BiggestCollections();
+            ViewBag.Items = LastItems();
+
             return View();
         }
 
@@ -54,14 +56,13 @@ namespace CollectionsPortal.Controllers
 
         private List<Collection> BiggestCollections()
         {
-            List<Collection> collections = new List<Collection>();
-
+            var collections = _context.Collections.Include(p => p.Items).OrderBy(p => p.Items.Count()).ToList();
             return collections;
         }
 
-        private List<Item> LastItems()
+        private List<Models.Item> LastItems()
         {
-            List<Item> items = new List<Item>();
+            var items = _context.Items.OrderBy(p => p.CreatedAt).ToList();
 
             return items;
         }

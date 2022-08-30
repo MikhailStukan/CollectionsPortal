@@ -1,5 +1,6 @@
 ﻿using CollectionsPortal.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CollectionsPortal.Controllers
 {
@@ -21,7 +22,7 @@ namespace CollectionsPortal.Controllers
             {
                 foreach (var pair in itemsTags)
                 {
-                    var item = _context.Items.Where(p => p.Id == pair.ItemId).ToList();
+                    var item = _context.Items.Where(p => p.Id == pair.ItemId).Include(p => p.Comments).Include(p => p.Likes).Include(p => p.Collection).ToList();
                     if (item != null)
                     {
                         ViewBag.items = item;

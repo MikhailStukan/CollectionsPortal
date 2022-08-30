@@ -9,19 +9,25 @@
 <div class="content">
     <h2>@Localizer["NewAdditions"]</h2> 
     <div class="card">
-        last 5 items
+        @foreach(var item in (List<Item>)ViewBag.Items)
+        {
+            
+        }
     </div>
     <h2>@Localizer["BiggestCollections"]</h2>
     <div class="card">
-        biggest collections
+        @foreach(var coll in (List<Collection>)ViewBag.Collections)
+        {
+            
+        }
     </div>
     <div class="container mt-5 col-6">
         <h2>@Localizer["Tags"]</h2>
         <ul class="cloud" role="navigation" aria-label="Tag Cloud">
         @{
-            foreach(var tag in (List<Tag>)ViewData["tags"])
+            foreach(var tag in (List<Tag>)ViewBag.Tags)
             {
-                    <li><a href="@Url.Action("Index", "Search", new {tag = @tag.Id})">@tag.Name</a></li>
+                        <li><a href="@Url.Action("Index", "Search", new {tag = @tag.Id})">@tag.Name</a></li>
             }
          }
         </ul>
