@@ -47,9 +47,7 @@ namespace CollectionsPortal.Controllers
         }
         private List<Tag> GetTags()
         {
-            List<Tag> tags = new List<Tag>();
-
-            tags = _context.Tags.ToList();
+            var tags = _context.Tags.ToList();
 
             return tags;
         }
@@ -62,7 +60,7 @@ namespace CollectionsPortal.Controllers
 
         private List<Models.Item> LastItems()
         {
-            var items = _context.Items.OrderBy(p => p.CreatedAt).ToList();
+            var items = _context.Items.OrderByDescending(p => p.CreatedAt).ToList();
 
             return items;
         }

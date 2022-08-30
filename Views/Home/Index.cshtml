@@ -11,14 +11,15 @@
     <div class="card">
         @foreach(var item in (List<Item>)ViewBag.Items)
         {
-            
+            <a href="@Url.Action("Index", "Item", new {itemId = item.Id})">@item.Name</a>
         }
     </div>
     <h2>@Localizer["BiggestCollections"]</h2>
     <div class="card">
         @foreach(var coll in (List<Collection>)ViewBag.Collections)
         {
-            
+            <a href="@Url.Action("Index", "Collections", new {collectionId = coll.Id})">@coll.Name</a>
+
         }
     </div>
     <div class="container mt-5 col-6">
