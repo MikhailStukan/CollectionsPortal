@@ -7,6 +7,6 @@
 
         public Item Item { get; set; }
 
-        public FieldTemplate FieldTemplates { get; set; } 
+        public FieldTemplate FieldTemplates { get; set; }
     }
 }

@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using CollectionsPortal.Data;
+﻿using CollectionsPortal.Data;
 using CollectionsPortal.ViewModels;
-using CollectionsPortal.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CollectionsPortal.Controllers
 {
@@ -37,7 +34,7 @@ namespace CollectionsPortal.Controllers
                 return NotFound();
             }
 
-            if(User.Identity.Name == collection.User.UserName || User.IsInRole("Administrator"))
+            if (User.Identity.Name == collection.User.UserName || User.IsInRole("Administrator"))
             {
                 ViewBag.Collection = collection;
             }
@@ -55,28 +52,28 @@ namespace CollectionsPortal.Controllers
         {
             var collection = _context.Collections.FirstOrDefault(p => p.Id == model.collectionId);
 
-            foreach(var field in model.Fields)
+            foreach (var field in model.Fields)
             {
                 field.FieldTemplates = _context.FieldTemplates.FirstOrDefault(p => p.Id == field.FieldTemplates.Id);
             }
 
-                var item = new Models.Item()
-                {
-                    Collection = collection,
-                    Name = model.Name,
-                    Description = model.Description,
-                    Fields = model.Fields,
-                    CreatedAt = DateTime.Now
-                };
+            var item = new Models.Item()
+            {
+                Collection = collection,
+                Name = model.Name,
+                Description = model.Description,
+                Fields = model.Fields,
+                CreatedAt = DateTime.Now
+            };
 
-                collection.UpdatedAt = DateTime.Now;
+            collection.UpdatedAt = DateTime.Now;
 
-                await _context.AddAsync(item);
-                await _context.SaveChangesAsync();
-               
+            await _context.AddAsync(item);
+            await _context.SaveChangesAsync();
+
             return RedirectToAction("Index", "Collections", new { collectionId = model.collectionId });
         }
-        
+
 
         [Authorize(Policy = "RequireUser")]
         public IActionResult Edit()

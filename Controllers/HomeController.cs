@@ -2,8 +2,8 @@
 using CollectionsPortal.Models;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 
 namespace CollectionsPortal.Controllers
@@ -54,15 +54,30 @@ namespace CollectionsPortal.Controllers
 
         private List<Collection> BiggestCollections()
         {
-            var collections = _context.Collections.Include(p => p.Items).OrderBy(p => p.Items.Count()).ToList();
-            return collections;
+            var collections = _context.Collections.Include(p => p.Items).OrderByDescending(p => p.Items.Count()).ToList();
+
+            if (collections.Count() > 5)
+            {
+                return collections.GetRange(0, 5);
+            }
+            else
+            {
+                return collections;
+            }
         }
 
         private List<Models.Item> LastItems()
         {
             var items = _context.Items.OrderByDescending(p => p.CreatedAt).ToList();
 
-            return items;
+            if (items.Count() > 5)
+            {
+                return items.GetRange(0, 5);
+            }
+            else
+            {
+                return items;
+            }
         }
 
     }

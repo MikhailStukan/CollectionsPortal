@@ -55,7 +55,7 @@ namespace CollectionsPortal.Controllers
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             var topic = await _context.Topics.FirstOrDefaultAsync(p => p.Id == model.Topic.Id);
 
-            
+
             Collection collection = new Collection()
             {
                 User = user,

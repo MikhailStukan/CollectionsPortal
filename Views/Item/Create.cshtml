@@ -22,7 +22,7 @@
             {
                 <input type="hidden" asp-for="Fields[fields].FieldTemplates.Id" value="@ViewBag.Collection.FieldTemplates[fields].Id">
                 <label>@ViewBag.Collection.FieldTemplates[fields].Name</label>
-                <input class="form-control" name="Fields[@fields].Value" placeholder="@ViewBag.Collection.FieldTemplates[fields].Name">
+                <input class="form-control" name="Fields[@fields].Value" placeholder="@Localizer["Enter"] @ViewBag.Collection.FieldTemplates[fields].Name">
             }
         </div>
         <div class="form-group">
