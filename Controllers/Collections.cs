@@ -1,11 +1,10 @@
 ﻿using CollectionsPortal.Data;
 using CollectionsPortal.Models;
+using CollectionsPortal.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using CollectionsPortal.ViewModels;
-using CollectionsPortal.Models;
 
 namespace CollectionsPortal.Controllers
 {
@@ -77,15 +76,15 @@ namespace CollectionsPortal.Controllers
             if (coll == null)
                 return NotFound();
 
-                if(User.Identity.Name != null && (User.Identity.Name == coll.User.UserName || User.IsInRole("Administrator")))
-                {
-                    _context.Collections.Remove(coll);
-                    await _context.SaveChangesAsync();
-                }
+            if (User.Identity.Name != null && (User.Identity.Name == coll.User.UserName || User.IsInRole("Administrator")))
+            {
+                _context.Collections.Remove(coll);
+                await _context.SaveChangesAsync();
+            }
 
             return RedirectToAction("Index", "Profile");
         }
 
-        }
     }
+}
 

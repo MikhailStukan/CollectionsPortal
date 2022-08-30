@@ -1,9 +1,9 @@
 ﻿using CollectionsPortal.Data;
+using CollectionsPortal.Models;
 using CollectionsPortal.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using CollectionsPortal.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CollectionsPortal.Controllers
@@ -44,12 +44,12 @@ namespace CollectionsPortal.Controllers
             if (email != null)
             {
                 User user = await _userManager.FindByEmailAsync(email);
-                
-                if(user != null)
+
+                if (user != null)
                 {
                     if (user.isAdmin)
                     {
-                      
+
                         await _userManager.RemoveFromRoleAsync(user, "Administrator");
                         user.isAdmin = false;
                         if (user.UserName == User.Identity.Name)
@@ -81,14 +81,14 @@ namespace CollectionsPortal.Controllers
 
                 if (user != null)
                 {
-                    if(user.LockoutEnd == null)
+                    if (user.LockoutEnd == null)
                     {
                         user.LockoutEnd = DateTimeOffset.Now.AddYears(100);
                         if (user.UserName == User.Identity.Name)
                         {
                             await _signInManager.SignOutAsync();
                         }
-                        
+
                     }
                     else
                     {
@@ -97,8 +97,8 @@ namespace CollectionsPortal.Controllers
                     _context.SaveChanges();
                 }
             }
-         return RedirectToAction("Users");
-            
+            return RedirectToAction("Users");
+
         }
 
         public async Task<IActionResult> Delete(string email)
@@ -118,14 +118,14 @@ namespace CollectionsPortal.Controllers
                     await _userManager.DeleteAsync(user);
 
 
-                    if(user.UserName == User.Identity.Name)
+                    if (user.UserName == User.Identity.Name)
                     {
                         await _signInManager.SignOutAsync();
                     }
                     _context.SaveChanges();
                 }
             }
-         return RedirectToAction("Users");
+            return RedirectToAction("Users");
         }
 
     }

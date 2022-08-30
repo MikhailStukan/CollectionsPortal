@@ -21,6 +21,6 @@ namespace CollectionsPortal.ViewModels
             return Users.OrderBy(u => u.Id).Skip((CurrentPage - 1) * UsersPerPage).Take(UsersPerPage);
         }
 
-        
+
     }
 }

@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CollectionsPortal.Controllers
 {
@@ -15,9 +15,9 @@ namespace CollectionsPortal.Controllers
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> CreateItem(Item item)
         {
-            if(ViewBag.collection != null)
+            if (ViewBag.collection != null)
             {
-              
+
             }
             return View();
         }

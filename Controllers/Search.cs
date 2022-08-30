@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using CollectionsPortal.Data;
-using CollectionsPortal.Models;
-using CollectionsPortal.ViewModels;
+﻿using CollectionsPortal.Data;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CollectionsPortal.Controllers
 {
@@ -19,12 +17,12 @@ namespace CollectionsPortal.Controllers
             var itemsTags = _context.TagsToItems.Where(p => p.TagId == tag).ToList();
 
 
-            if(itemsTags != null)
+            if (itemsTags != null)
             {
                 foreach (var pair in itemsTags)
                 {
                     var item = _context.Items.Where(p => p.Id == pair.ItemId).ToList();
-                    if(item != null)
+                    if (item != null)
                     {
                         ViewBag.items = item;
                     }

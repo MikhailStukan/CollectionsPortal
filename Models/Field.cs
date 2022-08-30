@@ -6,7 +6,7 @@
         public string Value { get; set; }
 
         public Item Item { get; set; }
-        
+
         public Collection Collection { get; set; }
     }
 }

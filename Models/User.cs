@@ -11,7 +11,7 @@ namespace CollectionsPortal.Models
 
         public List<Collection> collections { get; set; } = new();
         public List<Like> likes { get; set; } = new();
-        public List<Comment> comments { get; set; } = new(); 
+        public List<Comment> comments { get; set; } = new();
 
     }
 }

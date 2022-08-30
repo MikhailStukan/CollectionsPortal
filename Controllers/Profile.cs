@@ -1,10 +1,8 @@
 ﻿using CollectionsPortal.Data;
 using CollectionsPortal.Models;
-using CollectionsPortal.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CollectionsPortal.Controllers
 {
@@ -33,7 +31,7 @@ namespace CollectionsPortal.Controllers
             return View();
         }
 
-        
+
 
 
     }

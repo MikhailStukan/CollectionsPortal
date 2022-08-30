@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using CollectionsPortal.Models;
+﻿using CollectionsPortal.Models;
 
 namespace CollectionsPortal.ViewModels
 {
