@@ -19,6 +19,7 @@ namespace CollectionsPortal.Data
         public DbSet<Item> Items { get; set; }
         public DbSet<Collection> Collections { get; set; }
         public DbSet<TagsToItems> TagsToItems { get; set; }
+        public DbSet<TagsToCollection> TagsToCollections { get; set; }
         public DbSet<FieldTemplate> FieldTemplates { get; set; }
         public DbSet<Field> Fields { get; set; }
 

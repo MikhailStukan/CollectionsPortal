@@ -1,10 +1,10 @@
 ﻿namespace CollectionsPortal.Models
 {
-    public class TagsToItems
+    public class TagsToCollection
     {
         public int Id { get; set; }
 
-        public Item Item { get; set; }
+        public Collection Collection { get; set; }
         public Tag Tag { get; set; }
     }
 }

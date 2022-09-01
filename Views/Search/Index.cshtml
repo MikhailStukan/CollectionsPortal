@@ -1,16 +1,31 @@
 ﻿@using CollectionsPortal.Models;
 
 @{
+
     if (ViewBag.items != null)
     {
+        <h1>Found items:</h1>
         foreach (var item in (List<Item>)ViewBag.items)
         {
-            <p>@item.Id</p>
+            <div>
+                <h2>Item name: @item.Name</h2>
+                <p>Item desc: @item.Description</p>
+            </div>
+
         }
     }
-    else
+
+    if (ViewBag.collections != null)
     {
-        <h2>Nothing found</h2>
+        <h1>Found collections:</h1>
+        foreach (var coll in (List<Collection>)ViewBag.collections)
+        {
+            <div>
+                <h2>Coll name: @coll.Name</h2>
+                <p>Coll desc: @coll.Description</p>
+            </div>
+        }
     }
+
 
 }

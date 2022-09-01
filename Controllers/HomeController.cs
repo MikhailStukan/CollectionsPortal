@@ -48,7 +48,8 @@ namespace CollectionsPortal.Controllers
         private List<Tag> GetTags()
         {
             var tags = _context.Tags.ToList();
-
+            if(tags == null)
+                tags = new List<Tag>();
             return tags;
         }
 

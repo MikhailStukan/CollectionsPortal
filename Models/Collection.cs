@@ -16,6 +16,5 @@
         public List<Item> Items { get; set; } = new();
         public List<FieldTemplate> FieldTemplates { get; set; } = new();
 
-
     }
 }

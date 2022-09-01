@@ -10,6 +10,7 @@ namespace CollectionsPortal.ViewModels
 
         public Topic Topic { get; set; }
 
+        public string Tags { get; set; }
         public List<FieldTemplate> Fields { get; set; } = new();
     }
 }

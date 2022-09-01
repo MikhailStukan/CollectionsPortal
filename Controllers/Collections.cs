@@ -54,7 +54,7 @@ namespace CollectionsPortal.Controllers
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             var topic = await _context.Topics.FirstOrDefaultAsync(p => p.Id == model.Topic.Id);
-
+            var tags = model.Tags.Split(",");
 
             Collection collection = new Collection()
             {
@@ -66,6 +66,25 @@ namespace CollectionsPortal.Controllers
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             };
+
+            foreach(var tag in tags)
+            {
+                Tag t = new Tag()
+                {
+                    Name = tag
+                };
+
+                await _context.Tags.AddAsync(t);
+
+                TagsToCollection tagsTo = new TagsToCollection()
+                {
+                    Collection = collection,
+                    Tag = t
+                };
+
+                await _context.TagsToCollections.AddAsync(tagsTo);
+            }
+
 
             await _context.AddAsync(collection);
             await _context.SaveChangesAsync();
