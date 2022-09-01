@@ -3,10 +3,22 @@
 
 // Write your JavaScript code.
 
+
+$(document).ready(function () {
+    autoComplete();
+});
+
+
 let x = 0;
 
 function addInput() {
     var str = '<input class="form-control" name="Fields[' + x + '].Name" placeholder="NameCollection">';
     document.getElementById('fields').innerHTML += str;
     x++;
+}
+
+function autoComplete() {
+    $("#tag").autocomplete({
+        source: '/api/GetTags'
+    });
 }

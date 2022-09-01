@@ -20,7 +20,7 @@
                 @{
                     foreach (var topic in ViewBag.Topics)
                     {
-                           <option value="@topic.Id">@topic.Name</option> 
+                               <option value="@topic.Id">@topic.Name</option> 
                     }
                 }
             </select>
@@ -32,7 +32,7 @@
         </div>
         <div class="form-group">
             <label asp-for="Tags">@Localizer["Tags"]</label>
-            <input asp-for="Tags" class="form-control"/>
+            <input id="tag" asp-for="Tags" class="form-control"/>
         </div>
         <div class="form-group">
             <label asp-for="Fields">@Localizer["Fields"]</label>
@@ -46,3 +46,4 @@
         </div>
     </div>
 </form>
+

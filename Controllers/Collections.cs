@@ -44,9 +44,20 @@ namespace CollectionsPortal.Controllers
         public async Task<IActionResult> Create()
         {
             ViewBag.Topics = await _context.Topics.ToListAsync();
+            ViewBag.Tags = await _context.Tags.ToListAsync();
 
             return View();
         }
+
+        [HttpGet("getTags")]
+        [Route("api/getTags")]
+        public IActionResult GetTags()
+        {
+            string term = HttpContext.Request.Query["term"].ToString();
+            var tags = _context.Tags.Where(p => p.Name.StartsWith(term)).Select(u => u.Name).ToList();
+            return Ok(tags);
+        }
+
 
         [Authorize(Policy = "RequireUser")]
         [HttpPost]
@@ -54,6 +65,8 @@ namespace CollectionsPortal.Controllers
         {
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             var topic = await _context.Topics.FirstOrDefaultAsync(p => p.Id == model.Topic.Id);
+            var existingTags = _context.Tags.ToList().Select(u => u.Name);
+
             var tags = model.Tags.Split(",");
 
             Collection collection = new Collection()
@@ -67,24 +80,33 @@ namespace CollectionsPortal.Controllers
                 UpdatedAt = DateTime.Now
             };
 
-            foreach(var tag in tags)
+            foreach (var tag in tags)
             {
-                Tag t = new Tag()
+                if (!existingTags.Contains(tag))
                 {
-                    Name = tag
-                };
-
-                await _context.Tags.AddAsync(t);
-
-                TagsToCollection tagsTo = new TagsToCollection()
+                    Tag newTag = new Tag()
+                    {
+                        Name = tag
+                    };
+                    TagsToCollection tagsTo = new TagsToCollection()
+                    {
+                        Collection = collection,
+                        Tag = newTag
+                    };
+                    await _context.Tags.AddAsync(newTag);
+                    await _context.TagsToCollections.AddAsync(tagsTo);
+                }
+                else
                 {
-                    Collection = collection,
-                    Tag = t
-                };
-
-                await _context.TagsToCollections.AddAsync(tagsTo);
+                    TagsToCollection tagsTo = new TagsToCollection()
+                    {
+                        Collection = collection,
+                        Tag = _context.Tags.Where(p => p.Name == tag).FirstOrDefault()
+                    };
+                    await _context.TagsToCollections.AddAsync(tagsTo);
+                }
             }
-
+                
 
             await _context.AddAsync(collection);
             await _context.SaveChangesAsync();
