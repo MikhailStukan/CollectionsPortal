@@ -8,20 +8,19 @@
 
 <div class="content">
     <h2>@Localizer["NewAdditions"]</h2> 
-    <div class="card">
         @foreach(var item in (List<Item>)ViewBag.Items)
-        {
-            <a href="@Url.Action("Index", "Item", new {itemId = item.Id})">@item.Name</a>
+        {<div class="card">
+            <a style="text-decoration: none;" href="@Url.Action("Index", "Item", new {itemId = item.Id})">@item.Name @Localizer["Collection:"] @item.Collection.Name @Localizer["Author:"] @item.Collection.User.FirstName @item.Collection.User.LastName</a>
+         </div>
         }
-    </div>
+    
     <h2>@Localizer["BiggestCollections"]</h2>
-    <div class="card">
         @foreach(var coll in (List<Collection>)ViewBag.Collections)
         {
-            <a href="@Url.Action("Index", "Collections", new {collectionId = coll.Id})">@coll.Name</a>
-
+            <div class="card">
+                <a style="text-decoration: none;"href="@Url.Action("Index", "Collections", new {collectionId = coll.Id})">@coll.Name</a>
+            </div>
         }
-    </div>
     <div class="container mt-5 col-6">
         <h2>@Localizer["Tags"]</h2>
         <ul class="cloud" role="navigation" aria-label="Tag Cloud">
