@@ -104,7 +104,6 @@ namespace CollectionsPortal.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Value")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -125,6 +124,9 @@ namespace CollectionsPortal.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("CollectionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DataType")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")

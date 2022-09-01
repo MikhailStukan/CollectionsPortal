@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CollectionsPortal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220901093727_seed")]
+    [Migration("20220901121206_seed")]
     partial class seed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -106,7 +106,6 @@ namespace CollectionsPortal.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Value")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -127,6 +126,9 @@ namespace CollectionsPortal.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("CollectionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DataType")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")

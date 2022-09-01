@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization;
+@using CollectionsPortal.Models;
 
 @inject IViewLocalizer Localizer
 @model CollectionsPortal.ViewModels.CreateItemViewModel;
@@ -21,8 +22,35 @@
             @for(var fields = 0; fields < ViewBag.Collection.FieldTemplates.Count; fields++)
             {
                 <input type="hidden" asp-for="Fields[fields].FieldTemplates.Id" value="@ViewBag.Collection.FieldTemplates[fields].Id">
-                <label>@ViewBag.Collection.FieldTemplates[fields].Name</label>
-                <input class="form-control" name="Fields[@fields].Value" placeholder="@Localizer["Enter"] @ViewBag.Collection.FieldTemplates[fields].Name">
+                
+                switch(ViewBag.Collection.FieldTemplates[fields].DataType)
+                {
+                    case CollectionsPortal.Models.Type.integer:
+                        //number input
+                        <label>@ViewBag.Collection.FieldTemplates[fields].Name</label>
+                        <input class="form-control" type="number" name=Fields[@fields].Value  placeholder="@Localizer["Enter"] @ViewBag.Collection.FieldTemplates[fields].Name">
+                        break;
+                    case CollectionsPortal.Models.Type.text:
+                        //string input
+                        <label>@ViewBag.Collection.FieldTemplates[fields].Name</label>
+                        <input class="form-control" name="Fields[@fields].Value" placeholder="@Localizer["Enter"] @ViewBag.Collection.FieldTemplates[fields].Name">
+                        break;
+                    case CollectionsPortal.Models.Type.boolean:
+                        //checkbox
+                        <label>@ViewBag.Collection.FieldTemplates[fields].Name</label>
+                        <input class="form-check-input" id="check@fields" type="checkbox" name="Fields[@fields].Value">
+                        break;
+                    case CollectionsPortal.Models.Type.textarea:
+                        //textarea
+                        <label>@ViewBag.Collection.FieldTemplates[fields].Name</label>
+                        <textarea class="form-control" name="Fields[@fields].Value" placeholder="@Localizer["Enter"] @ViewBag.Collection.FieldTemplates[fields].Name"></textarea>
+                        break;
+                    case CollectionsPortal.Models.Type.dateTime:
+                        //dateTime
+                        <label>@ViewBag.Collection.FieldTemplates[fields].Name</label>
+                        <input class="form-control" type="date" name="Fields[@fields].Value">
+                        break;
+                }
             }
         </div>
         <div class="form-group">

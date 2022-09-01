@@ -12,7 +12,7 @@ $(document).ready(function () {
 let x = 0;
 
 function addInput() {
-    var str = '<input class="form-control" name="Fields[' + x + '].Name" placeholder="NameCollection">';
+    var str = '<input class="form-control" name="Fields[' + x + '].Name" placeholder="Name of field"> <select class="form-select" name="Fields[' + x + '].DataType"><option value="integer">Number</option><option value="boolean">CheckBox</option><option value="dateTime">Date</option><option value="textarea">Big text</option><option value="text">Small text</option></select>';
     document.getElementById('fields').innerHTML += str;
     x++;
 }

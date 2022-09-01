@@ -44,7 +44,6 @@ namespace CollectionsPortal.Controllers
         public async Task<IActionResult> Create()
         {
             ViewBag.Topics = await _context.Topics.ToListAsync();
-            ViewBag.Tags = await _context.Tags.ToListAsync();
 
             return View();
         }
