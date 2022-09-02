@@ -55,57 +55,67 @@ namespace CollectionsPortal.Controllers
         public async Task<IActionResult> Create(CreateItemViewModel model)
         {
             var collection = _context.Collections.FirstOrDefault(p => p.Id == model.collectionId);
-            var existingTags = _context.Tags.ToList().Select(u => u.Name);
 
-            var tags = model.Tags.Split(",");
-
-            foreach (var field in model.Fields)
+            if (model.Name == null || model.Description == null|| model.Tags == null || model.Fields == null)
             {
-                field.FieldTemplates = _context.FieldTemplates.FirstOrDefault(p => p.Id == field.FieldTemplates.Id);
+                //small model validation
+                ViewBag.Collection = collection;
+                return RedirectToAction("Create", new { collectionId = collection.Id });
             }
-
-            var item = new Models.Item()
+            else
             {
-                Collection = collection,
-                Name = model.Name,
-                Description = model.Description,
-                Fields = model.Fields,
-                CreatedAt = DateTime.Now
-            };
+                var existingTags = _context.Tags.ToList().Select(u => u.Name);
 
-            foreach(var tag in tags)
-            {
-                if (!existingTags.Contains(tag))
+                var tags = model.Tags.Split(",");
+
+                foreach (var field in model.Fields)
                 {
-                    Tag newTag = new Tag()
-                    {
-                        Name = tag
-                    };
-                    TagsToItems tagsTo = new TagsToItems()
-                    {
-                        Item = item,
-                        Tag = newTag
-                    };
-                    await _context.Tags.AddAsync(newTag);
-                    await _context.TagsToItems.AddAsync(tagsTo);
+                    field.FieldTemplates = _context.FieldTemplates.FirstOrDefault(p => p.Id == field.FieldTemplates.Id);
                 }
-                else
+
+                var item = new Models.Item()
                 {
-                    TagsToItems tagsTo = new TagsToItems()
+                    Collection = collection,
+                    Name = model.Name,
+                    Description = model.Description,
+                    Fields = model.Fields,
+                    CreatedAt = DateTime.Now
+                };
+
+                foreach (var tag in tags)
+                {
+                    if (!existingTags.Contains(tag))
                     {
-                        Item = item,
-                        Tag = _context.Tags.Where(p => p.Name == tag).FirstOrDefault()
-                    };
-                    await _context.TagsToItems.AddAsync(tagsTo);
+                        Tag newTag = new Tag()
+                        {
+                            Name = tag
+                        };
+                        TagsToItems tagsTo = new TagsToItems()
+                        {
+                            Item = item,
+                            Tag = newTag
+                        };
+                        await _context.Tags.AddAsync(newTag);
+                        await _context.TagsToItems.AddAsync(tagsTo);
+                    }
+                    else
+                    {
+                        TagsToItems tagsTo = new TagsToItems()
+                        {
+                            Item = item,
+                            Tag = _context.Tags.Where(p => p.Name == tag).FirstOrDefault()
+                        };
+                        await _context.TagsToItems.AddAsync(tagsTo);
+                    }
                 }
-            }
 
-            collection.UpdatedAt = DateTime.Now;
+                collection.UpdatedAt = DateTime.Now;
 
-            await _context.AddAsync(item);
-            await _context.SaveChangesAsync();
+                await _context.AddAsync(item);
+                await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index", "Collections", new { collectionId = model.collectionId });
+                return RedirectToAction("Index", "Collections", new { collectionId = model.collectionId });
+            }   
         }
 
 

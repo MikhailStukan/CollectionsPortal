@@ -16,9 +16,12 @@
     }
 </div>
 <div>
-    <div class="image" style="margin: 10px">
-        <img alt="@ViewBag.Collection.Name image"  widht="300" height="300" src="@ViewBag.Collection.imageUrl" />
-    </div>
+    @if(@ViewBag.Collection.imageUrl != null)
+    {
+        <div class="image" style="margin: 10px">
+            <img alt="@ViewBag.Collection.Name image"  widht="300" height="300" src="@ViewBag.Collection.imageUrl" />
+        </div>
+    }
     <h2>@Localizer["Collection name:"] </h2>
     <p>@ViewBag.Collection.Name</p>
     <h3>@Localizer["Topic:"]</h3>

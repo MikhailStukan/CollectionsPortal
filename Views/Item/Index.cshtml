@@ -32,7 +32,7 @@
                         break;
                     case CollectionsPortal.Models.Type.text:
                         //string input
-                        <input class="form-control" value="@ViewBag.Fields[field].Value" readonly>
+                        <input class="form-control" type="text" value="@ViewBag.Fields[field].Value" readonly>
                         break;
                     case CollectionsPortal.Models.Type.boolean:
                         //checkbox
@@ -47,7 +47,7 @@
                         break;
                     case CollectionsPortal.Models.Type.textarea:
                         //textarea
-                        <textarea class="form-control" value="@ViewBag.Fields[field].Value" disabled></textarea>
+                        <textarea class="form-control" disabled>@ViewBag.Fields[field].Value</textarea>
                         break;
                     case CollectionsPortal.Models.Type.dateTime:
                         //dateTime

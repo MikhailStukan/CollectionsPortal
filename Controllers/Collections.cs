@@ -50,7 +50,6 @@ namespace CollectionsPortal.Controllers
         public async Task<IActionResult> Create()
         {
             ViewBag.Topics = await _context.Topics.ToListAsync();
-
             return View();
         }
 
@@ -66,65 +65,73 @@ namespace CollectionsPortal.Controllers
 
         [Authorize(Policy = "RequireUser")]
         [HttpPost]
-        public async Task<IActionResult> CreateCollection(CreateCollectionViewModel model)
+        public async Task<IActionResult> Create(CreateCollectionViewModel model)
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            var topic = await _context.Topics.FirstOrDefaultAsync(p => p.Id == model.Topic.Id);
-            var existingTags = _context.Tags.ToList().Select(u => u.Name);
-
-            var tags = model.Tags.Split(",");
-
-            Collection collection = new Collection()
+            if (model.Name == null && model.Description == null || model.Fields == null && model.Topic.Id == null && model.Tags == null)
             {
-                User = user,
-                Name = model.Name,
-                Description = model.Description,
-                FieldTemplates = model.Fields,
-                Topic = topic,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
-            };
-            
-            if(model.ImageFile != null)
-            {
-                string fileNameForStorage = $"{collection.Name}{collection.Id}{DateTime.Now.ToString("yyyyMMddHHmmss")}{Path.GetExtension(model.ImageFile.FileName)}";
-                collection.imageUrl = await _cloudStorage.UploadFileAsync(model.ImageFile, fileNameForStorage);
+                //small validation cause ModelState doesnt work on ForeignKeys
+                ViewBag.Topics = await _context.Topics.ToListAsync();
+                return View(model);
             }
-
-
-            foreach (var tag in tags)
+            else
             {
-                if (!existingTags.Contains(tag))
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                var topic = await _context.Topics.FirstOrDefaultAsync(p => p.Id == model.Topic.Id);
+                var existingTags = _context.Tags.ToList().Select(u => u.Name);
+
+                Collection collection = new Collection()
                 {
-                    Tag newTag = new Tag()
-                    {
-                        Name = tag
-                    };
-                    TagsToCollection tagsTo = new TagsToCollection()
-                    {
-                        Collection = collection,
-                        Tag = newTag
-                    };
-                    await _context.Tags.AddAsync(newTag);
-                    await _context.TagsToCollections.AddAsync(tagsTo);
+                    User = user,
+                    Name = model.Name,
+                    Description = model.Description,
+                    FieldTemplates = model.Fields,
+                    Topic = topic,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
+
+                if (model.ImageFile != null)
+                {
+                    string fileNameForStorage = $"{collection.User.Id}{collection.Id}{DateTime.Now.ToString("yyyyMMddHHmmss")}{Path.GetExtension(model.ImageFile.FileName)}";
+                    collection.imageUrl = await _cloudStorage.UploadFileAsync(model.ImageFile, fileNameForStorage);
                 }
                 else
                 {
-                    TagsToCollection tagsTo = new TagsToCollection()
-                    {
-                        Collection = collection,
-                        Tag = _context.Tags.Where(p => p.Name == tag).FirstOrDefault()
-                    };
-                    await _context.TagsToCollections.AddAsync(tagsTo);
+                    model.ImageFile = null;
                 }
+
+                var tags = model.Tags.Split(",");
+
+                foreach (var tag in tags)
+                {
+                    if (!existingTags.Contains(tag))
+                    {
+                        Tag newTag = new Tag()
+                        {
+                            Name = tag
+                        };
+                        TagsToCollection tagsTo = new TagsToCollection()
+                        {
+                            Collection = collection,
+                            Tag = newTag
+                        };
+                        await _context.Tags.AddAsync(newTag);
+                        await _context.TagsToCollections.AddAsync(tagsTo);
+                    }
+                    else
+                    {
+                        TagsToCollection tagsTo = new TagsToCollection()
+                        {
+                            Collection = collection,
+                            Tag = _context.Tags.Where(p => p.Name == tag).FirstOrDefault()
+                        };
+                        await _context.TagsToCollections.AddAsync(tagsTo);
+                    }
+                }
+                await _context.AddAsync(collection);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Collections", new { collectionId = collection.Id });
             }
-                
-
-            await _context.AddAsync(collection);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Index", "Collections", new { collectionId = collection.Id });
-
         }
 
         [Authorize(Policy = "RequireUser")]

@@ -6,13 +6,13 @@
     ViewData["Title"] = @Localizer["CreateCollection"];
 }
 
-<form method="post" enctype="multipart/form-data"  asp-controller="Collections" asp-action="CreateCollection">
+<form method="post" enctype="multipart/form-data"  asp-controller="Collections" asp-action="Create">
     <div asp-validation-summary="ModelOnly"></div>
     <div class="col-md-4">
         <div class="form-group">
             <label asp-for="Name">@Localizer["Name"]</label><br />
             <input asp-for="Name" class="form-control"/>
-            <span asp-validation-for="Name"></span>
+            <span asp-validation-for="Name" class="text-primary"></span>
         </div>
         <div class="form-group">
             <label asp-for="Topic">@Localizer["Topic"]</label><br />
@@ -20,30 +20,32 @@
                 @{
                     foreach (var topic in ViewBag.Topics)
                     {
-                               <option value="@topic.Id">@topic.Name</option> 
+                                   <option value="@topic.Id">@topic.Name</option> 
                     }
                 }
             </select>
+            <span asp-validation-for="Topic" class="text-primary"></span>
         </div>
         <div class="form-group">
             <label asp-for="ImageFile">@Localizer["ImageFile"]</label>
-            <input asp-for="ImageFile" type="file" class="form-control" />
-            <span asp-validation-for="ImageFile" class="text-danger"></span>
+            <input asp-for="ImageFile" type="file"  accept="image/jpeg,image/gif,image/png" class="form-control" />
+            <span asp-validation-for="ImageFile" class="text-primary"></span>
         </div>
         <div class="form-group">
             <label asp-for="Description">@Localizer["Description"]</label>
             <textarea class="form-control" rows="3" asp-for="Description"></textarea>
-            <span asp-validation-for="Description"></span>
+            <span asp-validation-for="Description" class="text-primary"></span>
         </div>
         <div class="form-group">
             <label asp-for="Tags">@Localizer["Tags"]</label>
             <input id="tag" asp-for="Tags" class="form-control"/>
+            <span asp-validation-for="Tags" class="text-primary"></span>
         </div>
         <div class="form-group">
             <label asp-for="Fields">@Localizer["Fields"]</label>
             <div id="fields">
             </div>
-            <span asp-validation-for="Fields" class="text-danger"></span>
+            <span asp-validation-for="Fields" class="text-primary"></span>
             <a class="btn btn-primary" onclick="addInput()">@Localizer["AddFields"]</a>
         </div>
         <div>

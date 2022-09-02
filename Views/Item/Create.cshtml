@@ -33,7 +33,7 @@
                     case CollectionsPortal.Models.Type.text:
                         //string input
                         <label>@ViewBag.Collection.FieldTemplates[fields].Name</label>
-                        <input class="form-control" name="Fields[@fields].Value" placeholder="@Localizer["Enter"] @ViewBag.Collection.FieldTemplates[fields].Name">
+                        <input class="form-control" name="Fields[@fields].Value" type="text" placeholder="@Localizer["Enter"] @ViewBag.Collection.FieldTemplates[fields].Name">
                         break;
                     case CollectionsPortal.Models.Type.boolean:
                         //checkbox
