@@ -20,6 +20,9 @@ namespace CollectionsPortal.Controllers
         {
             var item = await _context.Items.Where(p => p.Id == itemId).Include(p => p.Collection).Include(p => p.Comments).Include(p => p.Likes).FirstOrDefaultAsync();
 
+            var fields = _context.Fields.Where(p => p.Item.Id == itemId).Include(p => p.FieldTemplates).ToList();
+
+            ViewBag.Fields = fields;
             ViewBag.Item = item;
             return View();
         }

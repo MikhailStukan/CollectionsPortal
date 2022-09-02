@@ -1,6 +1,62 @@
-﻿<div>
-    <h1>@ViewBag.Item.Name</h1>
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+
+@inject IViewLocalizer Localizer
+
+<div class="container-fluid">
+    @{
+        if(User.Identity.Name != null)
+        {
+           if(User.IsInRole("Administrator") || User.Identity.Name == ViewBag.Owner.UserName)
+            {
+                        <button onclick="location.href='@Url.Action("Index","Collections", new {collectionId = ViewBag.Item.Collection.Id})'" class="btn btn-primary">@Localizer["GoToCollection"]</button>
+                        <button onclick="location.href='@Url.Action("Edit","Item", new {itemId = ViewBag.Item.Id})'" class="btn btn-primary">@Localizer["EditItem"]</button>
+                        <button onclick="location.href='@Url.Action("Delete", "Item", new {itemId = ViewBag.Item.Id})'" class="btn btn-danger">@Localizer["DeleteItem"]</button>
+            }
+        }
+    }
 </div>
-<div>
-    <h2>@ViewBag.Item.Description</h2>
+<div class="container-fluid">
+    <div class="flex-column">
+        <h3>@ViewBag.Item.Name</h3>
+        <h5>@ViewBag.Item.Description</h5>
+    </div>
+    <div class="flex-column">
+        @for(int field = 0; field < ViewBag.Fields.Count; field++)
+            {
+                <label>@ViewBag.Fields[field].FieldTemplates.Name</label>
+                switch(ViewBag.Fields[field].FieldTemplates.DataType)
+                {
+                    case CollectionsPortal.Models.Type.integer:
+                        //number input
+                        <input class="form-control" type="number" value="@ViewBag.Fields[field].Value" disabled>
+                        break;
+                    case CollectionsPortal.Models.Type.text:
+                        //string input
+                        <input class="form-control" value="@ViewBag.Fields[field].Value" readonly>
+                        break;
+                    case CollectionsPortal.Models.Type.boolean:
+                        //checkbox
+                        if (ViewBag.Fields[field].Value == "on")
+                        {
+                            <input class="form-check-input" type="checkbox" checked disabled>
+                        }
+                        else
+                        {
+                            <input class="form-check-input" type="checkbox" disabled>
+                        }
+                        break;
+                    case CollectionsPortal.Models.Type.textarea:
+                        //textarea
+                        <textarea class="form-control" value="@ViewBag.Fields[field].Value" disabled></textarea>
+                        break;
+                    case CollectionsPortal.Models.Type.dateTime:
+                        //dateTime
+                        <input class="form-control" type="date" value="@ViewBag.Fields[field].Value" disabled>
+                        break;
+                }
+            }
+        </div>
+</div>
+<div id="comments" class="flex-column">
+    <p>there are gonna me comments</p>
 </div>
