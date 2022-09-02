@@ -130,16 +130,20 @@ namespace CollectionsPortal.Controllers
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Delete(int collectionId)
         {
-            var coll = _context.Collections.OrderBy(p => p.Id).Include(p => p.Items).Include(p => p.User).First();
+            var coll = _context.Collections.OrderBy(p => p.Id).Include(p => p.User).First();
 
             if (coll == null)
                 return NotFound();
 
             if (User.Identity.Name != null && (User.Identity.Name == coll.User.UserName || User.IsInRole("Administrator")))
             {
-                Uri uri = new Uri(coll.imageUrl);
-                string fileName = uri.Segments.LastOrDefault();
-                await _cloudStorage.DeleteFileAsync(fileName);
+                if (coll.imageUrl != null)
+                {
+                    Uri uri = new Uri(coll.imageUrl);
+                    string fileName = uri.Segments.LastOrDefault();
+                    await _cloudStorage.DeleteFileAsync(fileName);
+                }
+
                 _context.Collections.Remove(coll);
                 await _context.SaveChangesAsync();
             }

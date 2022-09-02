@@ -51,7 +51,6 @@ namespace CollectionsPortal.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("imageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
