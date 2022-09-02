@@ -7,32 +7,38 @@
         {
            if(User.IsInRole("Administrator") || User.Identity.Name == ViewBag.Owner.UserName)
             {
-                    <h2>@Localizer["ControlCollection"]</h2>
-                    <button onclick="location.href='@Url.Action("Create","Item", new {collectionId = ViewBag.Collection.Id})'" class="btn btn-success">@Localizer["AddItem"]</button>
-                    <button onclick="location.href='@Url.Action("Edit","Collection", new {collectionId = ViewBag.Collection.Id})'" class="btn btn-primary">@Localizer["EditCollection"]</button>
-                    <button onclick="location.href='@Url.Action("Delete", "Collections", new {collectionId = ViewBag.Collection.Id})'" class="btn btn-danger">@Localizer["DeleteCollection"]</button>
+                        <h2>@Localizer["ControlCollection"]</h2>
+                        <button onclick="location.href='@Url.Action("Create","Item", new {collectionId = ViewBag.Collection.Id})'" class="btn btn-success">@Localizer["AddItem"]</button>
+                        <button onclick="location.href='@Url.Action("Edit","Collection", new {collectionId = ViewBag.Collection.Id})'" class="btn btn-primary">@Localizer["EditCollection"]</button>
+                        <button onclick="location.href='@Url.Action("Delete", "Collections", new {collectionId = ViewBag.Collection.Id})'" class="btn btn-danger">@Localizer["DeleteCollection"]</button>
             }
         }
     }
 </div>
 <div>
-    <h1>@Localizer["Collname"] @ViewBag.Collection.Name @Localizer["CollectionTopic"] @ViewBag.Collection.Topic.Name</h1>
+    <div class="image" style="margin: 10px">
+        <img alt="@ViewBag.Collection.Name image"  widht="300" height="300" src="@ViewBag.Collection.imageUrl" />
+    </div>
+    <h2>@Localizer["Collection name:"] </h2>
+    <p>@ViewBag.Collection.Name</p>
+    <h3>@Localizer["Topic:"]</h3>
+    <p>@ViewBag.Collection.Topic.Name</p>
     <div class="h2">@Localizer["Description"] @ViewBag.Collection.Description</div>
     <div>
         @{
             if(ViewBag.Items.Count == 0)
             {
-                <h3>@Localizer["NoItems"]</h3>
+                    <h3>@Localizer["NoItems"]</h3>
             }
             else
             {
                 foreach(var item in ViewBag.Items)
                 {
-                    <div class="card-body">
-                        <h5 class="card-title">@item.Name</h5>
-                        <p class="card-text cropped-text">@item.Description</p>
-                        <a href="@Url.Action("Index", "Item", new {itemId = @item.Id})" class="btn btn-primary">@Localizer["OpenItem"]</a>
-                    </div>
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Name</h5>
+                            <p class="card-text cropped-text">@item.Description</p>
+                            <a href="@Url.Action("Index", "Item", new {itemId = @item.Id})" class="btn btn-primary">@Localizer["OpenItem"]</a>
+                        </div>
                 } 
             }
         }

@@ -1,4 +1,5 @@
 ﻿using CollectionsPortal.Data;
+using CollectionsPortal.Models;
 using CollectionsPortal.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -51,6 +52,9 @@ namespace CollectionsPortal.Controllers
         public async Task<IActionResult> Create(CreateItemViewModel model)
         {
             var collection = _context.Collections.FirstOrDefault(p => p.Id == model.collectionId);
+            var existingTags = _context.Tags.ToList().Select(u => u.Name);
+
+            var tags = model.Tags.Split(",");
 
             foreach (var field in model.Fields)
             {
@@ -65,6 +69,33 @@ namespace CollectionsPortal.Controllers
                 Fields = model.Fields,
                 CreatedAt = DateTime.Now
             };
+
+            foreach(var tag in tags)
+            {
+                if (!existingTags.Contains(tag))
+                {
+                    Tag newTag = new Tag()
+                    {
+                        Name = tag
+                    };
+                    TagsToItems tagsTo = new TagsToItems()
+                    {
+                        Item = item,
+                        Tag = newTag
+                    };
+                    await _context.Tags.AddAsync(newTag);
+                    await _context.TagsToItems.AddAsync(tagsTo);
+                }
+                else
+                {
+                    TagsToItems tagsTo = new TagsToItems()
+                    {
+                        Item = item,
+                        Tag = _context.Tags.Where(p => p.Name == tag).FirstOrDefault()
+                    };
+                    await _context.TagsToItems.AddAsync(tagsTo);
+                }
+            }
 
             collection.UpdatedAt = DateTime.Now;
 

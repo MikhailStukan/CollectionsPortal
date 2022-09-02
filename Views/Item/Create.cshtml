@@ -54,9 +54,8 @@
             }
         </div>
         <div class="form-group">
-            <label asp-for="Tags"></label>
-            <input type="hidden" id="tags" asp-for="Tags"/>
-            <span asp-validation-for="Tags" class="text-danger"></span>
+            <label asp-for="Tags">@Localizer["Tags"]</label>
+            <input id="tag" asp-for="Tags" class="form-control"/>
         </div>
         <div>
             <button type="submit" class="btn btn-primary mt-1">@Localizer["Create"]</button>

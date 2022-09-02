@@ -1,4 +1,6 @@
-﻿namespace CollectionsPortal.Models
+﻿
+
+namespace CollectionsPortal.Models
 {
     public class Collection
     {
@@ -6,6 +8,7 @@
         public string Name { get; set; }
         public string Description { get; set; }
 
+        public string imageUrl { get; set; }
         public Topic Topic { get; set; }
 
         public User User { get; set; }

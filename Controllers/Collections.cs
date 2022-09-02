@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using CollectionsPortal.CloudStorage;
+using Google.Cloud.Storage.V1;
+using Google;
+using Microsoft.Extensions.Options;
 
 namespace CollectionsPortal.Controllers
 {
@@ -12,11 +16,13 @@ namespace CollectionsPortal.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly ICloudStorage _cloudStorage;
 
-        public Collections(ApplicationDbContext db, UserManager<User> userManager)
+        public Collections(ApplicationDbContext db, UserManager<User> userManager, ICloudStorage cloudStorage)
         {
             _context = db;
             _userManager = userManager;
+            _cloudStorage = cloudStorage;
         }
 
         [HttpGet]
@@ -78,6 +84,13 @@ namespace CollectionsPortal.Controllers
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
             };
+            
+            if(model.ImageFile != null)
+            {
+                string fileNameForStorage = $"{collection.Name}{collection.Id}{DateTime.Now.ToString("yyyyMMddHHmmss")}{Path.GetExtension(model.ImageFile.FileName)}";
+                collection.imageUrl = await _cloudStorage.UploadFileAsync(model.ImageFile, fileNameForStorage);
+            }
+
 
             foreach (var tag in tags)
             {
@@ -124,6 +137,9 @@ namespace CollectionsPortal.Controllers
 
             if (User.Identity.Name != null && (User.Identity.Name == coll.User.UserName || User.IsInRole("Administrator")))
             {
+                Uri uri = new Uri(coll.imageUrl);
+                string fileName = uri.Segments.LastOrDefault();
+                await _cloudStorage.DeleteFileAsync(fileName);
                 _context.Collections.Remove(coll);
                 await _context.SaveChangesAsync();
             }

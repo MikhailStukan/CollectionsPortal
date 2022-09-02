@@ -1,5 +1,6 @@
 using CollectionsPortal.Data;
 using CollectionsPortal.Models;
+using CollectionsPortal.CloudStorage;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +32,8 @@ builder.Services.AddLocalization(options => options.ResourcesPath = "Resources")
 builder.Services.AddMvc()
     .AddDataAnnotationsLocalization()
     .AddViewLocalization();
+
+builder.Services.AddSingleton<ICloudStorage, GoogleCloudStorage>();
 
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>
