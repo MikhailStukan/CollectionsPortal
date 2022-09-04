@@ -46,6 +46,8 @@ namespace CollectionsPortal.Controllers
             return View();
         }
 
+
+        [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Edit(int collectionId)
         {
             var collection = await _context.Collections.Where(p => p.Id == collectionId).FirstOrDefaultAsync();
@@ -54,8 +56,36 @@ namespace CollectionsPortal.Controllers
             return View();
         }
 
+        [HttpPost]
+        [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Edit(EditCollectionViewModel model)
         {
+            var collection = await _context.Collections.Where(p => p.Id == model.collectionId).Include(p => p.User).FirstOrDefaultAsync();
+            if (model.Name == null || model.Description == null)
+            {
+                ViewBag.Collection = collection;
+                return View(model);
+            }
+            else
+            {
+                if (collection != null)
+                {
+                    if (User.Identity.Name == collection.User.UserName || User.IsInRole("Administrator"))
+                    {
+                        collection.Name = model.Name;
+                        collection.Description = model.Description;
+
+                        if (model.ImageFile != null)
+                        {
+                            string fileNameForStorage = $"{collection.User.Id}{collection.Id}{DateTime.Now.ToString("yyyyMMddHHmmss")}{Path.GetExtension(model.ImageFile.FileName)}";
+                            collection.imageUrl = await _cloudStorage.UploadFileAsync(model.ImageFile, fileNameForStorage);
+                        }
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction("Index", "Collections", new { collectionId = collection.Id });
+                    }
+                }
+            }
             return View();
         }
 

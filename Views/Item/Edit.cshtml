@@ -1,7 +1,62 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization;
-@using CollectionsPortal.Models;
+@model CollectionsPortal.ViewModels.EditItemViewModel;
 
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = Localizer["EdiItem"];
+    ViewData["Title"] = Localizer["EditItem"];
 }
+
+<form method="post" enctype="multipart/form-data"  asp-controller="Item" asp-action="Edit">
+    <div asp-validation-summary="ModelOnly"></div>
+    <input type="hidden" asp-for="itemId" value="@ViewBag.item.Id">
+    <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="Name">@Localizer["Name"]</label><br />
+            <input value="@ViewBag.item.Name"asp-for="Name" class="form-control"/>
+            <span asp-validation-for="Name"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ImageFile">@Localizer["ImageFile"]</label>
+            <input asp-for="ImageFile" type="file"  accept="image/jpeg,image/gif,image/png" class="form-control" />
+            <span asp-validation-for="ImageFile" class="text-primary"></span>
+        </div>
+        <div class="form-group">
+            @for(var fields = 0; fields < ViewBag.Collection.FieldTemplates.Count; fields++)
+            {
+                <input type="hidden" asp-for="Fields[fields].FieldTemplates.Id" value="@ViewBag.Collection.FieldTemplates[fields].Id">
+                
+                switch(ViewBag.Collection.FieldTemplates[fields].DataType)
+                {
+                    case CollectionsPortal.Models.Type.integer:
+                        //number input
+                        <label>@ViewBag.Collection.FieldTemplates[fields].Name</label>
+                        <input value="@ViewBag.item.Fields[fields].Value" class="form-control" type="number" name=Fields[@fields].Value  placeholder="@Localizer["Enter"] @ViewBag.Collection.FieldTemplates[fields].Name">
+                        break;
+                    case CollectionsPortal.Models.Type.text:
+                        //string input
+                        <label>@ViewBag.Collection.FieldTemplates[fields].Name</label>
+                        <input value="@ViewBag.item.Fields[fields].Value" class="form-control" name="Fields[@fields].Value" type="text" placeholder="@Localizer["Enter"] @ViewBag.Collection.FieldTemplates[fields].Name">
+                        break;
+                    case CollectionsPortal.Models.Type.boolean:
+                        //checkbox
+                        <label>@ViewBag.Collection.FieldTemplates[fields].Name</label>
+                        <input value="@ViewBag.item.Fields[fields].Value" class="form-check-input" id="check@fields" type="checkbox" name="Fields[@fields].Value">
+                        break;
+                    case CollectionsPortal.Models.Type.textarea:
+                        //textarea
+                        <label>@ViewBag.Collection.FieldTemplates[fields].Name</label>
+                        <textarea value="@ViewBag.item.Fields[fields].Value" class="form-control" name="Fields[@fields].Value" placeholder="@Localizer["Enter"] @ViewBag.Collection.FieldTemplates[fields].Name"></textarea>
+                        break;
+                    case CollectionsPortal.Models.Type.dateTime:
+                        //dateTime
+                        <label>@ViewBag.Collection.FieldTemplates[fields].Name</label>
+                        <input value="@ViewBag.item.Fields[fields].Value" class="form-control" type="date" name="Fields[@fields].Value">
+                        break;
+                }
+            }
+        </div>
+        <div>
+            <button type="submit" class="btn btn-primary mt-1">@Localizer["Edit"]</button>
+        </div>
+    </div>
+</form>

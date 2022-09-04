@@ -158,18 +158,62 @@ namespace CollectionsPortal.Controllers
         }
 
 
+        [HttpGet]
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Edit(int itemId)
         {
-            var item = await _context.Items.Where(p => p.Id == itemId).Include(p => p.Collection).Include(p => p.Fields).FirstOrDefaultAsync();
-            ViewBag.item = item;
+            await GetItemdata(itemId);
             return View();
         }
 
+        private async Task GetItemdata(int itemId)
+        {
+            var item = await _context.Items.Where(p => p.Id == itemId).Include(p => p.Collection).Include(p => p.Fields).FirstOrDefaultAsync();
+            ViewBag.item = item;
+            var tags = await _context.TagsToItems.Where(p => p.Item == item).Include(p => p.Tag).Select(p => p.Tag.Name).ToListAsync();
+            ViewBag.Tags = string.Join(",", tags);
+            var collection = await _context.Collections.Where(p => p.Id == item.Collection.Id).Include(p => p.FieldTemplates).FirstOrDefaultAsync();
+            ViewBag.Collection = collection;
+        }
+
+        [HttpPost]
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Edit(EditItemViewModel model)
         {
-            return View();
+            if (model.Name == null || model.Fields == null)
+            {
+                await GetItemdata(model.itemId);
+                return View(model);
+            }
+            else
+            {
+                var item = await _context.Items.Where(p => p.Id == model.itemId).Include(p => p.Collection.User).Include(p => p.Fields).FirstOrDefaultAsync();
+                if (item != null)
+                {
+                    if (User.Identity.Name == item.Collection.User.UserName || User.IsInRole("Administrator"))
+                    {
+                        item.Name = model.Name;
+
+                        for (var i = 0; i < model.Fields.Count; i++)
+                        {
+                            item.Fields[i].Value = model.Fields[i].Value;
+                        }
+
+                        if (model.ImageFile != null)
+                        {
+                            string fileNameForStorage = $"{item.Collection.User.Id}{item.Id}{DateTime.Now.ToString("yyyyMMddHHmmss")}{Path.GetExtension(model.ImageFile.FileName)}";
+                            item.imageUrl = await _cloudStorage.UploadFileAsync(model.ImageFile, fileNameForStorage);
+                        }
+                        item.UpdatedAt = DateTime.Now;
+
+                        await _context.SaveChangesAsync();
+
+
+                    }
+
+                }
+                return RedirectToAction("Index", "Item", new { itemId = item.Id });
+            }
         }
 
         [Authorize(Policy = "RequireUser")]

@@ -50,15 +50,15 @@ namespace CollectionsPortal.Controllers
             var resultsItems = await _context.Items.Include(p => p.Collection).Include(p => p.Collection.User).Where(c => (c.Name + c.Collection.Name + c.Collection.Description).Contains(text)).ToListAsync();
             var resultComments = await _context.Comments.Include(p => p.Item).Include(p => p.Item.Collection).Include(p => p.User).Where(p => p.Content.Contains(text)).ToListAsync();
 
-            if(resultComments.Any())
+            if (resultComments.Any())
             {
-                foreach(var comment in resultComments)
+                foreach (var comment in resultComments)
                 {
-                    if(!resultsItems.Contains(comment.Item))
+                    if (!resultsItems.Contains(comment.Item))
                     {
                         resultsItems.Add(comment.Item);
                     }
-                   
+
                 }
             }
 
