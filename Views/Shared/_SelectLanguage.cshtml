@@ -11,12 +11,16 @@
     var cultureItems = LocOptions.Value.SupportedUICultures
         .Select(c => new SelectListItem { Value = c.Name, Text = c.NativeName })
         .ToList();
+    var returnUrl = Context.Request.Path.ToString() + Context.Request.QueryString.Value.ToString();
 }
 
-<form asp-controller="Home" asp-action="SetLanguage"
-      asp-route-returnUrl="@Context.Request.Path"
-      method="post" class="form-horizontal">
-      @Localizer["Language"]: <select name="culture" onchange="this.form.submit();"
-                      asp-for="@requestCulture.RequestCulture.UICulture.Name"
-                      asp-items="cultureItems"></select>
-</form>
+<div title="@Localizer["Request culture provider:"] @requestCulture?.Provider?.GetType().Name">
+    <form id="selectLanguage" asp-controller="Home" 
+          asp-action="SetLanguage" asp-route-returnUrl="@returnUrl" 
+          method="post" class="form-horizontal" role="form">
+        <label asp-for="@requestCulture.RequestCulture.UICulture.Name">@Localizer["Language:"]</label> <select name="culture"
+          onchange="this.form.submit();"
+          asp-for="@requestCulture.RequestCulture.UICulture.Name" asp-items="cultureItems">
+        </select>
+    </form>
+</div>
