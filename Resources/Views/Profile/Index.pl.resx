@@ -120,8 +120,26 @@
   <data name="CreateNewCollection" xml:space="preserve">
     <value>Utwórz nową kolekcję</value>
   </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Usuń</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edytuj</value>
+  </data>
   <data name="Hello" xml:space="preserve">
     <value>Witam</value>
+  </data>
+  <data name="Items" xml:space="preserve">
+    <value>Temat</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nazwa</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="Topic" xml:space="preserve">
+    <value>Topic</value>
   </data>
   <data name="YourCollections" xml:space="preserve">
     <value>Twoje kolekcje:</value>
