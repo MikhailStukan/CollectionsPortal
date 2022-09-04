@@ -25,7 +25,6 @@
     <Folder Include="Data\Migrations\" />
     <Folder Include="Migrations\" />
     <Folder Include="Resources\Controllers\" />
-    <Folder Include="Resources\Views\Item\" />
   </ItemGroup>
 
 </Project>
