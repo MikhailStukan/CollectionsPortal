@@ -81,7 +81,7 @@ namespace CollectionsPortal.Controllers
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Create(CreateItemViewModel model)
         {
-            var collection = await _context.Collections.Include(p => p.User).FirstOrDefaultAsync(p => p.Id == model.collectionId);
+            var collection = await _context.Collections.Include(p => p.User).Include(p => p.Items).Include(p => p.FieldTemplates).FirstOrDefaultAsync(p => p.Id == model.collectionId);
 
             if (collection == null)
             {
@@ -92,7 +92,7 @@ namespace CollectionsPortal.Controllers
             {
                 //small model validation
                 ViewBag.Collection = collection;
-                return RedirectToAction("Create", new { collectionId = collection.Id });
+                return View(model);
             }
             else
             {

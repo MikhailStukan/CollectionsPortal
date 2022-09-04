@@ -110,7 +110,7 @@ namespace CollectionsPortal.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateCollectionViewModel model)
         {
-            if (model.Name == null && model.Description == null || model.Fields == null && model.Tags == null)
+            if (model.Name == null || model.Description == null || model.Description == null || model.Fields == null || model.Tags == null)
             {
                 //small validation cause ModelState doesnt work on ForeignKeys
                 ViewBag.Topics = await _context.Topics.ToListAsync();
