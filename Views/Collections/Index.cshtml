@@ -1,5 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization;
-
+@{
+    ViewData["Title"] = @ViewBag.Collection.Name + @Localizer["collection"];
+}
 @inject IViewLocalizer Localizer
 <div>
     @if(@ViewBag.Collection.imageUrl != null)
@@ -56,7 +58,7 @@
             </tbody>
         </table>
         <div class="container-fluid">
-        @if(User.Identity.Name != null)
+        @if(User.Identity.IsAuthenticated)
         {
            if(User.IsInRole("Administrator") || User.Identity.Name == ViewBag.Owner.UserName)
             {

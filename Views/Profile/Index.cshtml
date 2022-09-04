@@ -2,7 +2,7 @@
 
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = @Localizer["Profile"];
 }
 <h1 class="display-4">@Localizer["Hello"], @ViewBag.User</h1>
 <h2>@Localizer["YourCollections"] </h2>

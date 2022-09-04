@@ -2,6 +2,10 @@
 @using CollectionsPortal.Models;
 
 @inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["CreateItem"];
+}
+
 @model CollectionsPortal.ViewModels.CreateItemViewModel;
 
 <form method="post" enctype="multipart/form-data"  asp-controller="Item" asp-action="Create">

@@ -1,30 +1,54 @@
 ﻿@using CollectionsPortal.Models;
+@using Microsoft.AspNetCore.Mvc.Localization;
 
+@inject IViewLocalizer Localizer
+@{
+    ViewData["Title"] = @Localizer["Seach"];
+}
 @{
 
     if (ViewBag.items != null)
     {
-        <h1>Found items:</h1>
-        foreach (var item in (List<Item>)ViewBag.items)
+        if(ViewBag.items.Count == 0)
         {
-            <div>
-                <h2>Item name: @item.Name</h2>
-            </div>
-
+            <h1>@Localizer["Found no items"]</h1>
         }
+        else
+        {
+            <h1>@Localizer["FoundItems:"]</h1>
+            foreach (var item in (List<Item>)ViewBag.items)
+            {
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" width="75" height="150" src="@item.imageUrl" alt="@item.Name @Localizer["image"]">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Name</h5>
+                    <p class="card-text">@Localizer["In collection:"] @item.Collection.Name @Localizer["Author:"] @item.Collection.User.UserName</p>
+                    <a href="@Url.Action("Index", "Item", new {itemId = item.Id})" class="btn btn-primary">@Localizer["Open"]</a>
+                </div>
+            </div>
+            }
+        } 
     }
-
     if (ViewBag.collections != null)
     {
-        <h1>Found collections:</h1>
-        foreach (var coll in (List<Collection>)ViewBag.collections)
+        if(ViewBag.collections.Count == 0)
         {
-            <div>
-                <h2>Coll name: @coll.Name</h2>
-                <p>Coll desc: @coll.Description</p>
+            <h1>@Localizer["Found no collections"]</h1>
+        }
+        else
+        {
+            <h1>@Localizer["FoundCollections:"]</h1>
+            foreach (var coll in (List<Collection>)ViewBag.collections)
+            {
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" width="75" height="150" src="@coll.imageUrl" alt="@coll.Name @Localizer["image"]">
+                <div class="card-body">
+                    <h5 class="card-title">@coll.Name</h5>
+                    <p class="card-text">@coll.Description</p>
+                    <a href="@Url.Action("Index", "Collections", new {collectionId = coll.Id})" class="btn btn-primary">@Localizer["Open"]</a>
+                </div>
             </div>
         }
+        }
     }
-
-
 }

@@ -14,10 +14,10 @@ namespace CollectionsPortal.Controllers
             _context = db;
         }
 
-        public IActionResult Index(int tag)
+        public async Task<IActionResult> Index(int tag)
         {
-            var itemsTags = _context.TagsToItems.Where(p => p.Tag.Id == tag).Include(p => p.Item).Include(p => p.Tag).ToList();
-            var collectionTags = _context.TagsToCollections.Where(p => p.Tag.Id == tag).Include(p => p.Collection).Include(p => p.Tag).ToList();
+            var itemsTags = await _context.TagsToItems.Where(p => p.Tag.Id == tag).Include(p => p.Item).Include(p => p.Tag).Include(p => p.Item.Collection).Include(p => p.Item.Collection.User).ToListAsync();
+            var collectionTags = await _context.TagsToCollections.Where(p => p.Tag.Id == tag).Include(p => p.Collection).Include(p => p.Tag).ToListAsync();
 
             List<Models.Item> items = new List<Models.Item>();
             List<Collection> collections = new List<Collection>();
@@ -43,9 +43,13 @@ namespace CollectionsPortal.Controllers
             return View();
         }
 
-        public IActionResult textSearch(string text)
+        public async Task<IActionResult> TextSearch(string text)
         {
             //full text search of db implementation here
+
+            var resultsItems = await _context.Items.Include(p => p.Collection).Include(p => p.Collection.User).Where(c => (c.Name + c.Collection.Name + c.Collection.Description).Contains(text)).ToListAsync();
+
+            ViewBag.items = resultsItems;
 
             return View();
         }

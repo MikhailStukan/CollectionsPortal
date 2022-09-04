@@ -16,7 +16,7 @@ namespace CollectionsPortal.ViewModels
 
         [Required]
         [DataType(DataType.MultilineText)]
-        [StringLength(100, MinimumLength = 20)]
+        [StringLength(100, MinimumLength = 10)]
         public string Description { get; set; }
 
         public Topic Topic { get; set; }
