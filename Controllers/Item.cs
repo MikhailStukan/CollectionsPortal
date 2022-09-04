@@ -76,7 +76,7 @@ namespace CollectionsPortal.Controllers
         {
             var collection = _context.Collections.FirstOrDefault(p => p.Id == model.collectionId);
 
-            if (model.Name == null || model.Description == null|| model.Tags == null || model.Fields == null)
+            if (model.Name == null || model.Description == null || model.Tags == null || model.Fields == null)
             {
                 //small model validation
                 ViewBag.Collection = collection;
@@ -135,7 +135,7 @@ namespace CollectionsPortal.Controllers
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction("Index", "Collections", new { collectionId = model.collectionId });
-            }   
+            }
         }
 
 
@@ -158,7 +158,7 @@ namespace CollectionsPortal.Controllers
         {
             var item = await _context.Items.Where(p => p.Id == itemId).Include(p => p.Likes).Include(p => p.Collection).Include(p => p.Fields).Include(p => p.Collection.User).FirstOrDefaultAsync();
 
-            if(User.Identity.Name == item.Collection.User.UserName || User.IsInRole("Administrator"))
+            if (User.Identity.Name == item.Collection.User.UserName || User.IsInRole("Administrator"))
             {
                 _context.Items.Remove(item);
                 await _context.SaveChangesAsync();
@@ -171,7 +171,7 @@ namespace CollectionsPortal.Controllers
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Comment(Comment comment, int itemId)
         {
-            if(comment != null)
+            if (comment != null)
             {
                 comment.User = await _context.Users.Where(p => p.UserName == User.Identity.Name).FirstOrDefaultAsync();
                 comment.Item = await _context.Items.Where(p => p.Id == itemId).FirstOrDefaultAsync();
@@ -187,7 +187,7 @@ namespace CollectionsPortal.Controllers
             var user = await _context.Users.Where(p => p.UserName == User.Identity.Name).FirstOrDefaultAsync();
             var item = await _context.Items.Where(p => p.Id == itemId).FirstOrDefaultAsync();
 
-            if(user != null && item != null)
+            if (user != null && item != null)
             {
                 Like like = new Like()
                 {
@@ -199,6 +199,26 @@ namespace CollectionsPortal.Controllers
                 await _context.SaveChangesAsync();
             }
 
+            return RedirectToAction("Index", "Item", new { itemId = itemId });
+        }
+
+        [Authorize(Policy = "RequireUser")]
+        public async Task<IActionResult> Unlike(int itemId)
+        {
+            var user = await _context.Users.Where(p => p.UserName == User.Identity.Name).FirstOrDefaultAsync();
+            var item = await _context.Items.Where(p => p.Id == itemId).FirstOrDefaultAsync();
+
+            if (user != null && item != null)
+            {
+                var like = await _context.Likes.Where(p => p.User == user && p.Item == item).FirstOrDefaultAsync();
+
+                if (like != null)
+                {
+                    _context.Likes.Remove(like);
+                    await _context.SaveChangesAsync();
+                }
+
+            }
             return RedirectToAction("Index", "Item", new { itemId = itemId });
         }
     }

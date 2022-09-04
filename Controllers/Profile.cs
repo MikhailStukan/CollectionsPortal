@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CollectionsPortal.Controllers
 {
-    
+
     public class Profile : Controller
     {
         private readonly ApplicationDbContext _context;

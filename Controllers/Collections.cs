@@ -1,14 +1,11 @@
-﻿using CollectionsPortal.Data;
+﻿using CollectionsPortal.CloudStorage;
+using CollectionsPortal.Data;
 using CollectionsPortal.Models;
 using CollectionsPortal.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CollectionsPortal.CloudStorage;
-using Google.Cloud.Storage.V1;
-using Google;
-using Microsoft.Extensions.Options;
 
 namespace CollectionsPortal.Controllers
 {

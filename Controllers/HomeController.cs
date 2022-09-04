@@ -48,7 +48,7 @@ namespace CollectionsPortal.Controllers
         private List<Tag> GetTags()
         {
             var tags = _context.Tags.ToList();
-            if(tags == null)
+            if (tags == null)
                 tags = new List<Tag>();
             return tags;
         }
@@ -70,7 +70,7 @@ namespace CollectionsPortal.Controllers
         private List<Models.Item> LastItems()
         {
             var items = _context.Items.OrderByDescending(p => p.CreatedAt).Include(p => p.Collection.User).ToList();
-            
+
             if (items.Count() > 5)
             {
                 return items.GetRange(0, 5);

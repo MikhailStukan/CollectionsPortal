@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
-
-namespace CollectionsPortal.CloudStorage
+﻿namespace CollectionsPortal.CloudStorage
 {
     public interface ICloudStorage
     {

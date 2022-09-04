@@ -64,7 +64,7 @@
         {
             @if (ViewBag.isLiked != null && ViewBag.isLiked == true)
         {
-                <button onclick="location.href='@Url.Action("UnLike", "Item", new{itemId = ViewBag.Item.Id})'" class="btn btn-outline-success m-1" id="like">@Localizer["unLike"]</button>
+                <button onclick="location.href='@Url.Action("Unlike", "Item", new{itemId = ViewBag.Item.Id})'" class="btn btn-outline-success m-1" id="like">@Localizer["unLike"]</button>
             }
             else
             {

@@ -22,14 +22,14 @@ namespace CollectionsPortal.Controllers
             List<Models.Item> items = new List<Models.Item>();
             List<Collection> collections = new List<Collection>();
 
-            if(itemsTags != null)
+            if (itemsTags != null)
             {
                 foreach (var item in itemsTags)
                 {
                     items.Add(item.Item);
                 }
             }
-            if(collectionTags != null)
+            if (collectionTags != null)
             {
                 foreach (var col in collectionTags)
                 {
