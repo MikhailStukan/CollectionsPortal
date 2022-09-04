@@ -18,7 +18,10 @@
             foreach (var item in (List<Item>)ViewBag.items)
             {
              <div class="card" style="width: 18rem;">
-                <img class="card-img-top" width="75" height="150" src="@item.imageUrl" alt="@item.Name @Localizer["image"]">
+                @if(item.imageUrl != null)
+                    {
+                        <img class="card-img-top" width="75" height="150" src="@item.imageUrl" alt="@item.Name @Localizer["image"]">
+                    } 
                 <div class="card-body">
                     <h5 class="card-title">@item.Name</h5>
                     <p class="card-text">@Localizer["InCollection:"] @item.Collection.Name @Localizer["Author:"] @item.Collection.User.UserName</p>
