@@ -19,6 +19,11 @@ body {
 
 }
 
+#customField
+{
+    margin: 5px;
+}
+
 #userBlock{
     text-align:left;
 }
