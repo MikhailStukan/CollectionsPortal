@@ -9,7 +9,7 @@
 <div class="container-fluid">
     <button onclick="location.href='@Url.Action("Index","Collections", new {collectionId = ViewBag.Item.Collection.Id})'" class="btn btn-primary">@Localizer["GoToCollection"]</button>
 </div>
-<p class="hidden" id="itemId">@ViewBag.Item.Id</p>
+<p hidden id="itemId">@ViewBag.Item.Id</p>
 <div class="container-fluid">
     <h2 class="pb-2 border-bottom">@ViewBag.Item.Name:</h2>
      @if(@ViewBag.Item.imageUrl != null)
@@ -46,7 +46,7 @@
                         break;
                     case CollectionsPortal.Models.Type.textarea:
                         //textarea
-                        <textarea class="form-control" disabled>@ViewBag.Fields[field].Value</textarea>
+                        <textarea class="form-control" rows=6 >@ViewBag.Fields[field].Value</textarea>
                         break;
                     case CollectionsPortal.Models.Type.dateTime:
                         //dateTime
