@@ -13,7 +13,7 @@ let x = 0;
 
 function addInput() {
     var str = '<div id="customField"><input class="form-control" name="Fields[' + x + '].Name" placeholder="Name of field"> <select class="form-select" name="Fields[' + x + '].DataType"><option value="integer">Number</option><option value="boolean">CheckBox</option><option value="dateTime">Date</option><option value="textarea">Big text</option><option value="text">Small text</option></select></div>';
-    document.getElementById('fields').innerHTML += str;
+    $("#fields").append(str);
     x++;
 }
 
