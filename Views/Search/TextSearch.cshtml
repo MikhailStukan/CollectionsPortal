@@ -17,7 +17,7 @@
            <h1>@Localizer["Found items:"]</h1>
             foreach (var item in (List<Item>)ViewBag.items)
             {
-             <div class="card" style="width: 18rem;">
+             <div class="card" style="width: 50%;">
                 @if(item.imageUrl != null)
                     {
                         <img class="card-img-top" width="75" height="150" src="@item.imageUrl" alt="@item.Name @Localizer["image"]">

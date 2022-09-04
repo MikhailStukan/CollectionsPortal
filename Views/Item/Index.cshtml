@@ -56,7 +56,7 @@
             }
     </div>
     <div class="row" id="likes">
-        <h5>@Localizer["Likes:"] @ViewBag.Likes.Count</h5>
+        <h5>@Localizer["Likes"]: @ViewBag.Likes.Count</h5>
         @if(User.IsInRole("User"))
         {
             @if (ViewBag.isLiked != null && ViewBag.isLiked == true)
@@ -73,7 +73,7 @@
 <div id="comments" class="container">
     @if (ViewBag.Comments.Count != 0 && ViewBag.Comments != null)
     {
-        <h5>@Localizer["Comments:"]</h5>
+        <h5>@Localizer["Comments"]:</h5>
         <div class="row"  id="comments">
             <div class="card mb-3" style="background-color: lightgray;">
                 <div class="card-body">

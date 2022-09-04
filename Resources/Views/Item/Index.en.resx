@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddComment" xml:space="preserve">
+    <value>New comment</value>
+  </data>
   <data name="Collection name" xml:space="preserve">
     <value>Collection name</value>
   </data>
@@ -138,8 +141,14 @@
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
+  <data name="GoToCollection" xml:space="preserve">
+    <value>Go to collection</value>
+  </data>
   <data name="ItemName" xml:space="preserve">
     <value>Item name</value>
+  </data>
+  <data name="like" xml:space="preserve">
+    <value>Like item</value>
   </data>
   <data name="Likes" xml:space="preserve">
     <value>Likes</value>
@@ -147,10 +156,19 @@
   <data name="Open" xml:space="preserve">
     <value>Open</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
+  </data>
   <data name="Tags" xml:space="preserve">
     <value>Tags</value>
   </data>
   <data name="Topic" xml:space="preserve">
     <value>Topic</value>
+  </data>
+  <data name="unLike" xml:space="preserve">
+    <value>Remove like</value>
+  </data>
+  <data name="WriteComment" xml:space="preserve">
+    <value>Write a comment there</value>
   </data>
 </root>

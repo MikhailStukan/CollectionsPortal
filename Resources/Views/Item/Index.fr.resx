@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddComment" xml:space="preserve">
+    <value>Nouveau commentaire</value>
+  </data>
   <data name="Collection name" xml:space="preserve">
     <value>Nom de la collection</value>
   </data>
@@ -138,8 +141,14 @@
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
+  <data name="GoToCollection" xml:space="preserve">
+    <value>Aller à la collection</value>
+  </data>
   <data name="ItemName" xml:space="preserve">
     <value>Nom de l'article</value>
+  </data>
+  <data name="like" xml:space="preserve">
+    <value>Comme l'article</value>
   </data>
   <data name="Likes" xml:space="preserve">
     <value>Aime</value>
@@ -147,10 +156,19 @@
   <data name="Open" xml:space="preserve">
     <value>Ouvrir</value>
   </data>
+  <data name="Send" xml:space="preserve">
+    <value>Envoyer</value>
+  </data>
   <data name="Tags" xml:space="preserve">
     <value>Tags</value>
   </data>
   <data name="Topic" xml:space="preserve">
     <value>Thème</value>
+  </data>
+  <data name="unLike" xml:space="preserve">
+    <value>Enlever comme</value>
+  </data>
+  <data name="WriteComment" xml:space="preserve">
+    <value>Écrire un commentaire ici</value>
   </data>
 </root>

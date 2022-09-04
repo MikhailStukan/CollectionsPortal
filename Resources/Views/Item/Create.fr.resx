@@ -123,7 +123,7 @@
   <data name="Create" xml:space="preserve">
     <value>Créer</value>
   </data>
-  <data name="CreateCollection" xml:space="preserve">
+  <data name="CreateItem" xml:space="preserve">
     <value>Créer une collection</value>
   </data>
   <data name="Description" xml:space="preserve">

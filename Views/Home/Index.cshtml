@@ -9,17 +9,30 @@
 <div class="content">
     <h2>@Localizer["NewAdditions"]</h2> 
         @foreach(var item in (List<Item>)ViewBag.Items)
-        {<div class="card">
-            <a style="text-decoration: none;" href="@Url.Action("Index", "Item", new {itemId = item.Id})">@item.Name @Localizer["Collection:"] @item.Collection.Name @Localizer["Author:"] @item.Collection.User.FirstName @item.Collection.User.LastName</a>
+        {<div class="card" style="width: 50%; margin-bottom: 20px;">
+            <div class="card-body">
+                <div class="d-inline-flex">
+                <a class="h5 ms-2" style="text-decoration: none;" href="@Url.Action("Index", "Item", new {itemId = item.Id})">@item.Name</a>
+                <span class="text-dark ms-2"> @Localizer["Author"]: @item.Collection.User.UserName</span>
+                <span class="text-dark ms-2"> @item.CreatedAt</span>
+                </div>
+            </div>
          </div>
         }
-    
     <h2>@Localizer["BiggestCollections"]</h2>
-        @foreach(var coll in (List<Collection>)ViewBag.Collections)
+    @{
+        foreach(var coll in (List<Collection>)ViewBag.Collections)
         {
-            <div class="card">
-                <a style="text-decoration: none;"href="@Url.Action("Index", "Collections", new {collectionId = coll.Id})">@coll.Name</a>
+            <div class="card" style="width: 50%; margin-bottom: 20px;">
+                <div class="card-body">
+                    <div class="d-inline-flex">
+                        <a class="h5 ms-2" style="text-decoration: none;" href="@Url.Action("Index", "Collections", new {collectionId = coll.Id})">@coll.Name</a>
+                        <span class="text-dark ms-2"> @Localizer["Auhor"]: @coll.User.UserName</span>
+                        <span class="text-dark ms-2"> @Localizer["AmountofItems"]: @coll.Items.Count</span>
+                    </div>
+                </div>
             </div>
+            }
         }
     <div class="container mt-5 col-6">
         <h2>@Localizer["Tags"]</h2>
@@ -27,7 +40,7 @@
         @{
             foreach(var tag in (List<Tag>)ViewBag.Tags)
             {
-                        <li><a href="@Url.Action("Index", "Search", new {tag = @tag.Id})">@tag.Name</a></li>
+                     <li><a href="@Url.Action("Index", "Search", new {tag = @tag.Id})">@tag.Name</a></li>
             }
          }
         </ul>

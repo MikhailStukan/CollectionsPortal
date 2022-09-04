@@ -18,7 +18,7 @@
             <h1>@Localizer["FoundItems:"]</h1>
             foreach (var item in (List<Item>)ViewBag.items)
             {
-            <div class="card" style="width: 18rem;">
+            <div class="card" style="width: 50%;">
             @if(item.imageUrl != null)
                     {
                         <img class="card-img-top" width="75" height="150" src="@item.imageUrl" alt="@item.Name @Localizer["image"]">
@@ -43,7 +43,7 @@
             <h1>@Localizer["FoundCollections:"]</h1>
             foreach (var coll in (List<Collection>)ViewBag.collections)
             {
-            <div class="card" style="width: 18rem;">
+            <div class="card" style="width: 50%;">
                 @if(coll.imageUrl != null)
                     {
                         <img class="card-img-top" width="75" height="150" src="@coll.imageUrl" alt="@coll.Name @Localizer["image"]">
