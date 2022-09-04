@@ -9,6 +9,7 @@
 <div class="container-fluid">
     <button onclick="location.href='@Url.Action("Index","Collections", new {collectionId = ViewBag.Item.Collection.Id})'" class="btn btn-primary">@Localizer["GoToCollection"]</button>
 </div>
+<p class="hidden" id="itemId">@ViewBag.Item.Id</p>
 <div class="container-fluid">
     <h2 class="pb-2 border-bottom">@ViewBag.Item.Name:</h2>
      @if(@ViewBag.Item.imageUrl != null)
@@ -77,13 +78,13 @@
         <div class="row"  id="comments">
             <div class="card mb-3" style="background-color: lightgray;">
                 <div class="card-body">
-                    <div class="d-flex flex-column">
+                    <div class="d-flex flex-column" id="commentsData">
                         @foreach (var comment in ViewBag.Comments)
                         {
                             <div class="w-100" style="margin:10px; background-color: ghostwhite; padding: 20px;">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h6 class="text-primary fw-bold mb-0">
-                                        <a href="@Url.Action("Index", "Profile", new {userId = @comment.User.Id})">@comment.User.UserName</a>
+                                        <b>@comment.User.UserName</b>
                                         <span class="text-dark ms-2">@comment.Content</span>
                                     </h6>
                                     <span class="text-dark ms-5">@comment.CreatedDate</span>

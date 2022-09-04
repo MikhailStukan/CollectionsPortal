@@ -55,7 +55,7 @@ namespace CollectionsPortal.Controllers
 
         private List<Collection> BiggestCollections()
         {
-            var collections = _context.Collections.Include(p => p.Items).OrderByDescending(p => p.Items.Count()).ToList();
+            var collections = _context.Collections.Include(p => p.Items).OrderByDescending(p => p.Items.Count()).Include(p => p.User).ToList();
 
             if (collections.Count() > 5)
             {

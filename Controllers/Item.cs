@@ -296,5 +296,19 @@ namespace CollectionsPortal.Controllers
             }
             return RedirectToAction("Index", "Item", new { itemId = itemId });
         }
+
+
+        [Produces("application/json")]
+        [HttpPost]
+        [Route("api/comments/")]
+        public async Task<IActionResult> Comments([FromBody]int itemId)
+        {
+             if (itemId != null)
+                {
+                var comments = _context.Comments.Where(p => p.Item.Id == itemId).Select(p => new { p.User.UserName, p.Content, p.CreatedDate }).ToList();
+                    return Ok(comments);
+                }
+            return BadRequest();
+        }
     }
 }
