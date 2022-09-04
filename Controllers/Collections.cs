@@ -74,6 +74,7 @@ namespace CollectionsPortal.Controllers
                     {
                         collection.Name = model.Name;
                         collection.Description = model.Description;
+                        collection.UpdatedAt = DateTime.Now;
 
                         if (model.ImageFile != null)
                         {

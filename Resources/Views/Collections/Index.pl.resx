@@ -117,16 +117,40 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddItem" xml:space="preserve">
-    <value>Dodaj element do kolekcji</value>
+  <data name="Collection name" xml:space="preserve">
+    <value>Nazwa kolekcji</value>
   </data>
-  <data name="CollectionItems" xml:space="preserve">
-    <value>Pozycje:</value>
+  <data name="Comments" xml:space="preserve">
+    <value>Komentarze</value>
   </data>
-  <data name="CollectionName" xml:space="preserve">
-    <value>Nazwa kolekcji:</value>
+  <data name="Create" xml:space="preserve">
+    <value>Utwórz</value>
   </data>
-  <data name="DeleteCollection" xml:space="preserve">
-    <value>Usunąć kolekcję</value>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Utworzony</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Edytuj</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Opis</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="ItemName" xml:space="preserve">
+    <value>Nazwa przedmiotu</value>
+  </data>
+  <data name="Likes" xml:space="preserve">
+    <value>Podoba mi się</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Otwórz</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Tagi</value>
+  </data>
+  <data name="Topic" xml:space="preserve">
+    <value>Temat</value>
   </data>
 </root>

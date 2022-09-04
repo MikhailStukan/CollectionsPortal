@@ -10,13 +10,13 @@
             <img alt="@ViewBag.Collection.Name image"  widht="300" height="300" src="@ViewBag.Collection.imageUrl" />
         </div>
     }
-    <h2>@Localizer["Collection name:"] </h2>
+    <h2>@Localizer["Collection name"]:</h2>
     <p>@ViewBag.Collection.Name</p>
-    <h3>@Localizer["Topic:"]</h3>
+    <h3>@Localizer["Topic"]:</h3>
     <p>@ViewBag.Collection.Topic.Name</p>
-    <h3>@Localizer["Description:"]</h3>
+    <h3>@Localizer["Description"]:</h3>
     <p>@ViewBag.Collection.Description</p>
-    <h3>@Localizer["Tags:"]</h3>
+    <h3>@Localizer["Tags"]:</h3>
     @foreach(var tag in ViewBag.Tags)
     {
         <b>@tag.Name</b>

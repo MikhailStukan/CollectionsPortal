@@ -14,6 +14,7 @@ namespace CollectionsPortal.ViewModels
 
         public IFormFile ImageFile { get; set; }
 
+        [Required]
         public List<Field> Fields { get; set; } = new();
     }
 }
