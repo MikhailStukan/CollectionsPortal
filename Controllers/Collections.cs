@@ -30,10 +30,14 @@ namespace CollectionsPortal.Controllers
         {
             var collection = _context.Collections.Where(p => p.Id == collectionId).Include(p => p.User).Include(p => p.Items).Include(p => p.Topic).Include(p => p.FieldTemplates).FirstOrDefault();
 
+            var tags = _context.TagsToCollections.Where(p => p.Collection == collection).Select(p => p.Tag).ToList();
+
             if (collection == null)
                 return NotFound();
 
             ViewBag.Collection = collection;
+
+            ViewBag.Tags = tags;
 
             ViewBag.Owner = collection.User;
 
@@ -41,8 +45,19 @@ namespace CollectionsPortal.Controllers
 
             ViewBag.Fields = collection.FieldTemplates;
 
-            ViewBag.Topic = collection.Topic;
+            return View();
+        }
 
+        public async Task<IActionResult> Edit(int collectionId)
+        {
+            var collection = await _context.Collections.Where(p => p.Id == collectionId).FirstOrDefaultAsync();
+            ViewBag.Collection = collection;
+
+            return View();
+        }
+
+        public async Task<IActionResult> Edit(EditCollectionViewModel model)
+        {
             return View();
         }
 
@@ -137,7 +152,7 @@ namespace CollectionsPortal.Controllers
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Delete(int collectionId)
         {
-            var coll = _context.Collections.OrderBy(p => p.Id).Include(p => p.User).First();
+            var coll = _context.Collections.OrderBy(p => p.Id == collectionId).Include(p => p.User).First();
 
             if (coll == null)
                 return NotFound();

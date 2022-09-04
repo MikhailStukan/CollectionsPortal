@@ -34,7 +34,5 @@
     </table>
 </div>
 <div>
-    <a href="/collections/create/">
-        <button class="btn btn-success">@Localizer["CreateNewCollection"]</button>
-        </a>
+    <button onclick="location.href='@Url.Action("Create", "Collections")'" class="btn btn-success">@Localizer["CreateNewCollection"]</button>
 </div>

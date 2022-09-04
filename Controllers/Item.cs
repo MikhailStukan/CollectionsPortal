@@ -18,10 +18,11 @@ namespace CollectionsPortal.Controllers
         }
         public async Task<IActionResult> Index(int itemId)
         {
-            var item = await _context.Items.Where(p => p.Id == itemId).Include(p => p.Collection).Include(p => p.Comments).Include(p => p.Likes).FirstOrDefaultAsync();
+            var item = await _context.Items.Where(p => p.Id == itemId).Include(p => p.Collection).Include(p => p.Comments).Include(p => p.Likes).Include(p => p.Collection.User).FirstOrDefaultAsync();
 
             var fields = _context.Fields.Where(p => p.Item.Id == itemId).Include(p => p.FieldTemplates).ToList();
 
+            
             ViewBag.Fields = fields;
             ViewBag.Item = item;
             return View();
@@ -120,9 +121,31 @@ namespace CollectionsPortal.Controllers
 
 
         [Authorize(Policy = "RequireUser")]
-        public IActionResult Edit()
+        public async Task<IActionResult> Edit(int itemId)
+        {
+            var item = await _context.Items.Where(p => p.Id == itemId).Include(p => p.Collection).Include(p => p.Fields).FirstOrDefaultAsync();
+            ViewBag.item = item;
+            return View();
+        }
+
+        [Authorize(Policy = "RequireUser")]
+        public async Task<IActionResult> Edit(EditItemViewModel model)
         {
             return View();
+        }
+
+        [Authorize(Policy = "RequireUser")]
+        public async Task<IActionResult> Delete(int itemId)
+        {
+            var item = await _context.Items.Where(p => p.Id == itemId).Include(p => p.Likes).Include(p => p.Collection).Include(p => p.Fields).Include(p => p.Collection.User).FirstOrDefaultAsync();
+
+            if(User.Identity.Name == item.Collection.User.UserName || User.IsInRole("Administrator"))
+            {
+                _context.Items.Remove(item);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Index", "Collections", new { collectionId = item.Collection.Id });
         }
     }
 }

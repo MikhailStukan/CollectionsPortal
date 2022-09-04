@@ -6,11 +6,11 @@
     @{
         if(User.Identity.Name != null)
         {
-           if(User.IsInRole("Administrator") || User.Identity.Name == ViewBag.Owner.UserName)
+           if(User.IsInRole("Administrator") || User.Identity.Name == ViewBag.Item.Collection.User.UserName)
             {
-                        <button onclick="location.href='@Url.Action("Index","Collections", new {collectionId = ViewBag.Item.Collection.Id})'" class="btn btn-primary">@Localizer["GoToCollection"]</button>
-                        <button onclick="location.href='@Url.Action("Edit","Item", new {itemId = ViewBag.Item.Id})'" class="btn btn-primary">@Localizer["EditItem"]</button>
-                        <button onclick="location.href='@Url.Action("Delete", "Item", new {itemId = ViewBag.Item.Id})'" class="btn btn-danger">@Localizer["DeleteItem"]</button>
+                <button onclick="location.href='@Url.Action("Index","Collections", new {collectionId = ViewBag.Item.Collection.Id})'" class="btn btn-primary">@Localizer["GoToCollection"]</button>
+                <button onclick="location.href='@Url.Action("Edit","Item", new {itemId = ViewBag.Item.Id})'" class="btn btn-primary">@Localizer["EditItem"]</button>
+                <button onclick="location.href='@Url.Action("Delete", "Item", new {itemId = ViewBag.Item.Id})'" class="btn btn-danger">@Localizer["DeleteItem"]</button>
             }
         }
     }

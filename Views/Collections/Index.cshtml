@@ -7,10 +7,9 @@
         {
            if(User.IsInRole("Administrator") || User.Identity.Name == ViewBag.Owner.UserName)
             {
-                        <h2>@Localizer["ControlCollection"]</h2>
-                        <button onclick="location.href='@Url.Action("Create","Item", new {collectionId = ViewBag.Collection.Id})'" class="btn btn-success">@Localizer["AddItem"]</button>
-                        <button onclick="location.href='@Url.Action("Edit","Collection", new {collectionId = ViewBag.Collection.Id})'" class="btn btn-primary">@Localizer["EditCollection"]</button>
-                        <button onclick="location.href='@Url.Action("Delete", "Collections", new {collectionId = ViewBag.Collection.Id})'" class="btn btn-danger">@Localizer["DeleteCollection"]</button>
+                <button onclick="location.href='@Url.Action("Create","Item", new {collectionId = ViewBag.Collection.Id})'" class="btn btn-success">@Localizer["AddItem"]</button>
+                <button onclick="location.href='@Url.Action("Edit","Collection", new {collectionId = ViewBag.Collection.Id})'" class="btn btn-primary">@Localizer["EditCollection"]</button>
+                <button onclick="location.href='@Url.Action("Delete", "Collections", new {collectionId = ViewBag.Collection.Id})'" class="btn btn-danger">@Localizer["DeleteCollection"]</button>
             }
         }
     }
@@ -26,25 +25,40 @@
     <p>@ViewBag.Collection.Name</p>
     <h3>@Localizer["Topic:"]</h3>
     <p>@ViewBag.Collection.Topic.Name</p>
-    <div class="h2">@Localizer["Description"] @ViewBag.Collection.Description</div>
+    <h3>@Localizer["Description:"]</h3>
+    <p>@ViewBag.Collection.Description</p>
+    <h3>@Localizer["Tags:"]</h3>
+    @foreach(var tag in ViewBag.Tags)
+    {
+        <b>@tag.Name</b>
+    }
     <div>
-        @{
-            if(ViewBag.Items.Count == 0)
-            {
-                    <h3>@Localizer["NoItems"]</h3>
-            }
-            else
-            {
-                foreach(var item in ViewBag.Items)
-                {
-                        <div class="card-body">
-                            <h5 class="card-title">@item.Name</h5>
-                            <p class="card-text cropped-text">@item.Description</p>
-                            <a href="@Url.Action("Index", "Item", new {itemId = @item.Id})" class="btn btn-primary">@Localizer["OpenItem"]</a>
-                        </div>
-                } 
-            }
-        }
-        
+        <table id="itemsTable" class="table table-hover" cellspacing="0", width="80%">
+            <thead>
+                <tr>
+                    <th>@Localizer["ItemName"]</th>
+                    <th>@Localizer["ItemDescription"]</th>
+                    <th>@Localizer["CreatedAt"]</th>
+                    <th>@Localizer["Likes"]</th>
+                    <th>@Localizer["Comments"]</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                        foreach(var item in ViewBag.Items)
+                        {
+                                <tr>
+                                    <td>@item.Name</td>
+                                    <td>@item.Description</td>
+                                    <td>@item.CreatedAt</td>
+                                    <td>@item.Likes.Count</td>
+                                    <td>@item.Comments.Count</td>
+                                    <td><a href="@Url.Action("Index", "Item", new {itemId = @item.Id})" class="btn btn-primary">@Localizer["OpenItem"]</a></td>
+                                </tr>
+                        }
+                    }
+            </tbody>
+        </table>
     </div>
 </div>
