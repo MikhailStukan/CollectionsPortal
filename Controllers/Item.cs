@@ -18,13 +18,32 @@ namespace CollectionsPortal.Controllers
         }
         public async Task<IActionResult> Index(int itemId)
         {
-            var item = await _context.Items.Where(p => p.Id == itemId).Include(p => p.Collection).Include(p => p.Comments).Include(p => p.Likes).Include(p => p.Collection.User).FirstOrDefaultAsync();
+            var item = await _context.Items.Where(p => p.Id == itemId).Include(p => p.Collection).Include(p => p.Collection.User).FirstOrDefaultAsync();
 
             var fields = _context.Fields.Where(p => p.Item.Id == itemId).Include(p => p.FieldTemplates).ToList();
 
-            
+            var comments = _context.Comments.Where(p => p.Item == item).Include(p => p.User).ToList();
+
+            var likes = _context.Likes.Where(p => p.Item == item).Include(p => p.User).ToList();
+
+
+            if (User.Identity.Name != null)
+            {
+                ViewBag.currentUser = await _context.Users.Where(p => p.UserName == User.Identity.Name).FirstOrDefaultAsync();
+                foreach (var like in likes)
+                {
+                    if (like.User.UserName == User.Identity.Name)
+                    {
+                        ViewBag.isLiked = true;
+                    }
+                }
+            }
+
             ViewBag.Fields = fields;
             ViewBag.Item = item;
+            ViewBag.Comments = comments;
+            ViewBag.Likes = likes;
+
             return View();
         }
 
@@ -32,7 +51,7 @@ namespace CollectionsPortal.Controllers
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Create(int collectionId)
         {
-            var collection = _context.Collections.Include(p => p.User).Include(p => p.Items).Include(p => p.FieldTemplates).Where(c => c.Id == collectionId).FirstOrDefault();
+            var collection = await _context.Collections.Include(p => p.User).Include(p => p.Items).Include(p => p.FieldTemplates).Where(c => c.Id == collectionId).FirstOrDefaultAsync();
 
             if (collection == null)
             {
@@ -146,6 +165,41 @@ namespace CollectionsPortal.Controllers
             }
 
             return RedirectToAction("Index", "Collections", new { collectionId = item.Collection.Id });
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "RequireUser")]
+        public async Task<IActionResult> Comment(Comment comment, int itemId)
+        {
+            if(comment != null)
+            {
+                comment.User = await _context.Users.Where(p => p.UserName == User.Identity.Name).FirstOrDefaultAsync();
+                comment.Item = await _context.Items.Where(p => p.Id == itemId).FirstOrDefaultAsync();
+                await _context.Comments.AddAsync(comment);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction("Index", "Item", new { itemId = itemId });
+        }
+
+        [Authorize(Policy = "RequireUser")]
+        public async Task<IActionResult> Like(int itemId)
+        {
+            var user = await _context.Users.Where(p => p.UserName == User.Identity.Name).FirstOrDefaultAsync();
+            var item = await _context.Items.Where(p => p.Id == itemId).FirstOrDefaultAsync();
+
+            if(user != null && item != null)
+            {
+                Like like = new Like()
+                {
+                    User = user,
+                    Item = item
+                };
+
+                await _context.Likes.AddAsync(like);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Index", "Item", new { itemId = itemId });
         }
     }
 }

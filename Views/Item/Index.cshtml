@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization;
-
+@model CollectionsPortal.Models.Comment;
 @inject IViewLocalizer Localizer
 
 <div class="container-fluid">
@@ -8,17 +8,17 @@
         {
            if(User.IsInRole("Administrator") || User.Identity.Name == ViewBag.Item.Collection.User.UserName)
             {
-                <button onclick="location.href='@Url.Action("Index","Collections", new {collectionId = ViewBag.Item.Collection.Id})'" class="btn btn-primary">@Localizer["GoToCollection"]</button>
-                <button onclick="location.href='@Url.Action("Edit","Item", new {itemId = ViewBag.Item.Id})'" class="btn btn-primary">@Localizer["EditItem"]</button>
-                <button onclick="location.href='@Url.Action("Delete", "Item", new {itemId = ViewBag.Item.Id})'" class="btn btn-danger">@Localizer["DeleteItem"]</button>
+                                        <button onclick="location.href='@Url.Action("Index","Collections", new {collectionId = ViewBag.Item.Collection.Id})'" class="btn btn-primary">@Localizer["GoToCollection"]</button>
+                                        <button onclick="location.href='@Url.Action("Edit","Item", new {itemId = ViewBag.Item.Id})'" class="btn btn-primary">@Localizer["EditItem"]</button>
+                                        <button onclick="location.href='@Url.Action("Delete", "Item", new {itemId = ViewBag.Item.Id})'" class="btn btn-danger">@Localizer["DeleteItem"]</button>
             }
         }
     }
 </div>
 <div class="container-fluid">
     <div class="flex-column">
-        <h3>@ViewBag.Item.Name</h3>
-        <h5>@ViewBag.Item.Description</h5>
+        <h3>@Localizer["Name"] @ViewBag.Item.Name</h3>
+        <h5>@Localizer["Description"] @ViewBag.Item.Description</h5>
     </div>
     <div class="flex-column">
         @for(int field = 0; field < ViewBag.Fields.Count; field++)
@@ -57,6 +57,62 @@
             }
         </div>
 </div>
-<div id="comments" class="flex-column">
-    <p>there are gonna me comments</p>
+<div id="commentsLikes" class="container-fluid">
+    <div id="likes">
+        <span id="count">@Localizer["Liked:"] @ViewBag.Likes.Count @Localizer["times"]</span>
+        @if(User.IsInRole("User"))
+        {
+            @if (ViewBag.isLiked != null && ViewBag.isLiked == true)
+        {
+                <button onclick="location.href='@Url.Action("UnLike", "Item", new{itemId = ViewBag.Item.Id})'" class="btn btn-outline-success m-1" id="like">@Localizer["unLike"]</button>
+            }
+            else
+            {
+                <button onclick="location.href='@Url.Action("Like", "Item", new{itemId = ViewBag.Item.Id})'" class="btn btn-outline-success m-1" id="like">@Localizer["Like"]</button>
+            }  
+        }
+        
+    </div>
+    @if (ViewBag.Comments.Count != 0 && ViewBag.Comments != null)
+    {
+        <div id="comments">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex flex-column">
+                        @foreach (var comment in ViewBag.Comments)
+                        {
+                            <div class="w-100">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="text-primary fw-bold mb-0">
+                                        <a href="@Url.Action("Index", "Profile", new {userId = @comment.User.Id})">@comment.User.UserName</a>
+                                        <span class="text-dark ms-2">@comment.Content</span>
+                                    </h6>
+                                    <p class="bm-0">@comment.CreatedDate</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    @if(User.IsInRole("User"))
+    {
+        <div id="writeComment">
+                <div class="d-flex flex-start w-100">
+                    <div class="w-100">
+                        <h5>@Localizer["AddComment"]</h5>
+                        <form method="post" asp-controller="Item" asp-action="Comment" asp-route-itemId="@ViewBag.Item.Id">
+                             <input asp-for="CreatedDate" type="hidden" value="@DateTime.Now" />
+                             <div class="form-outline">
+                                <textarea asp-for="Content" class="form-control" id="textAreaComment" rows="3" placeholder="@Localizer["WriteComment"]"></textarea>
+                            </div>
+                            <div class="d-flex justify-content-between mt-3">
+                                <button type="submit" class="btn btn-primary">@Localizer["Send"]</button>
+                            </div>   
+                        </form>      
+            </div>
+        </div>
+    </div>
+    }  
 </div>

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CollectionsPortal.Controllers
 {
-    [Authorize(Policy = "RequireUser")]
+    
     public class Profile : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -19,6 +19,7 @@ namespace CollectionsPortal.Controllers
             _userManager = userManager;
         }
 
+        [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Index()
         {
             User user = await _userManager.FindByNameAsync(User.Identity.Name);
@@ -29,9 +30,6 @@ namespace CollectionsPortal.Controllers
 
             return View();
         }
-
-
-
 
     }
 }
