@@ -177,7 +177,7 @@ namespace CollectionsPortal.Controllers
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Delete(int collectionId)
         {
-            var coll = _context.Collections.OrderBy(p => p.Id == collectionId).Include(p => p.User).First();
+            var coll = await _context.Collections.Where(p => p.Id == collectionId).Include(p => p.User).FirstOrDefaultAsync();
 
             if (coll == null)
                 return NotFound();
