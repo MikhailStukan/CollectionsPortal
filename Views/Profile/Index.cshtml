@@ -9,10 +9,11 @@
 <div class="text-center">
     <table class="table table-hover">
         <thead>
-            <tr></tr>
-                <th scope="col">@Localizer["Name"]</th>
-                <th scope="col">@Localizer["Topic"]</th>
-                <th scope="col">@Localizer["Items"]</th>
+            <tr>
+                <th>@Localizer["Name"]</th>
+                <th>@Localizer["Topic"]</th>
+                <th>@Localizer["Items"]</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -27,6 +28,13 @@
                     </th>
                     <th>
                        @collection.Items.Count
+                    </th>
+                    <th>
+                        @if(User.Identity.Name == ViewBag.User.UserName || User.IsInRole("Administrator"))
+                        {
+                             <button onclick="location.href='@Url.Action("Edit","Collections", new {collectionId = collection.Id})'" class="btn btn-primary">@Localizer["Edit"]</button>
+                             <button onclick="location.href='@Url.Action("Delete", "Collections", new {collectionId = collection.Id})'" class="btn btn-danger">@Localizer["Delete"]</button>
+                        }
                     </th>
                 </tr>
             }

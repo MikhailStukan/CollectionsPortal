@@ -108,10 +108,6 @@ namespace CollectionsPortal.Controllers
                     string fileNameForStorage = $"{collection.User.Id}{collection.Id}{DateTime.Now.ToString("yyyyMMddHHmmss")}{Path.GetExtension(model.ImageFile.FileName)}";
                     collection.imageUrl = await _cloudStorage.UploadFileAsync(model.ImageFile, fileNameForStorage);
                 }
-                else
-                {
-                    model.ImageFile = null;
-                }
 
                 var tags = model.Tags.Split(",");
 

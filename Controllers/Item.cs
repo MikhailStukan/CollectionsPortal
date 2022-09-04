@@ -1,4 +1,5 @@
-﻿using CollectionsPortal.Data;
+﻿using CollectionsPortal.CloudStorage;
+using CollectionsPortal.Data;
 using CollectionsPortal.Models;
 using CollectionsPortal.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -11,14 +12,20 @@ namespace CollectionsPortal.Controllers
     public class Item : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly ICloudStorage _cloudStorage;
 
-        public Item(ApplicationDbContext db)
+        public Item(ApplicationDbContext db, ICloudStorage cloudStorage)
         {
             _context = db;
+            _cloudStorage = cloudStorage;
         }
         public async Task<IActionResult> Index(int itemId)
         {
             var item = await _context.Items.Where(p => p.Id == itemId).Include(p => p.Collection).Include(p => p.Collection.User).FirstOrDefaultAsync();
+            if (item == null)
+            {
+                return NotFound();
+            }
 
             var fields = _context.Fields.Where(p => p.Item.Id == itemId).Include(p => p.FieldTemplates).ToList();
 
@@ -74,9 +81,14 @@ namespace CollectionsPortal.Controllers
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Create(CreateItemViewModel model)
         {
-            var collection = _context.Collections.FirstOrDefault(p => p.Id == model.collectionId);
+            var collection = await _context.Collections.Include(p => p.User).FirstOrDefaultAsync(p => p.Id == model.collectionId);
 
-            if (model.Name == null || model.Description == null || model.Tags == null || model.Fields == null)
+            if (collection == null)
+            {
+                return NotFound();
+            }
+
+            if (model.Name == null || model.Tags == null || model.Fields == null)
             {
                 //small model validation
                 ViewBag.Collection = collection;
@@ -86,21 +98,27 @@ namespace CollectionsPortal.Controllers
             {
                 var existingTags = _context.Tags.ToList().Select(u => u.Name);
 
-                var tags = model.Tags.Split(",");
-
                 foreach (var field in model.Fields)
                 {
-                    field.FieldTemplates = _context.FieldTemplates.FirstOrDefault(p => p.Id == field.FieldTemplates.Id);
+                    field.FieldTemplates = await _context.FieldTemplates.FirstOrDefaultAsync(p => p.Id == field.FieldTemplates.Id);
                 }
 
                 var item = new Models.Item()
                 {
                     Collection = collection,
                     Name = model.Name,
-                    Description = model.Description,
                     Fields = model.Fields,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
                 };
+
+                if (model.ImageFile != null)
+                {
+                    string fileNameForStorage = $"{item.Collection.User.Id}{item.Id}{DateTime.Now.ToString("yyyyMMddHHmmss")}{Path.GetExtension(model.ImageFile.FileName)}";
+                    item.imageUrl = await _cloudStorage.UploadFileAsync(model.ImageFile, fileNameForStorage);
+                }
+
+                var tags = model.Tags.Split(",");
 
                 foreach (var tag in tags)
                 {
@@ -123,8 +141,9 @@ namespace CollectionsPortal.Controllers
                         TagsToItems tagsTo = new TagsToItems()
                         {
                             Item = item,
-                            Tag = _context.Tags.Where(p => p.Name == tag).FirstOrDefault()
+                            Tag = await _context.Tags.Where(p => p.Name == tag).FirstOrDefaultAsync()
                         };
+
                         await _context.TagsToItems.AddAsync(tagsTo);
                     }
                 }
@@ -158,8 +177,20 @@ namespace CollectionsPortal.Controllers
         {
             var item = await _context.Items.Where(p => p.Id == itemId).Include(p => p.Likes).Include(p => p.Collection).Include(p => p.Fields).Include(p => p.Collection.User).FirstOrDefaultAsync();
 
+            if (item == null)
+            {
+                return NotFound();
+            }
+
             if (User.Identity.Name == item.Collection.User.UserName || User.IsInRole("Administrator"))
             {
+                if (item.imageUrl != null)
+                {
+                    Uri uri = new Uri(item.imageUrl);
+                    string fileName = uri.Segments.LastOrDefault();
+                    await _cloudStorage.DeleteFileAsync(fileName);
+                }
+
                 _context.Items.Remove(item);
                 await _context.SaveChangesAsync();
             }

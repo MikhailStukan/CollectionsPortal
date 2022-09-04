@@ -12,11 +12,7 @@ namespace CollectionsPortal.ViewModels
         [StringLength(15, MinimumLength = 3)]
         public string Name { get; set; }
 
-        [Required]
-        [DataType(DataType.Text)]
-        [StringLength(100, MinimumLength = 15)]
-        public string Description { get; set; }
-
+        public IFormFile ImageFile { get; set; }
         public string Tags { get; set; }
 
         public List<Field> Fields { get; set; } = new();

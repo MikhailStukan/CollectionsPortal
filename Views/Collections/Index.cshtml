@@ -1,19 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization;
 
 @inject IViewLocalizer Localizer
-<div class="container-fluid">
-    @{
-        if(User.Identity.Name != null)
-        {
-           if(User.IsInRole("Administrator") || User.Identity.Name == ViewBag.Owner.UserName)
-            {
-                <button onclick="location.href='@Url.Action("Create","Item", new {collectionId = ViewBag.Collection.Id})'" class="btn btn-success">@Localizer["AddItem"]</button>
-                <button onclick="location.href='@Url.Action("Edit","Collection", new {collectionId = ViewBag.Collection.Id})'" class="btn btn-primary">@Localizer["EditCollection"]</button>
-                <button onclick="location.href='@Url.Action("Delete", "Collections", new {collectionId = ViewBag.Collection.Id})'" class="btn btn-danger">@Localizer["DeleteCollection"]</button>
-            }
-        }
-    }
-</div>
 <div>
     @if(@ViewBag.Collection.imageUrl != null)
     {
@@ -37,7 +24,6 @@
             <thead>
                 <tr>
                     <th>@Localizer["ItemName"]</th>
-                    <th>@Localizer["ItemDescription"]</th>
                     <th>@Localizer["CreatedAt"]</th>
                     <th>@Localizer["Likes"]</th>
                     <th>@Localizer["Comments"]</th>
@@ -48,17 +34,35 @@
                 @{
                         foreach(var item in ViewBag.Items)
                         {
-                                <tr>
-                                    <td>@item.Name</td>
-                                    <td>@item.Description</td>
-                                    <td>@item.CreatedAt</td>
-                                    <td>@item.Likes.Count</td>
-                                    <td>@item.Comments.Count</td>
-                                    <td><a href="@Url.Action("Index", "Item", new {itemId = @item.Id})" class="btn btn-primary">@Localizer["OpenItem"]</a></td>
-                                </tr>
+                                                    <tr>
+                                                        <td>@item.Name</td>
+                                                        <td>@item.CreatedAt</td>
+                                                        <td>@item.Likes.Count</td>
+                                                        <td>@item.Comments.Count</td>
+                                                        <td>
+                                                             <button onclick="location.href='@Url.Action("Index", "Item", new {itemId = item.Id})'" class="btn btn-success">@Localizer["Open"]</button>
+                                                              @if(User.Identity.Name != null)
+                                                              {
+                                                                  if(User.IsInRole("Administrator") || User.Identity.Name == ViewBag.Owner.UserName)
+                                                                  {
+                                                                      <button onclick="location.href='@Url.Action("Edit","Item", new {itemId = item.Id})'" class="btn btn-primary">@Localizer["Edit"]</button>
+                                                                      <button onclick="location.href='@Url.Action("Delete", "Item", new {itemId = item.Id})'" class="btn btn-danger">@Localizer["Delete"]</button>
+                                                                  }
+                                                              }
+                                                        </td>
+                                                    </tr>
                         }
                     }
             </tbody>
         </table>
+        <div class="container-fluid">
+        @if(User.Identity.Name != null)
+        {
+           if(User.IsInRole("Administrator") || User.Identity.Name == ViewBag.Owner.UserName)
+            {
+                <button onclick="location.href='@Url.Action("Create","Item", new {collectionId = ViewBag.Collection.Id})'" class="btn btn-success">@Localizer["Create"]</button>
+            }
+        } 
+        </div>
     </div>
 </div>

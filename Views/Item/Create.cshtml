@@ -14,9 +14,9 @@
             <span asp-validation-for="Name"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Description">@Localizer["Description"]</label><br />
-            <input asp-for="Description" class="form-control"/>
-            <span asp-validation-for="Description"></span>
+            <label asp-for="ImageFile">@Localizer["ImageFile"]</label>
+            <input asp-for="ImageFile" type="file"  accept="image/jpeg,image/gif,image/png" class="form-control" />
+            <span asp-validation-for="ImageFile" class="text-primary"></span>
         </div>
         <div class="form-group">
             @for(var fields = 0; fields < ViewBag.Collection.FieldTemplates.Count; fields++)

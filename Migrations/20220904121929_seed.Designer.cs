@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CollectionsPortal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220902115510_initial")]
-    partial class initial
+    [Migration("20220904121929_seed")]
+    partial class seed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -159,12 +159,14 @@ namespace CollectionsPortal.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("imageUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
