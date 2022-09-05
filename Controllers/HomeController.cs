@@ -19,11 +19,20 @@ namespace CollectionsPortal.Controllers
             _context = db;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            ViewBag.Tags = GetTags();
-            ViewBag.Collections = BiggestCollections();
-            ViewBag.Items = LastItems();
+            try
+            {
+                ViewBag.Tags = await GetTags();
+                ViewBag.Collections = await BiggestCollections();
+                ViewBag.Items = await LastItems();
+            }
+            catch
+            {
+                ViewBag.Tags = new List<Tag>();
+                ViewBag.Collections = new List<Collection>();
+                ViewBag.Items = new List<Models.Item>();
+            }
 
             return View();
         }
@@ -45,40 +54,61 @@ namespace CollectionsPortal.Controllers
 
             return LocalRedirect(returnUrl);
         }
-        private List<Tag> GetTags()
+        private async Task<List<Tag>> GetTags()
         {
-            var tags = _context.Tags.ToList();
-            if (tags == null)
-                tags = new List<Tag>();
-            return tags;
+            try
+            {
+                var tags = await _context.Tags.ToListAsync();
+                return tags;
+            }
+            catch(Exception e)
+            {
+                return new List<Tag>();
+            }
+            
         }
 
-        private List<Collection> BiggestCollections()
+        private async Task<List<Collection>> BiggestCollections()
         {
-            var collections = _context.Collections.Include(p => p.Items).OrderByDescending(p => p.Items.Count()).Include(p => p.User).ToList();
+            try
+            {
+                var collections = await _context.Collections.Include(p => p.Items).OrderByDescending(p => p.Items.Count()).Include(p => p.User).ToListAsync();
 
-            if (collections.Count() > 5)
-            {
-                return collections.GetRange(0, 5);
+                if (collections.Count() > 5)
+                {
+                    return collections.GetRange(0, 5);
+                }
+                else
+                {
+                    return collections;
+                }
             }
-            else
+            catch
             {
-                return collections;
-            }
+                return new List<Collection>();
+            }  
         }
 
-        private List<Models.Item> LastItems()
+        private async Task<List<Models.Item>> LastItems()
         {
-            var items = _context.Items.OrderByDescending(p => p.CreatedAt).Include(p => p.Collection.User).ToList();
+            try
+            {
+                var items = await _context.Items.OrderByDescending(p => p.CreatedAt).Include(p => p.Collection.User).ToListAsync();
 
-            if (items.Count() > 5)
-            {
-                return items.GetRange(0, 5);
+                if (items.Count() > 5)
+                {
+                    return items.GetRange(0, 5);
+                }
+                else
+                {
+                    return items;
+                }
             }
-            else
+            catch
             {
-                return items;
+                return new List<Models.Item>();
             }
+            
         }
 
     }
