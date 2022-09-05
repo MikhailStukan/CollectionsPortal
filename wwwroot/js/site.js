@@ -5,11 +5,19 @@
 
 
 $(document).ready(function () {
-    autoComplete();
+    autoComplete
+    document.getElementById('descriptionData').innerHTML = marked.parse(document.getElementById('desc').innerHTML)
 });
 
 
 let x = 0;
+
+
+$("#textAreaDescription").on('input', function (e) {
+    document.getElementById('descriptionPreview').innerHTML = marked.parse(e.target.value);
+});
+
+
 
 function addInput() {
     var str = '<div id="customField"><input class="form-control" name="Fields[' + x + '].Name" placeholder="Name of field"> <select class="form-select" name="Fields[' + x + '].DataType"><option value="integer">Number</option><option value="boolean">CheckBox</option><option value="dateTime">Date</option><option value="textarea">Big text</option><option value="text">Small text</option></select></div>';

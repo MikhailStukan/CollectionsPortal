@@ -15,7 +15,8 @@
     <h3>@Localizer["Topic"]:</h3>
     <p>@ViewBag.Collection.Topic.Name</p>
     <h3>@Localizer["Description"]:</h3>
-    <p>@ViewBag.Collection.Description</p>
+    <div hidden id="desc">@ViewBag.Collection.Description</div>
+    <div id="descriptionData"></div>
     <h3>@Localizer["Tags"]:</h3>
     @foreach(var tag in ViewBag.Tags)
     {
@@ -36,23 +37,23 @@
                 @{
                         foreach(var item in ViewBag.Items)
                         {
-                                                    <tr>
-                                                        <td>@item.Name</td>
-                                                        <td>@item.CreatedAt</td>
-                                                        <td>@item.Likes.Count</td>
-                                                        <td>@item.Comments.Count</td>
-                                                        <td>
-                                                             <button onclick="location.href='@Url.Action("Index", "Item", new {itemId = item.Id})'" class="btn btn-success">@Localizer["Open"]</button>
-                                                              @if(User.Identity.Name != null)
+                                                        <tr>
+                                                            <td>@item.Name</td>
+                                                            <td>@item.CreatedAt</td>
+                                                            <td>@item.Likes.Count</td>
+                                                            <td>@item.Comments.Count</td>
+                                                            <td>
+                                                                 <button onclick="location.href='@Url.Action("Index", "Item", new {itemId = item.Id})'" class="btn btn-success">@Localizer["Open"]</button>
+                                                                  @if(User.Identity.Name != null)
                                                               {
                                                                   if(User.IsInRole("Administrator") || User.Identity.Name == ViewBag.Owner.UserName)
                                                                   {
-                                                                      <button onclick="location.href='@Url.Action("Edit","Item", new {itemId = item.Id})'" class="btn btn-primary">@Localizer["Edit"]</button>
-                                                                      <button onclick="location.href='@Url.Action("Delete", "Item", new {itemId = item.Id})'" class="btn btn-danger">@Localizer["Delete"]</button>
+                                                                          <button onclick="location.href='@Url.Action("Edit","Item", new {itemId = item.Id})'" class="btn btn-primary">@Localizer["Edit"]</button>
+                                                                          <button onclick="location.href='@Url.Action("Delete", "Item", new {itemId = item.Id})'" class="btn btn-danger">@Localizer["Delete"]</button>
                                                                   }
                                                               }
-                                                        </td>
-                                                    </tr>
+                                                            </td>
+                                                        </tr>
                         }
                     }
             </tbody>
