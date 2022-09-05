@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -24,6 +25,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("RequireUser", policy => policy.RequireRole("User"));
 });
 
+
 builder.Services.AddCoreAdmin();
 builder.Services.AddCoreAdmin("Administrator");
 
@@ -34,6 +36,12 @@ builder.Services.AddMvc()
     .AddViewLocalization();
 
 builder.Services.AddSingleton<ICloudStorage, GoogleCloudStorage>();
+
+builder.Services.AddAuthentication().AddGoogle(option =>
+{
+    option.ClientId = Environment.GetEnvironmentVariable("Authentication:Google:ClientId");
+    option.ClientSecret = Environment.GetEnvironmentVariable("Authentication:Google:ClientSecret");
+});
 
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>
