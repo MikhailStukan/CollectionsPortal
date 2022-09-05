@@ -51,12 +51,18 @@
 
         </form>
         <button class="btn btn-secondary btn-lg btn-block" onclick="location.href='@Url.Page("./Register")'">@Localizer["Register"]</button>
-        <a class="btn btn-primary btn-lg btn-block" style="background-color: #3b5998" href="#!"
-            role="button">
-            <i class="fab fa-facebook-f me-2"></i>Facebook
-          </a>
-            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <div>
+                            <p>
+                                @foreach (var provider in Model.ExternalLogins)
+                                {
+                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                }
+                            </p>
+                        </div>
+                    </form>
       </div>
+
     </div>
   </div>
 
