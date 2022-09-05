@@ -40,22 +40,24 @@
           <button id="login-submit" type="submit" class="btn btn-secondary btn-lg btn-block">@Localizer["SignIn"]</button>
 
           <!-- Register button -->
-          <input class="btn btn-secondary btn-lg btn-block" type="button" asp-router-returnUrl="@Model.ReturnUrl" onclick="location.href='./Register';" value="Register" />
+          
           
           <div class="divider d-flex align-items-center my-4">
             <a id="forgotPassword" class="small text-muted" id="forgot-password" asp-page="./ForgotPassword">@Localizer["ForgotPassword?"]</a>
             <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
           </div>
 
-          <a class="btn btn-primary btn-lg btn-block" style="background-color: #3b5998" href="#!"
+          
+
+        </form>
+        <button class="btn btn-secondary btn-lg btn-block" onclick="location.href='@Url.Page("./Register")'">@Localizer["Register"]</button>
+        <a class="btn btn-primary btn-lg btn-block" style="background-color: #3b5998" href="#!"
             role="button">
             <i class="fab fa-facebook-f me-2"></i>Facebook
           </a>
           <a class="btn btn-primary btn-lg btn-block" style="background-color: #55acee" href="#!"
             role="button">
-            <i class="fab fa-twitter me-2"></i>Twitter</a>
-
-        </form>
+            <i class="fab fa-google me-2"></i>Google</a>
       </div>
     </div>
   </div>
