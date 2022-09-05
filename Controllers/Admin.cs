@@ -28,104 +28,129 @@ namespace CollectionsPortal.Controllers
 
         public IActionResult Users(int currentPageIndex = 1)
         {
-            var usersView = new UserViewModel
+            try
             {
-                UsersPerPage = 10,
-                Users = _context.Users.OrderBy(u => u.Id),
-                CurrentPage = currentPageIndex
-            };
+                var usersView = new UserViewModel
+                {
+                    UsersPerPage = 10,
+                    Users = _context.Users.OrderBy(u => u.Id),
+                    CurrentPage = currentPageIndex
+                };
 
-            return View(usersView);
+                return View(usersView);
+            }
+            catch(Exception ex)
+            {
+                return View("Error", ex.Message);
+            }
+
+            
         }
 
 
         public async Task<IActionResult> MakeAdmin(string email)
         {
-            if (email != null)
+            try
             {
-                User user = await _userManager.FindByEmailAsync(email);
-
-                if (user != null)
+                if (email != null)
                 {
-                    if (user.isAdmin)
-                    {
+                    User user = await _userManager.FindByEmailAsync(email);
 
-                        await _userManager.RemoveFromRoleAsync(user, "Administrator");
-                        user.isAdmin = false;
-                        if (user.UserName == User.Identity.Name)
+                    if (user != null)
+                    {
+                        if (user.isAdmin)
                         {
-                            //need to revalidate session somehow, cause RemoveFromRole doesnt invalidate session
-                            await _signInManager.SignOutAsync();
-                            return RedirectToAction("Index", "HomeController");
 
+                            await _userManager.RemoveFromRoleAsync(user, "Administrator");
+                            user.isAdmin = false;
+                            if (user.UserName == User.Identity.Name)
+                            {
+                                //need to revalidate session somehow, cause RemoveFromRole doesnt invalidate session
+                                await _signInManager.SignOutAsync();
+                                return RedirectToAction("Index", "HomeController");
+
+                            }
                         }
+                        else
+                        {
+                            await _userManager.AddToRoleAsync(user, "Administrator");
+                            user.isAdmin = true;
+                        }
+                        _context.SaveChanges();
                     }
-                    else
-                    {
-                        await _userManager.AddToRoleAsync(user, "Administrator");
-                        user.isAdmin = true;
-                    }
-                    _context.SaveChanges();
-                }
 
+                }
+                return RedirectToAction("Users");
             }
-            return RedirectToAction("Users");
+            catch (Exception ex)
+            {
+                return View("Error", ex.Message);
+            }
+
         }
 
         public async Task<IActionResult> Block(string email)
         {
-
-            if (email != null)
+            try
             {
-                User user = await _userManager.FindByEmailAsync(email);
-
-                if (user != null)
+                if (email != null)
                 {
-                    if (user.LockoutEnd == null)
-                    {
-                        user.LockoutEnd = DateTimeOffset.Now.AddYears(100);
-                        if (user.UserName == User.Identity.Name)
-                        {
-                            await _signInManager.SignOutAsync();
-                        }
+                    User user = await _userManager.FindByEmailAsync(email);
 
-                    }
-                    else
+                    if (user != null)
                     {
-                        user.LockoutEnd = null;
+                        if (user.LockoutEnd == null)
+                        {
+                            user.LockoutEnd = DateTimeOffset.Now.AddYears(100);
+                            if (user.UserName == User.Identity.Name)
+                            {
+                                await _signInManager.SignOutAsync();
+                            }
+
+                        }
+                        else
+                        {
+                            user.LockoutEnd = null;
+                        }
+                        _context.SaveChanges();
                     }
-                    _context.SaveChanges();
                 }
+                return RedirectToAction("Users");
             }
-            return RedirectToAction("Users");
+            catch(Exception ex)
+            {
+                return View("Error", ex.Message);
+            }
+            
 
         }
 
         public async Task<IActionResult> Delete(string email)
         {
-            if (email != null)
+            try
             {
-                User user = await _userManager.FindByEmailAsync(email);
-
-                if (user != null)
+                if (email != null)
                 {
-                    var items = _context.Collections.OrderBy(p => p.Id).Include(p => p.Items).ToList();
-                    foreach (var item in items)
+                    User user = await _userManager.FindByEmailAsync(email);
+
+                    if (user != null)
                     {
-                        _context.Remove(item);
+                        await _userManager.DeleteAsync(user);
+
+                        if (user.UserName == User.Identity.Name)
+                        {
+                            await _signInManager.SignOutAsync();
+                        }
+                        _context.SaveChanges();
                     }
-
-                    await _userManager.DeleteAsync(user);
-
-
-                    if (user.UserName == User.Identity.Name)
-                    {
-                        await _signInManager.SignOutAsync();
-                    }
-                    _context.SaveChanges();
                 }
+                return RedirectToAction("Users");
             }
-            return RedirectToAction("Users");
+            catch(Exception ex)
+            {
+                return View("Error", ex.Message);
+            }
+            
         }
 
     }
