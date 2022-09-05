@@ -50,7 +50,7 @@
                     case CollectionsPortal.Models.Type.textarea:
                         //textarea
                         <label>@ViewBag.Collection.FieldTemplates[fields].Name</label>
-                        <textarea value="@ViewBag.item.Fields[fields].Value" class="form-control" name="Fields[@fields].Value" placeholder="@Localizer["Enter"] @ViewBag.Collection.FieldTemplates[fields].Name"></textarea>
+                        <textarea class="form-control" name="Fields[@fields].Value" placeholder="@Localizer["Enter"] @ViewBag.Collection.FieldTemplates[fields].Name">@ViewBag.item.Fields[fields].Value</textarea>
                         break;
                     case CollectionsPortal.Models.Type.dateTime:
                         //dateTime
