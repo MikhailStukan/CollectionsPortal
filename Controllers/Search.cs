@@ -49,6 +49,18 @@ namespace CollectionsPortal.Controllers
 
             var resultsItems = await _context.Items.Include(p => p.Collection).Include(p => p.Collection.User).Where(c => (c.Name + c.Collection.Name + c.Collection.Description).Contains(text)).ToListAsync();
             var resultComments = await _context.Comments.Include(p => p.Item).Include(p => p.Item.Collection).Include(p => p.User).Where(p => p.Content.Contains(text)).ToListAsync();
+            var resultFields = await _context.Fields.Include(p => p.Item).Include(p=> p.Item.Collection.User).Where(p => p.Value.Contains(text)).ToListAsync();
+
+            if(resultFields.Any())
+            {
+                foreach(var fields in resultFields)
+                {
+                    if(!resultsItems.Contains(fields.Item))
+                    {
+                        resultsItems.Add(fields.Item);
+                    }
+                }
+            }
 
             if (resultComments.Any())
             {
