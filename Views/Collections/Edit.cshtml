@@ -14,6 +14,11 @@
             <input asp-for="Name" value="@ViewBag.Collection.Name" class="form-control"/>
             <span asp-validation-for="Name" class="text-primary"></span>
         </div>
+        @if(ViewBag.Collection.imageUrl != null)
+        {
+            <h5>@Localizer["Current image"]</h5>
+            <img src="@ViewBag.Collection.imageUrl" alt="@ViewBag.Collection.Name" width="100" height="200">
+        }
         <div class="form-group">
             <label asp-for="ImageFile">@Localizer["ImageFile"]</label>
             <input asp-for="ImageFile" type="file"  accept="image/jpeg,image/gif,image/png" class="form-control" />
@@ -21,7 +26,7 @@
         </div>
         <div class="form-group">
             <label asp-for="Description">@Localizer["Description"]</label>
-            <textarea class="form-control" rows="5" asp-for="Description">@ViewBag.Collection.Description</textarea>
+            <textarea class="form-control" rows="5" name="Description">@ViewBag.Collection.Description</textarea>
             <span asp-validation-for="Description" class="text-primary"></span>
         </div>
         <div>

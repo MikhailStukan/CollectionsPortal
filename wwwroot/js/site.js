@@ -45,7 +45,6 @@ function fetchComments() {
 };
 
 function updateComments(response) {
-    console.log(response);
     $("#commentsData").empty();
     for (let i = 0; i < response.length; i++) {
         appendComment(response[i]);

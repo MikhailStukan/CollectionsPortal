@@ -25,69 +25,91 @@ namespace CollectionsPortal.Controllers
         [HttpGet]
         public async Task<ActionResult> Index(int collectionId)
         {
-            var collection = await _context.Collections.Where(p => p.Id == collectionId).Include(p => p.User).Include(p => p.Topic).Include(p => p.FieldTemplates).FirstOrDefaultAsync();
+            try
+            {
+                var collection = await _context.Collections.Where(p => p.Id == collectionId).Include(p => p.User).Include(p => p.Topic).Include(p => p.FieldTemplates).FirstOrDefaultAsync();
 
-            var items = await _context.Items.Where(p => p.Collection == collection).Include(p => p.Likes).Include(p => p.Comments).Include(p => p.Fields).ToListAsync();
-            var tags = await _context.TagsToCollections.Where(p => p.Collection == collection).Select(p => p.Tag).ToListAsync();
+                var items = await _context.Items.Where(p => p.Collection == collection).Include(p => p.Likes).Include(p => p.Comments).Include(p => p.Fields).ToListAsync();
+                var tags = await _context.TagsToCollections.Where(p => p.Collection == collection).Select(p => p.Tag).ToListAsync();
 
-            if (collection == null)
-                return NotFound();
+                if (collection == null)
+                    return NotFound();
 
-            ViewBag.Collection = collection;
+                ViewBag.Collection = collection;
 
-            ViewBag.Tags = tags;
+                ViewBag.Tags = tags;
 
-            ViewBag.Owner = collection.User;
+                ViewBag.Owner = collection.User;
 
-            ViewBag.Items = items;
+                ViewBag.Items = items;
 
-            ViewBag.Fields = collection.FieldTemplates;
+                ViewBag.Fields = collection.FieldTemplates;
 
-            return View();
+                return View();
+            }
+            catch(Exception ex)
+            {
+                return View("Error", ex.Message);
+            }
+            
         }
 
 
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Edit(int collectionId)
         {
-            var collection = await _context.Collections.Where(p => p.Id == collectionId).FirstOrDefaultAsync();
-            ViewBag.Collection = collection;
+            try
+            {
+                var collection = await _context.Collections.Where(p => p.Id == collectionId).FirstOrDefaultAsync();
+                ViewBag.Collection = collection;
 
-            return View();
+                return View();
+            }
+            catch(Exception ex)
+            {
+                return View("Error", ex.Message);
+            }
         }
 
         [HttpPost]
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Edit(EditCollectionViewModel model)
         {
-            var collection = await _context.Collections.Where(p => p.Id == model.collectionId).Include(p => p.User).FirstOrDefaultAsync();
-            if (model.Name == null || model.Description == null)
+            try
             {
-                ViewBag.Collection = collection;
-                return View(model);
-            }
-            else
-            {
-                if (collection != null)
+                var collection = await _context.Collections.Where(p => p.Id == model.collectionId).Include(p => p.User).FirstOrDefaultAsync();
+                if (model.Name == null || model.Description == null)
                 {
-                    if (User.Identity.Name == collection.User.UserName || User.IsInRole("Administrator"))
+                    ViewBag.Collection = collection;
+                    return View(model);
+                }
+                else
+                {
+                    if (collection != null)
                     {
-                        collection.Name = model.Name;
-                        collection.Description = model.Description;
-                        collection.UpdatedAt = DateTime.Now;
-
-                        if (model.ImageFile != null)
+                        if (User.Identity.Name == collection.User.UserName || User.IsInRole("Administrator"))
                         {
-                            string fileNameForStorage = $"{collection.User.Id}{collection.Id}{DateTime.Now.ToString("yyyyMMddHHmmss")}{Path.GetExtension(model.ImageFile.FileName)}";
-                            collection.imageUrl = await _cloudStorage.UploadFileAsync(model.ImageFile, fileNameForStorage);
-                        }
-                        await _context.SaveChangesAsync();
+                            collection.Name = model.Name;
+                            collection.Description = model.Description;
+                            collection.UpdatedAt = DateTime.Now;
 
-                        return RedirectToAction("Index", "Collections", new { collectionId = collection.Id });
+                            if (model.ImageFile != null)
+                            {
+                                string fileNameForStorage = $"{collection.User.Id}{collection.Id}{DateTime.Now.ToString("yyyyMMddHHmmss")}{Path.GetExtension(model.ImageFile.FileName)}";
+                                collection.imageUrl = await _cloudStorage.UploadFileAsync(model.ImageFile, fileNameForStorage);
+                            }
+                            await _context.SaveChangesAsync();
+
+                            return RedirectToAction("Index", "Collections", new { collectionId = collection.Id });
+                        }
                     }
                 }
+                return View();
             }
-            return View();
+            catch(Exception ex)
+            {
+                return View("Error", ex.Message);
+            }
         }
 
         [Authorize(Policy = "RequireUser")]
