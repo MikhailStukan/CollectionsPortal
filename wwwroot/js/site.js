@@ -31,48 +31,7 @@ function autoComplete() {
     });
 }
 
-var intervalId = window.setInterval(function () {
-    fetchComments();
-}, 3000);
 
-function fetchComments() {
-    var itemId = $("#itemId").text();
-    $.ajax({
-        url: "/api/comments",
-        type: "POST",
-        data: JSON.stringify(itemId),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (response) {
-            updateComments(response);
-        },
-        error: function (response) {
-            console.log('error:' + response);
-        },
-    });
-};
-
-function updateComments(response) {
-    $("#commentsData").empty();
-    for (let i = 0; i < response.length; i++) {
-        appendComment(response[i]);
-    }
-};
-
-function appendComment(comment) {
-    var date = new Date(comment.createdDate);
-    $("#commentsData").append(
-        '<div class="w-100" style="margin:10px; background-color: ghostwhite; padding: 20px;">'+
-           '<div class="d-flex justify-content-between align-items-center mb-3">' +
-                '<h6 class="text-primary fw-bold mb-0">' + 
-                    '<b>'+ comment.userName  +'</b>' +
-                '<span class="text-dark ms-2">' + comment.content + '</span>' +
-        '</h6> ' +
-        '<span class="text-dark ms-5">' + date.toLocaleString() + '</span>' +
-        '</div>' +
-     '</div>'
-    )
-};
 
 function onSignIn(googleUser) {
     var profile = googleUser.getBasicProfile();
