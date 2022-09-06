@@ -3,7 +3,7 @@
 
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = @Localizer["Seach"];
+    ViewData["Title"] = @Localizer["Search"];
 }
 @{
 
@@ -15,7 +15,7 @@
         }
         else
         {
-            <h1>@Localizer["FoundItems:"]</h1>
+            <h1>@Localizer["FoundItems"]:</h1>
             foreach (var item in (List<Item>)ViewBag.items)
             {
             <div class="card" style="width: 50%;">
@@ -25,7 +25,7 @@
                     } 
                 <div class="card-body">
                     <h5 class="card-title">@item.Name</h5>
-                    <p class="card-text">@Localizer["In collection:"] @item.Collection.Name @Localizer["Author:"] @item.Collection.User.UserName</p>
+                    <p class="card-text">@Localizer["In collection"]: @item.Collection.Name @Localizer["Author"]: @item.Collection.User.UserName</p>
                     <a href="@Url.Action("Index", "Item", new {itemId = item.Id})" class="btn btn-primary">@Localizer["Open"]</a>
                 </div>
             </div>
@@ -40,7 +40,7 @@
         }
         else
         {
-            <h1>@Localizer["FoundCollections:"]</h1>
+            <h1>@Localizer["FoundCollections"]:</h1>
             foreach (var coll in (List<Collection>)ViewBag.collections)
             {
             <div class="card" style="width: 50%;">
