@@ -44,11 +44,11 @@ namespace CollectionsPortal.Controllers
 
                 return View();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return View("Error", e.Message);
             }
-            
+
         }
 
         public async Task<IActionResult> TextSearch(string text)
@@ -86,7 +86,7 @@ namespace CollectionsPortal.Controllers
 
                 return View();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return View("Error", e.Message);
             }

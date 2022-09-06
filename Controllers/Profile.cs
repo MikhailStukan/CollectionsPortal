@@ -32,7 +32,7 @@ namespace CollectionsPortal.Controllers
 
                 return View();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return View("Error", e.Message);
             }

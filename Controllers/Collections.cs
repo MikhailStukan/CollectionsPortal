@@ -47,11 +47,11 @@ namespace CollectionsPortal.Controllers
 
                 return View();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return View("Error", ex.Message);
             }
-            
+
         }
 
 
@@ -65,7 +65,7 @@ namespace CollectionsPortal.Controllers
 
                 return View();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return View("Error", ex.Message);
             }
@@ -106,7 +106,7 @@ namespace CollectionsPortal.Controllers
                 }
                 return View();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return View("Error", ex.Message);
             }
@@ -197,7 +197,7 @@ namespace CollectionsPortal.Controllers
                     return RedirectToAction("Index", "Collections", new { collectionId = collection.Id });
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return View("Error", e.Message);
             }
@@ -228,7 +228,7 @@ namespace CollectionsPortal.Controllers
 
                 return RedirectToAction("Index", "Profile");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return View("Error", e.Message);
             }

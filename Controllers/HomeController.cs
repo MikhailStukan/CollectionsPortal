@@ -61,11 +61,11 @@ namespace CollectionsPortal.Controllers
                 var tags = await _context.Tags.ToListAsync();
                 return tags;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return new List<Tag>();
             }
-            
+
         }
 
         private async Task<List<Collection>> BiggestCollections()
@@ -86,7 +86,7 @@ namespace CollectionsPortal.Controllers
             catch
             {
                 return new List<Collection>();
-            }  
+            }
         }
 
         private async Task<List<Models.Item>> LastItems()
@@ -108,7 +108,7 @@ namespace CollectionsPortal.Controllers
             {
                 return new List<Models.Item>();
             }
-            
+
         }
 
     }

@@ -4,7 +4,6 @@ using CollectionsPortal.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace CollectionsPortal.Controllers
 {
@@ -39,12 +38,12 @@ namespace CollectionsPortal.Controllers
 
                 return View(usersView);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return View("Error", ex.Message);
             }
 
-            
+
         }
 
 
@@ -117,11 +116,11 @@ namespace CollectionsPortal.Controllers
                 }
                 return RedirectToAction("Users");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return View("Error", ex.Message);
             }
-            
+
 
         }
 
@@ -146,11 +145,11 @@ namespace CollectionsPortal.Controllers
                 }
                 return RedirectToAction("Users");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return View("Error", ex.Message);
             }
-            
+
         }
 
     }

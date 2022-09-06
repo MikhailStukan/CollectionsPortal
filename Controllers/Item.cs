@@ -54,7 +54,7 @@ namespace CollectionsPortal.Controllers
                 ViewBag.Likes = likes;
                 return View();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return View("Error", e.Message);
             }
@@ -84,7 +84,7 @@ namespace CollectionsPortal.Controllers
 
                 return View();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return View("Error", e.Message);
             }
@@ -171,7 +171,7 @@ namespace CollectionsPortal.Controllers
                     return RedirectToAction("Index", "Collections", new { collectionId = model.collectionId });
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return View("Error", e.Message);
             }
@@ -187,11 +187,11 @@ namespace CollectionsPortal.Controllers
                 await GetItemdata(itemId);
                 return View();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return View("Error", e.Message);
             }
-           
+
         }
 
         private async Task GetItemdata(int itemId)
@@ -245,7 +245,7 @@ namespace CollectionsPortal.Controllers
                     return RedirectToAction("Index", "Item", new { itemId = item.Id });
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return View("Error", e.Message);
             }
@@ -278,7 +278,7 @@ namespace CollectionsPortal.Controllers
 
                 return RedirectToAction("Index", "Collections", new { collectionId = item.Collection.Id });
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return View("Error", e.Message);
             }
@@ -299,11 +299,11 @@ namespace CollectionsPortal.Controllers
                 }
                 return RedirectToAction("Index", "Item", new { itemId = itemId });
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return View("Error", e.Message);
             }
-            
+
         }
 
         [Authorize(Policy = "RequireUser")]
@@ -328,7 +328,7 @@ namespace CollectionsPortal.Controllers
 
                 return RedirectToAction("Index", "Item", new { itemId = itemId });
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return View("Error", e.Message);
             }
@@ -355,7 +355,7 @@ namespace CollectionsPortal.Controllers
                 }
                 return RedirectToAction("Index", "Item", new { itemId = itemId });
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return View("Error", e.Message);
             }
@@ -365,13 +365,13 @@ namespace CollectionsPortal.Controllers
         [Produces("application/json")]
         [HttpPost]
         [Route("api/comments/")]
-        public async Task<IActionResult> Comments([FromBody]int itemId)
+        public async Task<IActionResult> Comments([FromBody] int itemId)
         {
-             if (itemId != null)
-                {
+            if (itemId != null)
+            {
                 var comments = _context.Comments.Where(p => p.Item.Id == itemId).Select(p => new { p.User.UserName, p.Content, p.CreatedDate }).ToList();
-                    return Ok(comments);
-                }
+                return Ok(comments);
+            }
             return BadRequest();
         }
     }
