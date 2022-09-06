@@ -16,13 +16,13 @@
            <div asp-validation-summary="ModelOnly" class="font-weight-bold-danger"></div>
           <!-- Email input -->
           <div class="form-outline mb-4">
-            <input asp-for="Input.Email" type="email" placeholder="@Localizer["Email"]" id="emailInput" autocomplete="username" aria-required="true" class="form-control form-control-lg" />
+            <input asp-for="Input.Email" type="email" style="background-color: white;" placeholder="@Localizer["Email"]" id="emailInput" autocomplete="username" aria-required="true" class="form-control form-control-lg" />
             <span asp-validation-for="Input.Email" class="font-weight-bold-danger"></span>
           </div>
 
           <!-- Password input -->
-          <div id"rememberMe" class="form-outline mb-4">
-            <input asp-for="Input.Password" type="password" placeholder="@Localizer["Password"]" id="passwordInput" autocomplete="current-password" aria-required="true" class="form-control form-control-lg" />
+          <div class="form-outline mb-4">
+            <input asp-for="Input.Password" type="password" style="background-color: white;" placeholder="@Localizer["Password"]" id="passwordInput" autocomplete="current-password" aria-required="true" class="form-control form-control-lg" />
             <span asp-validation-for="Input.Password" class="font-weight-bold-danger"></span>
           </div>
  
@@ -44,7 +44,7 @@
           
           <div class="divider d-flex align-items-center my-4">
             <a id="forgotPassword" class="small text-muted" id="forgot-password" asp-page="./ForgotPassword">@Localizer["ForgotPassword"]?</a>
-            <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
+            <p class="text-center fw-bold mx-3 mb-0 text-muted">@Localizer["OR"]</p>
           </div>
 
           

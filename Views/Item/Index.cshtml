@@ -105,7 +105,7 @@
                         <form method="post" asp-controller="Item" asp-action="Comment" asp-route-itemId="@ViewBag.Item.Id">
                              <input asp-for="CreatedDate" type="hidden" value="@DateTime.Now" />
                              <div class="form-outline">
-                                <textarea asp-for="Content" class="form-control" id="textAreaComment" rows="3" placeholder="@Localizer["WriteComment"]"></textarea>
+                                <textarea asp-for="Content" class="form-control" style="background-color: white;" id="textAreaComment" rows="3" placeholder="@Localizer["WriteComment"]"></textarea>
                             </div>
                             <div class="d-flex justify-content-between mt-3">
                                 <button type="submit" class="btn btn-primary">@Localizer["Send"]</button>

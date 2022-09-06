@@ -123,6 +123,9 @@
   <data name="Log out" xml:space="preserve">
     <value>Déconnexion</value>
   </data>
+  <data name="OR" xml:space="preserve">
+    <value>OU</value>
+  </data>
   <data name="YouLoggedOut" xml:space="preserve">
     <value>Vous vous êtes déconnecté</value>
   </data>

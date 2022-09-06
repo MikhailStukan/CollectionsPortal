@@ -123,6 +123,9 @@
   <data name="Log out" xml:space="preserve">
     <value>Log out</value>
   </data>
+  <data name="OR" xml:space="preserve">
+    <value>OR</value>
+  </data>
   <data name="YouLoggedOut" xml:space="preserve">
     <value>You logged out</value>
   </data>
