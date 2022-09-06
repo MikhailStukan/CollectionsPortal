@@ -130,13 +130,13 @@
     <value>Utworzony</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Edytuj</value>
+    <value>Usuń</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Opis</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Edytuj</value>
   </data>
   <data name="ItemName" xml:space="preserve">
     <value>Nazwa przedmiotu</value>
