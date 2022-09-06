@@ -56,7 +56,7 @@
                 </div>
             }
     </div>
-    <div class="row" id="likes">
+    <div class="row" id="likes" style="margin-bottom: 10px; margin-top: 10px;">
         <h5>@Localizer["Likes"]: @ViewBag.Likes.Count</h5>
         @if(User.IsInRole("User"))
         {
@@ -71,7 +71,7 @@
         }
     </div>
 </div>
-<div id="comments" class="container">
+<div id="comments" class="container" style="margin-bottom: 10px; margin-top: 10px;">
     @if (ViewBag.Comments.Count != 0 && ViewBag.Comments != null)
     {
         <h5>@Localizer["Comments"]:</h5>
