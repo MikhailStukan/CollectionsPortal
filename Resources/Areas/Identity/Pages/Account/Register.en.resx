@@ -117,11 +117,20 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Best place" xml:space="preserve">
+    <value>Best place</value>
+  </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
   </data>
-  <data name="ForgotPassword" xml:space="preserve">
-    <value>Forgot passoword</value>
+  <data name="FirstName" xml:space="preserve">
+    <value>First name</value>
+  </data>
+  <data name="join us:" xml:space="preserve">
+    <value>join us:</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Last name</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
@@ -129,7 +138,10 @@
   <data name="Register" xml:space="preserve">
     <value>Register</value>
   </data>
-  <data name="SignIn" xml:space="preserve">
-    <value>Sign in</value>
+  <data name="RepeatPassword" xml:space="preserve">
+    <value>Repeat password</value>
+  </data>
+  <data name="to share your awesome collection!" xml:space="preserve">
+    <value>to share your awesome collection!</value>
   </data>
 </root>
