@@ -45,7 +45,14 @@
                     case CollectionsPortal.Models.Type.boolean:
                         //checkbox
                         <label>@ViewBag.Collection.FieldTemplates[fields].Name</label>
-                        <input value="@ViewBag.item.Fields[fields].Value" class="form-check-input" id="check@fields" type="checkbox" name="Fields[@fields].Value">
+                        if (ViewBag.item.Fields[fields].Value == "on")
+                        {
+                            <input checked class="form-check-input" id="check@fields" type="checkbox" name="Fields[@fields].Value">
+                        }
+                        else
+                        {
+                            <input checked class="form-check-input" id="check@fields" type="checkbox" name="Fields[@fields].Value">
+                        }
                         break;
                     case CollectionsPortal.Models.Type.textarea:
                         //textarea
