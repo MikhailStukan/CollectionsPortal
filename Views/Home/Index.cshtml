@@ -9,7 +9,7 @@
 <div class="content">
     <h2>@Localizer["NewAdditions"]</h2> 
         @foreach(var item in (List<Item>)ViewBag.Items)
-        {<div class="card" style="width: 50%; margin-bottom: 20px;">
+        {<div class="card mw-50 min-vw-20" style="margin-bottom: 20px;">
             <div class="card-body">
                 <div class="d-inline-flex">
                 <a class="h5 ms-2" style="text-decoration: none;" href="@Url.Action("Index", "Item", new {itemId = item.Id})">@item.Name</a>
@@ -22,7 +22,7 @@
     @{
         foreach(var coll in (List<Collection>)ViewBag.Collections)
         {
-            <div class="card" style="width: 50%; margin-bottom: 20px;">
+            <div class="card mw-50 min-vw-20" style="margin-bottom: 20px;">
                 <div class="card-body">
                     <div class="d-inline-flex">
                         <a class="h5 ms-2" style="text-decoration: none;" href="@Url.Action("Index", "Collections", new {collectionId = coll.Id})">@coll.Name</a>
