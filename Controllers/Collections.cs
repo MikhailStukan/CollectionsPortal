@@ -133,91 +133,105 @@ namespace CollectionsPortal.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateCollectionViewModel model)
         {
-            if (model.Name == null || model.Description == null || model.Description == null || model.Fields == null || model.Tags == null)
+            try
             {
-                //small validation cause ModelState doesnt work on ForeignKeys
-                ViewBag.Topics = await _context.Topics.ToListAsync();
-                return View(model);
+                if (model.Name == null || model.Description == null || model.Description == null || model.Fields == null || model.Tags == null)
+                {
+                    //small validation cause ModelState doesnt work on ForeignKeys
+                    ViewBag.Topics = await _context.Topics.ToListAsync();
+                    return View(model);
+                }
+                else
+                {
+                    var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                    var topic = await _context.Topics.FirstOrDefaultAsync(p => p.Id == model.Topic.Id);
+                    var existingTags = _context.Tags.ToList().Select(u => u.Name);
+
+                    Collection collection = new Collection()
+                    {
+                        User = user,
+                        Name = model.Name,
+                        Description = model.Description,
+                        FieldTemplates = model.Fields,
+                        Topic = topic,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now
+                    };
+
+                    if (model.ImageFile != null)
+                    {
+                        string fileNameForStorage = $"{collection.User.Id}{collection.Id}{DateTime.Now.ToString("yyyyMMddHHmmss")}{Path.GetExtension(model.ImageFile.FileName)}";
+                        collection.imageUrl = await _cloudStorage.UploadFileAsync(model.ImageFile, fileNameForStorage);
+                    }
+
+                    var tags = model.Tags.Split(",");
+
+                    foreach (var tag in tags)
+                    {
+                        if (!existingTags.Contains(tag))
+                        {
+                            Tag newTag = new Tag()
+                            {
+                                Name = tag
+                            };
+                            TagsToCollection tagsTo = new TagsToCollection()
+                            {
+                                Collection = collection,
+                                Tag = newTag
+                            };
+                            await _context.Tags.AddAsync(newTag);
+                            await _context.TagsToCollections.AddAsync(tagsTo);
+                        }
+                        else
+                        {
+                            TagsToCollection tagsTo = new TagsToCollection()
+                            {
+                                Collection = collection,
+                                Tag = _context.Tags.Where(p => p.Name == tag).FirstOrDefault()
+                            };
+                            await _context.TagsToCollections.AddAsync(tagsTo);
+                        }
+                    }
+                    await _context.AddAsync(collection);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index", "Collections", new { collectionId = collection.Id });
+                }
             }
-            else
+            catch(Exception e)
             {
-                var user = await _userManager.FindByNameAsync(User.Identity.Name);
-                var topic = await _context.Topics.FirstOrDefaultAsync(p => p.Id == model.Topic.Id);
-                var existingTags = _context.Tags.ToList().Select(u => u.Name);
-
-                Collection collection = new Collection()
-                {
-                    User = user,
-                    Name = model.Name,
-                    Description = model.Description,
-                    FieldTemplates = model.Fields,
-                    Topic = topic,
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now
-                };
-
-                if (model.ImageFile != null)
-                {
-                    string fileNameForStorage = $"{collection.User.Id}{collection.Id}{DateTime.Now.ToString("yyyyMMddHHmmss")}{Path.GetExtension(model.ImageFile.FileName)}";
-                    collection.imageUrl = await _cloudStorage.UploadFileAsync(model.ImageFile, fileNameForStorage);
-                }
-
-                var tags = model.Tags.Split(",");
-
-                foreach (var tag in tags)
-                {
-                    if (!existingTags.Contains(tag))
-                    {
-                        Tag newTag = new Tag()
-                        {
-                            Name = tag
-                        };
-                        TagsToCollection tagsTo = new TagsToCollection()
-                        {
-                            Collection = collection,
-                            Tag = newTag
-                        };
-                        await _context.Tags.AddAsync(newTag);
-                        await _context.TagsToCollections.AddAsync(tagsTo);
-                    }
-                    else
-                    {
-                        TagsToCollection tagsTo = new TagsToCollection()
-                        {
-                            Collection = collection,
-                            Tag = _context.Tags.Where(p => p.Name == tag).FirstOrDefault()
-                        };
-                        await _context.TagsToCollections.AddAsync(tagsTo);
-                    }
-                }
-                await _context.AddAsync(collection);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Collections", new { collectionId = collection.Id });
+                return View("Error", e.Message);
             }
         }
 
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Delete(int collectionId)
         {
-            var coll = await _context.Collections.Where(p => p.Id == collectionId).Include(p => p.User).FirstOrDefaultAsync();
-
-            if (coll == null)
-                return NotFound();
-
-            if (User.Identity.Name != null && (User.Identity.Name == coll.User.UserName || User.IsInRole("Administrator")))
+            try
             {
-                if (coll.imageUrl != null)
+                var coll = await _context.Collections.Where(p => p.Id == collectionId).Include(p => p.User).FirstOrDefaultAsync();
+
+                if (coll == null)
+                    return NotFound();
+
+                if (User.Identity.Name != null && (User.Identity.Name == coll.User.UserName || User.IsInRole("Administrator")))
                 {
-                    Uri uri = new Uri(coll.imageUrl);
-                    string fileName = uri.Segments.LastOrDefault();
-                    await _cloudStorage.DeleteFileAsync(fileName);
+                    if (coll.imageUrl != null)
+                    {
+                        Uri uri = new Uri(coll.imageUrl);
+                        string fileName = uri.Segments.LastOrDefault();
+                        await _cloudStorage.DeleteFileAsync(fileName);
+                    }
+
+                    _context.Collections.Remove(coll);
+                    await _context.SaveChangesAsync();
                 }
 
-                _context.Collections.Remove(coll);
-                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Profile");
             }
-
-            return RedirectToAction("Index", "Profile");
+            catch(Exception e)
+            {
+                return View("Error", e.Message);
+            }
         }
 
     }

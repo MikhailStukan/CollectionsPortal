@@ -14,7 +14,6 @@
                 <div class="d-inline-flex">
                 <a class="h5 ms-2" style="text-decoration: none;" href="@Url.Action("Index", "Item", new {itemId = item.Id})">@item.Name</a>
                 <span class="text-dark ms-2"> @Localizer["Author"]: @item.Collection.User.UserName</span>
-                <span class="text-dark ms-2"> @item.CreatedAt</span>
                 </div>
             </div>
          </div>
@@ -28,7 +27,7 @@
                     <div class="d-inline-flex">
                         <a class="h5 ms-2" style="text-decoration: none;" href="@Url.Action("Index", "Collections", new {collectionId = coll.Id})">@coll.Name</a>
                         <span class="text-dark ms-2"> @Localizer["Auhor"]: @coll.User.UserName</span>
-                        <span class="text-dark ms-2"> @Localizer["AmountofItems"]: @coll.Items.Count</span>
+                        <span class="text-dark ms-2"> @Localizer["AmountofItems"]:<span class="text-primary h5">@coll.Items.Count</span></span>
                     </div>
                 </div>
             </div>

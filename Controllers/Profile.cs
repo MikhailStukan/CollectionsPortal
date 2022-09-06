@@ -22,13 +22,20 @@ namespace CollectionsPortal.Controllers
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Index()
         {
-            User user = await _userManager.FindByNameAsync(User.Identity.Name);
-            ViewBag.User = user;
+            try
+            {
+                User user = await _userManager.FindByNameAsync(User.Identity.Name);
+                ViewBag.User = user;
 
-            var collections = _context.Collections.Where(p => p.User.Id.Equals(user.Id)).Include(p => p.Items).Include(p => p.Topic).ToList();
-            ViewBag.Collections = collections;
+                var collections = _context.Collections.Where(p => p.User.Id.Equals(user.Id)).Include(p => p.Items).Include(p => p.Topic).ToList();
+                ViewBag.Collections = collections;
 
-            return View();
+                return View();
+            }
+            catch(Exception e)
+            {
+                return View("Error", e.Message);
+            }
         }
 
     }

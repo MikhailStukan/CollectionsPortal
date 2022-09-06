@@ -21,139 +21,159 @@ namespace CollectionsPortal.Controllers
         }
         public async Task<IActionResult> Index(int itemId)
         {
-            var item = await _context.Items.Where(p => p.Id == itemId).Include(p => p.Collection).Include(p => p.Collection.User).FirstOrDefaultAsync();
-            if (item == null)
+            try
             {
-                return NotFound();
-            }
-
-            var fields = _context.Fields.Where(p => p.Item.Id == itemId).Include(p => p.FieldTemplates).ToList();
-
-            var comments = _context.Comments.Where(p => p.Item == item).Include(p => p.User).ToList();
-
-            var likes = _context.Likes.Where(p => p.Item == item).Include(p => p.User).ToList();
-
-
-            if (User.Identity.Name != null)
-            {
-                ViewBag.currentUser = await _context.Users.Where(p => p.UserName == User.Identity.Name).FirstOrDefaultAsync();
-                foreach (var like in likes)
+                var item = await _context.Items.Where(p => p.Id == itemId).Include(p => p.Collection).Include(p => p.Collection.User).FirstOrDefaultAsync();
+                if (item == null)
                 {
-                    if (like.User.UserName == User.Identity.Name)
+                    return NotFound();
+                }
+
+                var fields = _context.Fields.Where(p => p.Item.Id == itemId).Include(p => p.FieldTemplates).ToList();
+
+                var comments = _context.Comments.Where(p => p.Item == item).Include(p => p.User).ToList();
+
+                var likes = _context.Likes.Where(p => p.Item == item).Include(p => p.User).ToList();
+
+
+                if (User.Identity.Name != null)
+                {
+                    ViewBag.currentUser = await _context.Users.Where(p => p.UserName == User.Identity.Name).FirstOrDefaultAsync();
+                    foreach (var like in likes)
                     {
-                        ViewBag.isLiked = true;
+                        if (like.User.UserName == User.Identity.Name)
+                        {
+                            ViewBag.isLiked = true;
+                        }
                     }
                 }
+
+                ViewBag.Fields = fields;
+                ViewBag.Item = item;
+                ViewBag.Comments = comments;
+                ViewBag.Likes = likes;
+                return View();
             }
-
-            ViewBag.Fields = fields;
-            ViewBag.Item = item;
-            ViewBag.Comments = comments;
-            ViewBag.Likes = likes;
-
-            return View();
+            catch(Exception e)
+            {
+                return View("Error", e.Message);
+            }
         }
 
         [HttpGet]
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Create(int collectionId)
         {
-            var collection = await _context.Collections.Include(p => p.User).Include(p => p.Items).Include(p => p.FieldTemplates).Where(c => c.Id == collectionId).FirstOrDefaultAsync();
-
-            if (collection == null)
+            try
             {
-                return NotFound();
-            }
+                var collection = await _context.Collections.Include(p => p.User).Include(p => p.Items).Include(p => p.FieldTemplates).Where(c => c.Id == collectionId).FirstOrDefaultAsync();
 
-            if (User.Identity.Name == collection.User.UserName || User.IsInRole("Administrator"))
-            {
-                ViewBag.Collection = collection;
-            }
-            else
-            {
-                return RedirectToAction("Index", "HomeController");
-            }
+                if (collection == null)
+                {
+                    return NotFound();
+                }
 
-            return View();
+                if (User.Identity.Name == collection.User.UserName || User.IsInRole("Administrator"))
+                {
+                    ViewBag.Collection = collection;
+                }
+                else
+                {
+                    return RedirectToAction("Index", "HomeController");
+                }
+
+                return View();
+            }
+            catch(Exception e)
+            {
+                return View("Error", e.Message);
+            }
         }
 
         [HttpPost]
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Create(CreateItemViewModel model)
         {
-            var collection = await _context.Collections.Include(p => p.User).Include(p => p.Items).Include(p => p.FieldTemplates).FirstOrDefaultAsync(p => p.Id == model.collectionId);
-
-            if (collection == null)
+            try
             {
-                return NotFound();
-            }
+                var collection = await _context.Collections.Include(p => p.User).Include(p => p.Items).Include(p => p.FieldTemplates).FirstOrDefaultAsync(p => p.Id == model.collectionId);
 
-            if (model.Name == null || model.Tags == null || model.Fields == null)
-            {
-                //small model validation
-                ViewBag.Collection = collection;
-                return View(model);
-            }
-            else
-            {
-                var existingTags = _context.Tags.ToList().Select(u => u.Name);
-
-                foreach (var field in model.Fields)
+                if (collection == null)
                 {
-                    field.FieldTemplates = await _context.FieldTemplates.FirstOrDefaultAsync(p => p.Id == field.FieldTemplates.Id);
+                    return NotFound();
                 }
 
-                var item = new Models.Item()
+                if (model.Name == null || model.Tags == null || model.Fields == null)
                 {
-                    Collection = collection,
-                    Name = model.Name,
-                    Fields = model.Fields,
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now
-                };
-
-                if (model.ImageFile != null)
-                {
-                    string fileNameForStorage = $"{item.Collection.User.Id}{item.Id}{DateTime.Now.ToString("yyyyMMddHHmmss")}{Path.GetExtension(model.ImageFile.FileName)}";
-                    item.imageUrl = await _cloudStorage.UploadFileAsync(model.ImageFile, fileNameForStorage);
+                    //small model validation
+                    ViewBag.Collection = collection;
+                    return View(model);
                 }
-
-                var tags = model.Tags.Split(",");
-
-                foreach (var tag in tags)
+                else
                 {
-                    if (!existingTags.Contains(tag))
+                    var existingTags = _context.Tags.ToList().Select(u => u.Name);
+
+                    foreach (var field in model.Fields)
                     {
-                        Tag newTag = new Tag()
-                        {
-                            Name = tag
-                        };
-                        TagsToItems tagsTo = new TagsToItems()
-                        {
-                            Item = item,
-                            Tag = newTag
-                        };
-                        await _context.Tags.AddAsync(newTag);
-                        await _context.TagsToItems.AddAsync(tagsTo);
+                        field.FieldTemplates = await _context.FieldTemplates.FirstOrDefaultAsync(p => p.Id == field.FieldTemplates.Id);
                     }
-                    else
+
+                    var item = new Models.Item()
                     {
-                        TagsToItems tagsTo = new TagsToItems()
-                        {
-                            Item = item,
-                            Tag = await _context.Tags.Where(p => p.Name == tag).FirstOrDefaultAsync()
-                        };
+                        Collection = collection,
+                        Name = model.Name,
+                        Fields = model.Fields,
+                        CreatedAt = DateTime.Now,
+                        UpdatedAt = DateTime.Now
+                    };
 
-                        await _context.TagsToItems.AddAsync(tagsTo);
+                    if (model.ImageFile != null)
+                    {
+                        string fileNameForStorage = $"{item.Collection.User.Id}{item.Id}{DateTime.Now.ToString("yyyyMMddHHmmss")}{Path.GetExtension(model.ImageFile.FileName)}";
+                        item.imageUrl = await _cloudStorage.UploadFileAsync(model.ImageFile, fileNameForStorage);
                     }
+
+                    var tags = model.Tags.Split(",");
+
+                    foreach (var tag in tags)
+                    {
+                        if (!existingTags.Contains(tag))
+                        {
+                            Tag newTag = new Tag()
+                            {
+                                Name = tag
+                            };
+                            TagsToItems tagsTo = new TagsToItems()
+                            {
+                                Item = item,
+                                Tag = newTag
+                            };
+                            await _context.Tags.AddAsync(newTag);
+                            await _context.TagsToItems.AddAsync(tagsTo);
+                        }
+                        else
+                        {
+                            TagsToItems tagsTo = new TagsToItems()
+                            {
+                                Item = item,
+                                Tag = await _context.Tags.Where(p => p.Name == tag).FirstOrDefaultAsync()
+                            };
+
+                            await _context.TagsToItems.AddAsync(tagsTo);
+                        }
+                    }
+
+                    collection.UpdatedAt = DateTime.Now;
+
+                    await _context.AddAsync(item);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("Index", "Collections", new { collectionId = model.collectionId });
                 }
-
-                collection.UpdatedAt = DateTime.Now;
-
-                await _context.AddAsync(item);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction("Index", "Collections", new { collectionId = model.collectionId });
+            }
+            catch(Exception e)
+            {
+                return View("Error", e.Message);
             }
         }
 
@@ -162,8 +182,16 @@ namespace CollectionsPortal.Controllers
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Edit(int itemId)
         {
-            await GetItemdata(itemId);
-            return View();
+            try
+            {
+                await GetItemdata(itemId);
+                return View();
+            }
+            catch(Exception e)
+            {
+                return View("Error", e.Message);
+            }
+           
         }
 
         private async Task GetItemdata(int itemId)
@@ -180,121 +208,157 @@ namespace CollectionsPortal.Controllers
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Edit(EditItemViewModel model)
         {
-            if (model.Name == null || model.Fields == null)
+            try
             {
-                await GetItemdata(model.itemId);
-                return View(model);
-            }
-            else
-            {
-                var item = await _context.Items.Where(p => p.Id == model.itemId).Include(p => p.Collection.User).Include(p => p.Fields).FirstOrDefaultAsync();
-                if (item != null)
+                if (model.Name == null || model.Fields == null)
                 {
-                    if (User.Identity.Name == item.Collection.User.UserName || User.IsInRole("Administrator"))
+                    await GetItemdata(model.itemId);
+                    return View(model);
+                }
+                else
+                {
+                    var item = await _context.Items.Where(p => p.Id == model.itemId).Include(p => p.Collection.User).Include(p => p.Fields).FirstOrDefaultAsync();
+                    if (item != null)
                     {
-                        item.Name = model.Name;
-
-                        for (var i = 0; i < model.Fields.Count; i++)
+                        if (User.Identity.Name == item.Collection.User.UserName || User.IsInRole("Administrator"))
                         {
-                            item.Fields[i].Value = model.Fields[i].Value;
+                            item.Name = model.Name;
+
+                            for (var i = 0; i < model.Fields.Count; i++)
+                            {
+                                item.Fields[i].Value = model.Fields[i].Value;
+                            }
+
+                            if (model.ImageFile != null)
+                            {
+                                string fileNameForStorage = $"{item.Collection.User.Id}{item.Id}{DateTime.Now.ToString("yyyyMMddHHmmss")}{Path.GetExtension(model.ImageFile.FileName)}";
+                                item.imageUrl = await _cloudStorage.UploadFileAsync(model.ImageFile, fileNameForStorage);
+                            }
+                            item.UpdatedAt = DateTime.Now;
+
+                            await _context.SaveChangesAsync();
+
+
                         }
-
-                        if (model.ImageFile != null)
-                        {
-                            string fileNameForStorage = $"{item.Collection.User.Id}{item.Id}{DateTime.Now.ToString("yyyyMMddHHmmss")}{Path.GetExtension(model.ImageFile.FileName)}";
-                            item.imageUrl = await _cloudStorage.UploadFileAsync(model.ImageFile, fileNameForStorage);
-                        }
-                        item.UpdatedAt = DateTime.Now;
-
-                        await _context.SaveChangesAsync();
-
 
                     }
-
+                    return RedirectToAction("Index", "Item", new { itemId = item.Id });
                 }
-                return RedirectToAction("Index", "Item", new { itemId = item.Id });
+            }
+            catch(Exception e)
+            {
+                return View("Error", e.Message);
             }
         }
 
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Delete(int itemId)
         {
-            var item = await _context.Items.Where(p => p.Id == itemId).Include(p => p.Likes).Include(p => p.Collection).Include(p => p.Fields).Include(p => p.Collection.User).FirstOrDefaultAsync();
-
-            if (item == null)
+            try
             {
-                return NotFound();
-            }
+                var item = await _context.Items.Where(p => p.Id == itemId).Include(p => p.Likes).Include(p => p.Collection).Include(p => p.Fields).Include(p => p.Collection.User).FirstOrDefaultAsync();
 
-            if (User.Identity.Name == item.Collection.User.UserName || User.IsInRole("Administrator"))
-            {
-                if (item.imageUrl != null)
+                if (item == null)
                 {
-                    Uri uri = new Uri(item.imageUrl);
-                    string fileName = uri.Segments.LastOrDefault();
-                    await _cloudStorage.DeleteFileAsync(fileName);
+                    return NotFound();
                 }
 
-                _context.Items.Remove(item);
-                await _context.SaveChangesAsync();
-            }
+                if (User.Identity.Name == item.Collection.User.UserName || User.IsInRole("Administrator"))
+                {
+                    if (item.imageUrl != null)
+                    {
+                        Uri uri = new Uri(item.imageUrl);
+                        string fileName = uri.Segments.LastOrDefault();
+                        await _cloudStorage.DeleteFileAsync(fileName);
+                    }
 
-            return RedirectToAction("Index", "Collections", new { collectionId = item.Collection.Id });
+                    _context.Items.Remove(item);
+                    await _context.SaveChangesAsync();
+                }
+
+                return RedirectToAction("Index", "Collections", new { collectionId = item.Collection.Id });
+            }
+            catch(Exception e)
+            {
+                return View("Error", e.Message);
+            }
         }
 
         [HttpPost]
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Comment(Comment comment, int itemId)
         {
-            if (comment != null)
+            try
             {
-                comment.User = await _context.Users.Where(p => p.UserName == User.Identity.Name).FirstOrDefaultAsync();
-                comment.Item = await _context.Items.Where(p => p.Id == itemId).FirstOrDefaultAsync();
-                await _context.Comments.AddAsync(comment);
-                await _context.SaveChangesAsync();
+                if (comment != null)
+                {
+                    comment.User = await _context.Users.Where(p => p.UserName == User.Identity.Name).FirstOrDefaultAsync();
+                    comment.Item = await _context.Items.Where(p => p.Id == itemId).FirstOrDefaultAsync();
+                    await _context.Comments.AddAsync(comment);
+                    await _context.SaveChangesAsync();
+                }
+                return RedirectToAction("Index", "Item", new { itemId = itemId });
             }
-            return RedirectToAction("Index", "Item", new { itemId = itemId });
+            catch(Exception e)
+            {
+                return View("Error", e.Message);
+            }
+            
         }
 
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Like(int itemId)
         {
-            var user = await _context.Users.Where(p => p.UserName == User.Identity.Name).FirstOrDefaultAsync();
-            var item = await _context.Items.Where(p => p.Id == itemId).FirstOrDefaultAsync();
-
-            if (user != null && item != null)
+            try
             {
-                Like like = new Like()
+                var user = await _context.Users.Where(p => p.UserName == User.Identity.Name).FirstOrDefaultAsync();
+                var item = await _context.Items.Where(p => p.Id == itemId).FirstOrDefaultAsync();
+
+                if (user != null && item != null)
                 {
-                    User = user,
-                    Item = item
-                };
+                    Like like = new Like()
+                    {
+                        User = user,
+                        Item = item
+                    };
 
-                await _context.Likes.AddAsync(like);
-                await _context.SaveChangesAsync();
+                    await _context.Likes.AddAsync(like);
+                    await _context.SaveChangesAsync();
+                }
+
+                return RedirectToAction("Index", "Item", new { itemId = itemId });
             }
-
-            return RedirectToAction("Index", "Item", new { itemId = itemId });
+            catch(Exception e)
+            {
+                return View("Error", e.Message);
+            }
         }
 
         [Authorize(Policy = "RequireUser")]
         public async Task<IActionResult> Unlike(int itemId)
         {
-            var user = await _context.Users.Where(p => p.UserName == User.Identity.Name).FirstOrDefaultAsync();
-            var item = await _context.Items.Where(p => p.Id == itemId).FirstOrDefaultAsync();
-
-            if (user != null && item != null)
+            try
             {
-                var like = await _context.Likes.Where(p => p.User == user && p.Item == item).FirstOrDefaultAsync();
+                var user = await _context.Users.Where(p => p.UserName == User.Identity.Name).FirstOrDefaultAsync();
+                var item = await _context.Items.Where(p => p.Id == itemId).FirstOrDefaultAsync();
 
-                if (like != null)
+                if (user != null && item != null)
                 {
-                    _context.Likes.Remove(like);
-                    await _context.SaveChangesAsync();
-                }
+                    var like = await _context.Likes.Where(p => p.User == user && p.Item == item).FirstOrDefaultAsync();
 
+                    if (like != null)
+                    {
+                        _context.Likes.Remove(like);
+                        await _context.SaveChangesAsync();
+                    }
+
+                }
+                return RedirectToAction("Index", "Item", new { itemId = itemId });
             }
-            return RedirectToAction("Index", "Item", new { itemId = itemId });
+            catch(Exception e)
+            {
+                return View("Error", e.Message);
+            }
         }
 
 

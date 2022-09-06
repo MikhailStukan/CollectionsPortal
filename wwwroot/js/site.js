@@ -5,8 +5,8 @@
 
 
 $(document).ready(function () {
-    autoComplete
-    document.getElementById('descriptionData').innerHTML = marked.parse(document.getElementById('desc').innerHTML)
+    autoComplete();
+    document.getElementById('descriptionData').innerHTML = marked.parse(document.getElementById('desc').innerHTML);
 });
 
 
