@@ -120,6 +120,9 @@
   <data name="Current image" xml:space="preserve">
     <value>Current image</value>
   </data>
+  <data name="Current image1" xml:space="preserve">
+    <value>Current image</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Description</value>
   </data>
